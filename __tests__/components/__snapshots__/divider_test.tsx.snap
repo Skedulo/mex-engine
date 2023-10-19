@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Divider component tests Divider component basic renderer 1`] = `
+<View
+  style={
+    Object {
+      "backgroundColor": "#E5E7EE",
+      "height": 1,
+      "width": "100%",
+    }
+  }
+/>
+`;
+
+exports[`Divider component tests Divider component with different color renderer 1`] = `
+<View
+  style={
+    Object {
+      "backgroundColor": "#5E687A",
+      "height": 1,
+      "width": "100%",
+    }
+  }
+/>
+`;

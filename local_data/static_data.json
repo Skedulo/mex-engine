@@ -1,0 +1,9 @@
+{
+  "__vocabulary": {
+    "PlantTypeVocab": ["Aglaonema first diamond", "Aglaonema Maria", "Aglaonema Pink Valentine", "Aglaonema Silver Bay"],
+    "WhoWillDeliverVocab": ["Tech", "Install Team"],
+    "RouteWeekVocab": ["1", "2", "1/2"],
+    "TicketStatusVocab": ["Awaiting Approval", "Ticket Approve", "Order Placed", "Ticket Received - Pending Approval", "Order Placed"],
+    "SubstitutionVocab": [".", "No", "Yes"]
+  }
+}

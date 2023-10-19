@@ -1,0 +1,159 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Sublist title and caption view processor tests SublistTitleAndCaptionViewProcessor basic render 1`] = `
+<View
+  style={
+    Object {
+      "alignContent": "flex-start",
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "flexDirection": "row",
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "flex": 1,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "#223049",
+            "flexWrap": "wrap",
+            "fontSize": 16,
+            "fontWeight": "normal",
+          }
+        }
+      />
+      <Text
+        style={
+          Array [
+            Object {
+              "color": "#223049",
+              "flexWrap": "wrap",
+              "fontSize": 16,
+              "fontWeight": "normal",
+            },
+            Object {
+              "marginTop": 5,
+            },
+          ]
+        }
+      />
+    </View>
+    <Image
+      resizeMode="contain"
+      source={
+        Object {
+          "uri": "ChevronRight",
+        }
+      }
+      style={
+        Object {
+          "alignSelf": "center",
+          "height": 10,
+          "width": 6,
+        }
+      }
+    />
+  </View>
+  <View
+    style={
+      Object {
+        "backgroundColor": "#E5E7EE",
+        "height": 1,
+        "marginTop": 6,
+        "width": "100%",
+      }
+    }
+  />
+</View>
+`;
+
+exports[`Sublist title and caption view processor tests SublistTitleAndCaptionViewProcessor basic render 2`] = `
+<View
+  style={
+    Object {
+      "alignContent": "flex-start",
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "flexDirection": "row",
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "flex": 1,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "#223049",
+            "flexWrap": "wrap",
+            "fontSize": 16,
+            "fontWeight": "normal",
+          }
+        }
+      >
+        Title
+      </Text>
+      <Text
+        style={
+          Array [
+            Object {
+              "color": "#223049",
+              "flexWrap": "wrap",
+              "fontSize": 16,
+              "fontWeight": "normal",
+            },
+            Object {
+              "marginTop": 5,
+            },
+          ]
+        }
+      >
+        Caption
+      </Text>
+    </View>
+    <Image
+      resizeMode="contain"
+      source={
+        Object {
+          "uri": "ChevronRight",
+        }
+      }
+      style={
+        Object {
+          "alignSelf": "center",
+          "height": 10,
+          "width": 6,
+        }
+      }
+    />
+  </View>
+  <View
+    style={
+      Object {
+        "backgroundColor": "#E5E7EE",
+        "height": 1,
+        "marginTop": 6,
+        "width": "100%",
+      }
+    }
+  />
+</View>
+`;

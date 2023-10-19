@@ -1,0 +1,160 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SkedButton Component Tests SkedButton basic renderer 1`] = `
+<View
+  accessibilityState={
+    Object {
+      "disabled": false,
+    }
+  }
+  accessible={true}
+  focusable={true}
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Array [
+      Object {
+        "backgroundColor": "#0461cb",
+        "borderRadius": 8,
+        "height": 44,
+        "justifyContent": "center",
+        "paddingHorizontal": 12,
+        "paddingVertical": 10,
+      },
+      Object {
+        "backgroundColor": "#03AA55",
+      },
+    ]
+  }
+  testID="sked-button"
+>
+  <Text
+    style={
+      Array [
+        Object {
+          "alignSelf": "center",
+          "color": "#ffffff",
+          "fontSize": 16,
+          "fontWeight": "600",
+        },
+        Object {
+          "color": "#ffffff",
+        },
+      ]
+    }
+  >
+    Test button
+  </Text>
+</View>
+`;
+
+exports[`SkedButton Component Tests SkedButton basic renderer 2`] = `
+<View
+  accessibilityState={
+    Object {
+      "disabled": false,
+    }
+  }
+  accessible={true}
+  focusable={true}
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Array [
+      Object {
+        "backgroundColor": "#0461cb",
+        "borderRadius": 8,
+        "height": 44,
+        "justifyContent": "center",
+        "paddingHorizontal": 12,
+        "paddingVertical": 10,
+      },
+      Object {
+        "backgroundColor": "#028844",
+      },
+    ]
+  }
+  testID="sked-button"
+>
+  <Text
+    style={
+      Array [
+        Object {
+          "alignSelf": "center",
+          "color": "#ffffff",
+          "fontSize": 16,
+          "fontWeight": "600",
+        },
+        Object {
+          "color": "#ffffff",
+        },
+      ]
+    }
+  >
+    Test button
+  </Text>
+</View>
+`;
+
+exports[`SkedButton Component Tests SkedButton basic renderer 3`] = `
+<View
+  accessibilityState={
+    Object {
+      "disabled": false,
+    }
+  }
+  accessible={true}
+  focusable={true}
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Array [
+      Object {
+        "backgroundColor": "#0461cb",
+        "borderRadius": 8,
+        "height": 44,
+        "justifyContent": "center",
+        "paddingHorizontal": 12,
+        "paddingVertical": 10,
+      },
+      Object {
+        "backgroundColor": "#03AA55",
+      },
+    ]
+  }
+  testID="sked-button"
+>
+  <Text
+    style={
+      Array [
+        Object {
+          "alignSelf": "center",
+          "color": "#ffffff",
+          "fontSize": 16,
+          "fontWeight": "600",
+        },
+        Object {
+          "color": "#ffffff",
+        },
+      ]
+    }
+  >
+    Test button
+  </Text>
+</View>
+`;

@@ -1,0 +1,70 @@
+{
+  "Tickets": [
+    {
+      "UID": "test",
+      "Name": "Random Ticket",
+      "AccountId": "AccountId",
+      "ReplacementTicketLineItems": [{
+        "UID": "LineItem1",
+        "PlantType": "Aglaonema Maria",
+        "NotesSubstitutions": "This is a notes substitutions (what is it, don't ask me)",
+        "PlantLocation": "Som random location",
+        "PlantSize": "123 cm",
+        "Quantity": 1,
+        "Substitution": "Yes"
+      }],
+      "RouteWeek": "1/2",
+      "Status": "Awaiting Approval",
+      "SubmitterId": "Submitter1",
+      "WhoWillDeliver": "Tech",
+      "CreatedDate" : "2022-02-01 12:00:00"
+    },
+    {
+      "UID": "test2",
+      "Name": "Random Ticket",
+      "AccountId": "AccountId",
+      "ReplacementTicketLineItems": [{
+        "UID": "LineItem1",
+        "PlantType": "Aglaonema Maria",
+        "NotesSubstitutions": "This is a notes substitutions (what is it, don't ask me)",
+        "PlantLocation": "Som random location",
+        "PlantSize": "123 cm",
+        "Quantity": 1,
+        "Substitution": "Yes"
+      }],
+      "RouteWeek": "1/2",
+      "Status": "Approved",
+      "SubmitterId": "Submitter1",
+      "WhoWillDeliver": "Tech",
+      "CreatedDate" : "2022-02-01 12:00:00"
+    },
+    {
+      "UID": "test3",
+      "Name": "Random Ticket",
+      "AccountId": "AccountId",
+      "ReplacementTicketLineItems": [{
+        "UID": "LineItem1",
+        "PlantType": "Aglaonema Maria",
+        "NotesSubstitutions": "This is a notes substitutions (what is it, don't ask me)",
+        "PlantLocation": "Som random location",
+        "PlantSize": "123 cm",
+        "Quantity": 1,
+        "Substitution": "Yes"
+      }],
+      "RouteWeek": "1/2",
+      "Status": "Submitted",
+      "SubmitterId": "Submitter1",
+      "WhoWillDeliver": "Tech",
+      "CreatedDate" : "2022-02-01 12:00:00"
+    }
+  ],
+  "Account": {
+    "UID": "AccountId",
+    "ShippingStreet": "117 Ly Chinh Thang",
+    "ShippingCity": "Ho Chi Minh",
+    "ShippingState": "Ho Chi Minh",
+    "ShippingPostalCode": "700000",
+    "Branch": "Vietnam",
+    "Name": "Vu Hoang Huy"
+  }
+}

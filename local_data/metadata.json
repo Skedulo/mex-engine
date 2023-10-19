@@ -1,0 +1,15 @@
+{
+  "summary": "",
+  "email": "huyvu@skedulo.com",
+  "revisionCount": 1,
+  "contextObject": "Jobs",
+  "bundleId": "461f6ddcc7a1a751c7749955628b7c8ba6c80008",
+  "displayOrder": 2,
+  "templateId": "template_cps_4",
+  "hasAttachments": ["ShowCaseObject"],
+  "references": {
+    "ShowCaseObject": ["User", "ShowCaseMultiUsers.ShowCaseUser"]
+  },
+  "mandatoryIf": "it.type == 'Installation'",
+  "mandatoryExpression": "cf.testMandatoryExpression()"
+}

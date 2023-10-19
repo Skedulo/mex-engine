@@ -1,0 +1,79 @@
+{
+  "builtin_camera" : "Camera",
+  "builtin_photo_library" : "Photo Library",
+  "builtin_cancel" : "Cancel",
+  "builtin_close" : "Close",
+
+  "builtin_have_draft_description": "You have unsaved changes for this record, do you want to keep editing?",
+  "builtin_discard_draft": "Discard draft",
+  "builtin_use_draft": "Continue editing",
+  "builtin_save_as_draft": "Save draft",
+
+  "builtin_default_going_back_title": "Are you sure?",
+  "builtin_default_going_back_message": "You have unsaved changes. Are you sure to discard the changes and leave the screen?",
+
+
+  "hello": "Hello World!",
+  "date": "Date",
+  "job_products": "Job Products",
+  "add_product": "Add a product",
+  "no_products": "There are no products added yet",
+  "add": "Add",
+  "save": "Save",
+  "edit_product": "Edit product",
+  "remove_product_title": "Remove product",
+  "remove_product_description": "Are you sure",
+  "yes": "Yes",
+  "no": "No",
+  "add_quantity": "Add quantity",
+  "quantity_must_be_above_0": "Quantity must be above 0",
+  "quantity_must_be_below_10": "Quantity must be below 10",
+
+
+  "sleepover_disturbance": "Sleepover disturbance",
+  "sleepover_disturbance_empty": "There are no disturbances yet",
+  "add_sleepover_disturbance": "Add a new disturbance",
+  "new_disturbance": "New disturbance",
+  "edit_disturbance": "Edit disturbance",
+
+  "form": {
+    "JobProductListPages": {
+      "JobProductTitle": "Job Products",
+      "ItemTitle": "${item.Product.Name}",
+      "ItemCaption": "Qty: ${item.Qty} - Date: ${dateFormat(item.CreatedDate)}",
+      "Empty": "There is no job products yet.",
+      "Add": "Add Job Product"
+    },
+    "UpsertJobProductPage": {
+      "Quantity": "Quantity",
+      "QuantityHint": "Enter quantity for Job Product",
+      "AddProduct": "Add Product",
+      "EditProduct": "Edit Product",
+      "QuantityMustBeAbove0": "Quantity must be above 0",
+      "QuantityMustBeBelow10": "Quantity must be below 10",
+      "SelectProduct": "Product",
+      "SelectProductHint": "Select a product",
+      "SelectProductCaption": "${pageData.Product.Description}",
+      "Attachments": "Attachments",
+      "Add": "Add",
+      "Update": "Save",
+      "JobProductIsRequired": "Job Product is required",
+      "DeleteJobProduct": "Delete Job Product",
+      "ConfirmDeleteTitle": "Remove product",
+      "ConfirmDeleteDescription": "Are you sure that you want to remove this product. This action can't be undo.",
+      "ConfirmDeleteYesButton": "Yes",
+      "ConfirmDeleteNoButton": "No",
+      "CheckboxTest": "Checkboxes Test",
+      "HasFever": "Has Fever",
+      "SoreThroat": "Sore Throat",
+      "CreatedDate": "Created Date",
+      "CreatedDateHint": "Put created date"
+    },
+    "JobProductSelectPage": {
+      "Title": "Select Product",
+      "ItemTitle": "${item.Name}",
+      "ItemCaption": "${item.Description}",
+      "Empty": "No Job Products"
+    }
+  }
+}
