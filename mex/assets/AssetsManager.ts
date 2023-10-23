@@ -317,7 +317,7 @@ class AssetsManager implements IAssetsManager {
 
     getPageLevelData(route: any): PageLevelDataContext {
         return {
-            pageData: lodash.cloneDeep(route.params.pageData), /* Page Data for each page always a standalone data */
+            pageData: route ? lodash.cloneDeep(route.params.pageData) : undefined, /* Page Data for each page always a standalone data */
             formData: this.resources.formData,
             sharedData: this.resources.sharedData,
             metadata: this.getMetadata()

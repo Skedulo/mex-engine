@@ -36,7 +36,13 @@ const MexEngineScreen: React.FC<Props> = ({route, navigation}) => {
 
     let pageDef = jsonDefPages[pageId];
 
-    const translatedDataContextOfPageDataLevel = AssetsManager.getPageLevelData(route)
+    // If 'wipeExistingData' flag is on, we want to make pageData undefined
+    const translatedDataContextOfPageDataLevel = AssetsManager.getPageLevelData(!pageDef.wipeExistingData ? route : null)
+
+    // We should keep the originalPageData in case using 'wipeExistingData' flag
+    if (pageDef.wipeExistingData) {
+        translatedDataContextOfPageDataLevel.originalPageData = lodash.cloneDeep(route.params.pageData)
+    }
 
     if (!pageDataRef.current) {
 
@@ -104,8 +110,8 @@ const MexEngineScreen: React.FC<Props> = ({route, navigation}) => {
 
     navigationContext.currentDataContext = pageLevelData;
 
-    if (pageDef.pageDataExpression && !navigationContext.sourceExpression) {
-        // If there is no source expression but define pageDataExpression, which means we should indicate that the sourceExpression for this data is coming from defaultPageDataExpression
+    if (pageDef.pageDataExpression) {
+        // If pageDataExpression is defined,  we should indicate that the sourceExpression for this data is coming from defaultPageDataExpression
         navigationContext.sourceExpression = pageDef.pageDataExpression
     }
 

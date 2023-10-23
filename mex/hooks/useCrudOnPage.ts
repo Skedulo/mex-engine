@@ -117,7 +117,13 @@ export const useCrudOnPage = (
                 return await (abstractPageProcessorContextObj?.actions.submit() ?? Promise.resolve(false))
             } else {
                 /* Not first page, which means treat it as normal New/Edit */
-                return pageProcessorContextObjRef.current.actions?.submitFormWithCondition(true, true);
+                return pageProcessorContextObjRef.current.actions?.submitFormWithCondition(false, true).then((isOk: boolean) => {
+                    if (isOk) {
+                        ignoreGoBackCondition.current = true
+                        NavigationProcessManager.goBack()
+                    }
+                    return isOk
+                });
             }
         },
         submitFormWithCondition: function (triggerGoBack: boolean = true, saveAsDraftWhenValid: boolean = true, showOptionsWhenInvalid: boolean = true): Promise<boolean> {
