@@ -8,16 +8,12 @@ let argv = require('minimist')(process.argv.slice(2));
 async function run() {
     try {
         let moduleFolder = argv['moduleFolder']
-        let runningRootFolder = argv['rootFolder'] ?? "./"
+        let runningRootFolder = argv['rootFolder'] ?? "."
 
         console.log("Module folder path", moduleFolder)
 
         let modulesConfig = JSON.parse(fs.readFileSync(moduleFolder + "/modules_config.json", 'utf-8'))
         let modulesInfo:{ name: string, destinationFolderPath: string }[] = []
-
-
-        let engineModulesFolder = runningRootFolder + "mex/modules"
-        fs.mkdirSync(engineModulesFolder)
 
         for(let moduleFolderName in modulesConfig) {
             console.log("---", "Processing ", moduleFolderName, "----")
@@ -26,11 +22,11 @@ async function run() {
 
             // First we need to move the source code folder of the module
             let srcFolderPath = `${moduleFolder}/${moduleFolderName}/src`;
-            let destinationFolderPath = runningRootFolder + "mex/modules/" + moduleFolderName
+            let destinationFolderPath = runningRootFolder + "/mex/modules/" + moduleFolderName
 
             copyCodes(srcFolderPath, destinationFolderPath)
 
-            modulesInfo.push({name: moduleFolderName, destinationFolderPath: destinationFolderPath})
+            modulesInfo.push({name: moduleFolderName, destinationFolderPath: "./mex/modules/" + moduleFolderName})
         }
 
         await appendResolveModulesCode(modulesInfo, runningRootFolder)
@@ -42,7 +38,7 @@ async function run() {
 
 async function appendResolveModulesCode(modulesInfo: { name: string, destinationFolderPath: string }[], runningRootFolder: string) {
     let project = new Project()
-    project.addSourceFileAtPath(runningRootFolder + "index.tsx")
+    project.addSourceFileAtPath(runningRootFolder + "/index.tsx")
     project.resolveSourceFileDependencies();
 
     let indexSourceFile = project.getSourceFile("index.tsx")
