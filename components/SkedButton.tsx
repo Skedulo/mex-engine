@@ -5,19 +5,7 @@ import StylesManager from "../mex/StylesManager";
 import {PromiseFn} from "react-async";
 import MexAsyncText from "./MexAsyncText";
 import {SkedButtonTheme} from "@skedulo/mex-types";
-
-export enum SkedButtonSize {
-    SMALL = 'small',
-    LARGE = 'large',
-}
-
-type Props = {
-    textPromiseFn: PromiseFn<string>
-    onPress?: (() => void) | undefined;
-    theme?: SkedButtonTheme,
-    disabled?: boolean | undefined
-    size?: SkedButtonSize
-}
+import {SkedButtonProps, SkedButtonSize} from "@skedulo/mex-engine-proxy";
 
 const buttonStyleConfig = {
     primary: {
@@ -43,7 +31,7 @@ const buttonStyleConfig = {
     }
 }
 
-const SkedButton: React.FC<Props> = ({textPromiseFn, onPress, disabled = false, theme, size }: Props) => {
+const SkedButton: React.FC<SkedButtonProps> = ({textPromiseFn, onPress, disabled = false, theme, size }: SkedButtonProps) => {
     const buttonTheme = theme || 'success'
     const buttonSize = size || SkedButtonSize.LARGE
     const [isPressing, setIsPressing] = useState(false)

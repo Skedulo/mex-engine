@@ -1,0 +1,26 @@
+{
+  "name": "extractversionfromtagtask",
+  "version": "1.0.0",
+  "description": "Extract the version from the git tag.",
+  "main": "extract-version-from-tag.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:damienaicheh/azure-devops-mobile-versioning.git"
+  },
+  "author": "Damien AICHEH",
+  "license": "ISC",
+  "dependencies": {
+    "azure-pipelines-task-lib": "^3.2.0",
+    "fs": "0.0.1-security",
+    "minimist": "^1.2.8",
+    "plist": "^3.0.4"
+  },
+  "devDependencies": {
+    "@types/node": "^16.11.26",
+    "@types/q": "^1.5.5",
+    "typescript": "^5.1.3"
+  }
+}

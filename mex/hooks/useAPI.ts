@@ -1,9 +1,11 @@
-import useAxios from "axios-hooks";
+import useAxios, {Options} from "axios-hooks";
 import {useAccessToken} from "./useAccessToken";
 import {useBaseUrl} from "./useBaseUrl";
 import {useEffect} from "react";
 import AssetsManager from "../assets/AssetsManager";
 import {useNetInfo} from "@react-native-community/netinfo";
+import {HooksProxy} from "@skedulo/mex-engine-proxy";
+import {AxiosRequestConfig} from "axios";
 
 type APIResult<T> = {
     isLoading: boolean,
@@ -62,4 +64,54 @@ export const useSearchOnline = (key: string, variables: any):APIResult<any[]> =>
         label: key,
         variables: variables
     })
+}
+
+
+export const useSkedAPI = <TResponse = any, TBody = any>(config: AxiosRequestConfig<TBody> | string, options?: Options): APIResult<TResponse> =>
+{
+    let accessToken = useAccessToken()
+    let baseUrl = useBaseUrl()
+    let netInfo = useNetInfo()
+
+    config = {
+        ... {
+            baseURL: baseUrl ?? "",
+            Authorization: 'Bearer ' + accessToken
+        },
+        ...config
+    }
+
+    options = {
+        ... {
+            manual: true,
+            useCache: false
+        },
+        ...options
+    }
+
+    let [axiosResult, executeApiReq] = useAxios<TResponse>(
+        config,
+        options
+    )
+
+    useEffect(() => {
+        if (accessToken && baseUrl && netInfo.isConnected) {
+            executeApiReq()
+                .catch(err => {
+                    console.log("err when calling api", err)
+                })
+        }
+    }, [baseUrl, accessToken, executeApiReq, netInfo.isConnected])
+
+    if (!netInfo.isConnected) {
+        return {isLoading: false, error: new NoInternetError()}
+    }
+
+    if (axiosResult.error) {
+        console.log("err when calling api", axiosResult.error)
+
+        return {isLoading: false, error: new Error("Something wrong when calling API")};
+    }
+
+    return {isLoading: axiosResult.loading, data: axiosResult.data};
 }

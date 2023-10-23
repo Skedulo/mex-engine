@@ -35,9 +35,14 @@ import {
     ContextProxy,
     CustomComponentRegistry,
     ExpressionProxy,
-    ServicesProxy
+    ServicesProxy, HooksProxy, INativeHooks
 } from "@skedulo/mex-engine-proxy";
 import ExpressionFunctions from "./mex/common/expression/Expressions";
+import {InternalUtilsType} from "@skedulo/mex-engine-proxy/dist/src/proxies/services/interfaces";
+import {IAPIHooks} from "@skedulo/mex-engine-proxy/dist/src/proxies/hooks/interfaces";
+import {useSkedAPI} from "./mex/hooks/useAPI";
+import {useAccessToken} from "./mex/hooks/useAccessToken";
+import {useBaseUrl} from "./mex/hooks/useBaseUrl";
 LogBox.ignoreLogs(['Warning: ...', '[MobX]', 'Require cycle', 'Could not find image']); // Ignore log notification by message
 
 const Stack = createNativeStackNavigator();
@@ -82,7 +87,7 @@ const RootStack = ({packageId, formName, contextId, staticResourcesId} : RootSta
 
     if (!isLoaded)
     {
-        AssetsManager.initialize({packageId, formName, contextId, staticResourcesId}, {utils: InternalUtils})
+        AssetsManager.initialize({packageId, formName, contextId, staticResourcesId}, {utils: InternalUtils as InternalUtilsType})
         AttachmentsManager.initialize()
 
         // Initialize Localization
@@ -263,6 +268,17 @@ const registerServices = () => {
     CoreContainer.bind(ServicesProxy.InternalUtils).toConstant(InternalUtils as InternalUtilsType)
 
     CoreContainer.bind(ExpressionProxy.ExpressionFunctions).toConstant(ExpressionFunctions)
+
+    let apiHooks = {
+        useSkedAPI: useSkedAPI
+    } as IAPIHooks
+    CoreContainer.bind(HooksProxy.APIHooks).toConstant(apiHooks)
+
+    let nativeHooks = {
+        useAccessToken: useAccessToken,
+        useBaseUrl: useBaseUrl
+    } as INativeHooks
+    CoreContainer.bind(HooksProxy.NativeHooks).toConstant(nativeHooks)
 }
 
 registerServices();
