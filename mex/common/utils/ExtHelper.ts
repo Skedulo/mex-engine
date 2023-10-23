@@ -5,32 +5,16 @@ import {String} from "../String";
 import { Alert } from 'react-native'
 import {PageProcessorContextObj, PageSubmitOption} from "../../hooks/useCrudOnPage";
 import AssetsManager from "../../assets/AssetsManager";
-import {TimezoneMetadata} from "@skedulo/mex-engine-proxy";
-
-export interface ExtHelper {
-    data: ExtHelperData
-    date: ExtHelperDate
-    ui: ExtHelperUI
-}
-
-interface ExtHelperData {
-    getTimezonesData(): TimezoneMetadata|undefined
-    changeData(fn: () => void):any /* Change data in data context */
-    submit(options?: ExtHelperSubmitOptions): Promise<boolean> /* Submit/Save data from current page, and automatically close page */
-    translate(key: string, args?: any[]): string /* translate key from localization keys */
-}
-
-type ExtHelperSubmitOptions = {
-    stopWhenInvalid?: Boolean
-}
-
-interface ExtHelperDate {
-    getNowDateTime(): string /* get current date time */
-}
-
-interface ExtHelperUI {
-    alert(message: string): void /* make an alert UI */
-}
+import {
+    ExtHelper,
+    ExtHelperData,
+    ExtHelperDate,
+    ExtHelperSubmitOptions,
+    ExtHelperUI,
+    TimezoneMetadata
+} from "@skedulo/mex-engine-proxy";
+import {TimeZoneType} from "@skedulo/mex-engine-proxy/dist/src/proxies/utils/models";
+import converters from "../Converters";
 
 export class ExtHelperImpl implements ExtHelper {
     data: ExtHelperData
@@ -82,6 +66,16 @@ class ExtHelperDataImpl implements ExtHelperData {
 class ExtHelperDateImpl implements  ExtHelperDate {
     getNowDateTime(): string {
         return moment.utc(new Date()).toISOString(false)
+    }
+
+    getLocaleDateDisplay(value: string, type: "date" | "datetime" | "time", timezone: TimeZoneType): Promise<string|undefined> {
+        if (type == "date") {
+            return converters.date.dateFormat(value ,timezone)
+        } else if (type == "datetime") {
+            return converters.date.dateTimeFormat(value ,timezone)
+        }
+
+        return converters.date.timeFormat(value, timezone);
     }
 }
 

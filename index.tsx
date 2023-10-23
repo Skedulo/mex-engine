@@ -35,7 +35,7 @@ import {
     ContextProxy,
     CustomComponentRegistry,
     ExpressionProxy,
-    ServicesProxy, HooksProxy, INativeHooks
+    ServicesProxy, HooksProxy, INativeHooks, UtilsProxy
 } from "@skedulo/mex-engine-proxy";
 import ExpressionFunctions from "./mex/common/expression/Expressions";
 import {InternalUtilsType} from "@skedulo/mex-engine-proxy/dist/src/proxies/services/interfaces";
@@ -43,6 +43,7 @@ import {IAPIHooks} from "@skedulo/mex-engine-proxy/dist/src/proxies/hooks/interf
 import {useSkedAPI} from "./mex/hooks/useAPI";
 import {useAccessToken} from "./mex/hooks/useAccessToken";
 import {useBaseUrl} from "./mex/hooks/useBaseUrl";
+import {ExtHelperImpl} from "./mex/common/utils/ExtHelper";
 LogBox.ignoreLogs(['Warning: ...', '[MobX]', 'Require cycle', 'Could not find image']); // Ignore log notification by message
 
 const Stack = createNativeStackNavigator();
@@ -279,6 +280,9 @@ const registerServices = () => {
         useBaseUrl: useBaseUrl
     } as INativeHooks
     CoreContainer.bind(HooksProxy.NativeHooks).toConstant(nativeHooks)
+
+
+    CoreContainer.bind(UtilsProxy.ExtHelper).toConstant(new ExtHelperImpl())
 }
 
 registerServices();

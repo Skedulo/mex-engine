@@ -76,7 +76,9 @@ export const useSkedAPI = <TResponse = any, TBody = any>(config: AxiosRequestCon
     config = {
         ... {
             baseURL: baseUrl ?? "",
-            Authorization: 'Bearer ' + accessToken
+            headers: {
+                Authorization: 'Bearer ' + accessToken
+            }
         },
         ...config
     }

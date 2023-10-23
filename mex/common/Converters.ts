@@ -3,10 +3,9 @@ import {NativeModules} from 'react-native';
 import {BaseStructureObject} from "./models/BaseStructureObject";
 import moment from "moment";
 import AssetsManager from "../assets/AssetsManager";
+import {TimeZoneType} from "@skedulo/mex-engine-proxy/dist/src/proxies/utils/models";
 
 let cache = require('js-cache')();
-
-type TimeZoneType = "none" | "job" | "local";
 
 let converters = {
     date: {
