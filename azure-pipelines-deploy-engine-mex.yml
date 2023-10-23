@@ -1,0 +1,52 @@
+# Deploy Mex Engine
+
+trigger: none
+pr: none
+
+parameters:
+- name: MINIMUM_APP_VERSION
+  displayName: Minimum App Version
+  default: 3.0.0
+  type: string
+- name: MEX_ENGINE_VERSION
+  displayName: Mex Engine Version
+  type: string
+  default: 1.0.0
+- name: ADMIN_TOKEN
+  displayName: Admin Token
+  type: string
+
+resources:
+  - repo: self
+
+pool:
+  vmImage: 'macOS-12'
+
+stages:
+- stage: BuildAndDeploy
+  displayName: "Build and Deploy"
+  jobs:
+  - job: BuildMexAndDeploy
+    displayName: "Build And Deploy Mex Engine"
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSource: 'spec'
+        versionSpec: '18.x'
+    - task: CmdLine@2
+      displayName: "Restore npm packages and check code"
+      inputs:
+        script: npm ci --force
+    - task: CmdLine@2
+      displayName: "Run RN tests"
+      inputs:
+        script: CI=true npm test
+    - task: CmdLine@2
+      displayName: 'Bundle And Deploy'
+      inputs:
+        script: |
+          ./deploy.sh \
+            -u https://dev-api.test.skl.io \
+            -m ${{parameters.MEX_ENGINE_VERSION}} \
+            -a ${{parameters.MINIMUM_APP_VERSION}} \
+            -t ${{parameters.ADMIN_TOKEN}}

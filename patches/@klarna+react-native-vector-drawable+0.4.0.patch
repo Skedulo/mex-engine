@@ -1,0 +1,20 @@
+diff --git a/node_modules/@klarna/react-native-vector-drawable/android/build.gradle b/node_modules/@klarna/react-native-vector-drawable/android/build.gradle
+index cfc0013..ac9869a 100755
+--- a/node_modules/@klarna/react-native-vector-drawable/android/build.gradle
++++ b/node_modules/@klarna/react-native-vector-drawable/android/build.gradle
+@@ -56,7 +56,7 @@ android {
+     }
+ 
+     defaultConfig {
+-        minSdkVersion safeExtGet('minSdkVersion', 18)
++        minSdkVersion safeExtGet('minSdkVersion', 21)
+         targetSdkVersion safeExtGet('targetSdkVersion', 30)
+         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
+ 
+diff --git a/node_modules/@klarna/react-native-vector-drawable/src/index.ios.js b/node_modules/@klarna/react-native-vector-drawable/src/index.ios.js
+index d7e60f0..7ac5953 100644
+--- a/node_modules/@klarna/react-native-vector-drawable/src/index.ios.js
++++ b/node_modules/@klarna/react-native-vector-drawable/src/index.ios.js
+@@ -1 +1 @@
+-export { View as default } from 'react-native';
++// export { View as default } from 'react-native';

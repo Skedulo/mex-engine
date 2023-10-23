@@ -1,4 +1,4 @@
-import {PageLevelDataContext} from "../mex/assets/AssetsManager";
+import {PageLevelDataContext} from "@skedulo/mex-engine-proxy";
 
 export const SimpleProductData1 = (): PageLevelDataContext => {
     let newObjectKey = "temp-xxx";

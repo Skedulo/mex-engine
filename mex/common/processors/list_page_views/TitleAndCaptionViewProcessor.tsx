@@ -9,6 +9,7 @@ import SkedIcon, {IconTypes} from "../../../../components/SkedIcon";
 import Expressions from "../../expression/Expressions";
 import MexAsyncText from "../../../../components/MexAsyncText";
 import {TitleAndCaptionViewComponentModel} from "@skedulo/mex-types";
+import {ContextProxy, CoreContainer, ServicesProxy} from "@skedulo/mex-engine-proxy";
 
 export default class TitleAndCaptionViewProcessor extends AbstractListPageViewProcessor<TitleAndCaptionViewComponentModel> {
 

@@ -2,7 +2,7 @@ import {observer} from "mobx-react-lite";
 import {FC} from "react";
 import {NavigationContext} from "../NavigationProcessManager";
 import {BaseComponentModel} from "@skedulo/mex-types";
-import {PageLevelDataContext} from "@skedulo/mex-engine-core/dist/di/ServicesProxy";
+import {PageLevelDataContext} from "@skedulo/mex-engine-proxy";
 
 export type StandardComponentProps<TComponentArgs extends StandardComponentArgs<TComponentDefinitionModel>, TComponentDefinitionModel extends BaseComponentModel> = {
     args: TComponentArgs

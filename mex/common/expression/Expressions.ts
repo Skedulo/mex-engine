@@ -8,10 +8,8 @@ import {LocalizedKey, ValueExpressionLogic} from "@skedulo/mex-types";
 import moment from 'moment';
 import InternalUtils from "../InternalUtils";
 import {
-    CoreContainer,
     DataValueExpressionArgs,
     ExpressionArgs,
-    ExpressionProxy,
     FunctionExpressionArgs
 } from "@skedulo/mex-engine-proxy";
 

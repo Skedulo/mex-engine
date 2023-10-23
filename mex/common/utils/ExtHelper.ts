@@ -4,7 +4,8 @@ import { translate } from "../../assets/LocalizationManager";
 import {String} from "../String";
 import { Alert } from 'react-native'
 import {PageProcessorContextObj, PageSubmitOption} from "../../hooks/useCrudOnPage";
-import AssetsManager, {TimezoneMetadata} from "../../assets/AssetsManager";
+import AssetsManager from "../../assets/AssetsManager";
+import {TimezoneMetadata} from "@skedulo/mex-engine-proxy";
 
 export interface ExtHelper {
     data: ExtHelperData

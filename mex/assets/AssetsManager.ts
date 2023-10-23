@@ -26,14 +26,14 @@ type AssetsResource = {
 
 class AssetsManager implements IAssetsManager {
 
-    cachedPackageId = null
-    cachedFormName = null
-    cachedContextId = null
-    cachedStaticResourcesId = null
-    cachedCustomFunction= null
+    cachedPackageId: string | null = null
+    cachedFormName: string | null = null
+    cachedContextId: string | null = null
+    cachedStaticResourcesId: string | null = null
+    cachedCustomFunction: string | null = null
     instanceDataChangedCallbacks: any[] = []
-    cachedToken = null
-    cachedAPIUrl = null
+    cachedToken: string | null= null
+    cachedAPIUrl: string | null = null
 
     originalInstanceData?: any
 

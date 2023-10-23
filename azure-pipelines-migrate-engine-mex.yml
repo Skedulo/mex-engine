@@ -1,0 +1,63 @@
+# Deploy Mex Engine
+
+trigger: none
+pr: none
+
+parameters:
+  - name: ENGINE_VERSION
+    displayName: Engine Version
+    type: string
+    default: 1.0.0
+  - name: TARGET_ENVIRONMENT
+    displayName: Target Environment
+    type: string
+    default: staging
+    values:
+    - staging
+    - prod
+  - name: ADMIN_TOKEN
+    displayName: Admin Token
+    type: string
+  - name: OVERRIDE
+    displayName: Override
+    type: boolean
+    default: false
+
+variables:
+- group: mex-common
+
+resources:
+  - repo: self
+
+pool:
+  vmImage: 'macOS-12'
+
+stages:
+  - stage: BuildAndDeploy
+    displayName: "Build and Deploy"
+    jobs:
+      - job: BuildMexAndDeploy
+        displayName: "Build And Deploy Mex Engine"
+        steps:
+          - task: UseDotNet@2
+            inputs:
+              packageType: 'sdk'
+              version: '6.x'
+          - task: CmdLine@2
+            displayName: 'Migrate'
+            inputs:
+              ${{ if eq(parameters.OVERRIDE, true) }}:
+                script: |
+                  dotnet Tools/Compiled/MexBuildTool/MexMigrateTool.dll \
+                  -m ${{ parameters.ENGINE_VERSION }} \
+                  -e ${{ parameters.TARGET_ENVIRONMENT }} \
+                  -d $(TENANT_ADMIN_DEV_TOKEN) \
+                  -a ${{ parameters.ADMIN_TOKEN }} \
+                  -o
+              ${{ else }}:
+                script: |
+                  dotnet Tools/Compiled/MexBuildTool/MexMigrateTool.dll \
+                  -m ${{ parameters.ENGINE_VERSION }} \
+                  -e ${{ parameters.TARGET_ENVIRONMENT }} \
+                  -d $(TENANT_ADMIN_DEV_TOKEN) \
+                  -a ${{ parameters.ADMIN_TOKEN }}

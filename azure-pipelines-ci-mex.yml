@@ -1,0 +1,29 @@
+pr:
+  branches:
+    include:
+      - main
+      - develop
+  autoCancel: true
+
+trigger: none
+
+resources:
+  - repo: self
+
+stages:
+  - stage: BuildMex
+    jobs:
+      - job: BuildMex
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSource: 'spec'
+              versionSpec: '18.x'
+          - task: CmdLine@2
+            displayName: "Restore npm packages and check code"
+            inputs:
+              script: npm ci --force
+          - task: CmdLine@2
+            displayName: "Run RN tests"
+            inputs:
+              script: CI=true npm test
