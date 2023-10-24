@@ -1,7 +1,8 @@
 import {NativeModules} from "react-native";
 import AssetsManager from "../assets/AssetsManager";
+import {ILogManager} from "@skedulo/mex-engine-proxy";
 
-class LogManager {
+class LogManager implements ILogManager{
 
     logError(e: Error, stack: string): Promise<void> {
         return NativeModules.MexMainModule.logError(`[MEX] - ${e.message}`, stack)

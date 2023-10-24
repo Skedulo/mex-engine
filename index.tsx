@@ -35,7 +35,7 @@ import {
     ContextProxy,
     CustomComponentRegistry,
     ExpressionProxy,
-    ServicesProxy, HooksProxy, INativeHooks, UtilsProxy
+    ServicesProxy, HooksProxy, INativeHooks, UtilsProxy, StylesProxy
 } from "@skedulo/mex-engine-proxy";
 import ExpressionFunctions from "./mex/common/expression/Expressions";
 import {InternalUtilsType} from "@skedulo/mex-engine-proxy/dist/src/proxies/services/interfaces";
@@ -44,6 +44,13 @@ import {useSkedAPI} from "./mex/hooks/useAPI";
 import {useAccessToken} from "./mex/hooks/useAccessToken";
 import {useBaseUrl} from "./mex/hooks/useBaseUrl";
 import {ExtHelperImpl} from "./mex/common/utils/ExtHelper";
+import CaptureSignatureView from "./components/CaptureSignatureView";
+import MexAsyncText from "./components/MexAsyncText";
+import Divider from "./components/Divider";
+import SearchBar from "./components/SearchBar";
+import SkedIcon from "./components/SkedIcon";
+import SkeduloImage from "./components/SkeduloImage";
+import StylesManager from "./mex/StylesManager";
 LogBox.ignoreLogs(['Warning: ...', '[MobX]', 'Require cycle', 'Could not find image']); // Ignore log notification by message
 
 const Stack = createNativeStackNavigator();
@@ -262,13 +269,24 @@ const registerServices = () => {
     CoreContainer.bind(ContextProxy.InstanceContext).toConstant(InstanceDataContext)
 
     CoreContainer.bind(ComponentsProxy.SkedButton).toConstant(SkedButton)
+    CoreContainer.bind(ComponentsProxy.CaptureSignatureView).toConstant(CaptureSignatureView)
+    CoreContainer.bind(ComponentsProxy.MexAsyncText).toConstant(MexAsyncText)
+    CoreContainer.bind(ComponentsProxy.Divider).toConstant(Divider)
+    CoreContainer.bind(ComponentsProxy.SearchBar).toConstant(SearchBar)
+    CoreContainer.bind(ComponentsProxy.SkedIcon).toConstant(SkedIcon)
+    CoreContainer.bind(ComponentsProxy.SkeduloImage).toConstant(SkeduloImage)
 
     CoreContainer.bind(ServicesProxy.AssetsManager).toConstant(AssetsManager)
     CoreContainer.bind(ServicesProxy.NavigationProcessManager).toConstant(NavigationProcessManager)
+    CoreContainer.bind(ServicesProxy.AttachmentsManager).toConstant(AttachmentsManager)
+    CoreContainer.bind(ServicesProxy.LogManager).toConstant(LogManager)
     // @ts-ignore
     CoreContainer.bind(ServicesProxy.InternalUtils).toConstant(InternalUtils as InternalUtilsType)
 
     CoreContainer.bind(ExpressionProxy.ExpressionFunctions).toConstant(ExpressionFunctions)
+
+    CoreContainer.bind(StylesProxy.ThemeManager).toConstant(ThemeManager)
+    CoreContainer.bind(StylesProxy.StylesManager).toConstant(StylesManager)
 
     let apiHooks = {
         useSkedAPI: useSkedAPI

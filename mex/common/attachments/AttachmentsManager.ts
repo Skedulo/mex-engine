@@ -1,5 +1,5 @@
 import {NativeEventEmitter, NativeModules} from "react-native";
-import {AttachmentMetadata} from "../../../components/FilesView";
+import {AttachmentMetadata, AttachmentSetting, IAttachmentsManager} from "@skedulo/mex-engine-proxy";
 const { AttachmentModule } = NativeModules;
 
 type SubscriberCachingData = {
@@ -7,12 +7,7 @@ type SubscriberCachingData = {
     action: (attachments: AttachmentMetadata[]) => void
 }
 
-export type AttachmentSetting = {
-    saveOriginalPhotos: boolean
-}
-
-
-class AttachmentsManager {
+class AttachmentsManager implements IAttachmentsManager {
 
     private attachmentSubscriptionHashMap: Map<any, SubscriberCachingData> = new Map()
     private attachmentCachingHashMap: {[key: string]: any} = {}
@@ -74,7 +69,7 @@ class AttachmentsManager {
     }
 
     async getAttachmentSettings(): Promise<AttachmentSetting> {
-        let jsonStr = await AttachmentModule.getAttachmentSettings()
+        let jsonStr = await AttachmentModule.getAttachmentSettings() as string
 
         return JSON.parse(jsonStr)
     }

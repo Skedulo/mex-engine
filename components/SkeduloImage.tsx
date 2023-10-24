@@ -2,15 +2,10 @@ import React, {useState} from 'react'
 import {View, ActivityIndicator, ViewProps, StyleProp} from "react-native";
 import ThemesManager from "../mex/colors/ThemeManager";
 import AssetsManager from "../mex/assets/AssetsManager";
-import FastImage, {ImageStyle, ResizeMode} from 'react-native-fast-image';
+import FastImage from 'react-native-fast-image';
+import {SkedImageProps} from "@skedulo/mex-engine-proxy";
 
-interface Props extends ViewProps{
-    uri: string
-    resizeMode?: ResizeMode,
-    imageStyles?: StyleProp<ImageStyle>
-}
-
-const SkeduloImage = (props: Props) => {
+const SkeduloImage = (props: SkedImageProps) => {
 
     let [isLoading, setIsLoading] = useState(true)
     let [accessToken, setAccessToken] = useState('')

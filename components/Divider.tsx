@@ -1,18 +1,13 @@
 import * as React from "react";
 import {ColorValue, View, ViewStyle} from "react-native";
 import ThemeManager from "../mex/colors/ThemeManager";
+import {DividerProps} from "@skedulo/mex-engine-proxy";
 
-type Props = {
-    color?: ColorValue
-    style?: ViewStyle
-} | undefined
-
-
-const Divider: React.FC<Props> = (props: Props = undefined) => {
+const Divider: React.FC<DividerProps> = (props: DividerProps = undefined) => {
 
     let colors = ThemeManager.getColorSet();
 
-    const defaultProps:Props = {
+    const defaultProps:DividerProps = {
         color: colors.navy75,
         style: {}
     }

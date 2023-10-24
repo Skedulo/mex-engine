@@ -1,22 +1,10 @@
 import React from 'react';
 import {requireNativeComponent, ViewProps} from 'react-native';
+import {CaptureSignatureViewProps} from "@skedulo/mex-engine-proxy";
 
-const RCTSignatureView = requireNativeComponent<Props>('RCTSignatureView');
+const RCTSignatureView = requireNativeComponent<CaptureSignatureViewProps>('RCTSignatureView');
 
-type Props = ViewProps & {
-    onSignatureSaved: (data:OnSignatureSavedResult) => void,
-    onSignatureChanged: (data:OnSignatureChangedResult) => void,
-}
-
-type OnSignatureSavedResult = {
-    imageUrl: string
-}
-
-type OnSignatureChangedResult = {
-    hasDrawing: boolean
-}
-
-const CaptureSignatureView = React.forwardRef((props: Props, ref) => {
+const CaptureSignatureView = React.forwardRef((props: CaptureSignatureViewProps, ref) => {
     return  <RCTSignatureView {...props} ref={ref as any}/>
 })
 

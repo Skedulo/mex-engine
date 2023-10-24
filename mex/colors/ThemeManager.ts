@@ -3,8 +3,9 @@ import LightColors from "./LightColors";
 import DarkColors from "./DarkColors";
 import StylesManager from "../StylesManager";
 import {SkedColorSet} from "./SkedColorSet";
+import {IThemeManager} from "@skedulo/mex-engine-proxy/dist/src/proxies/styles/interfaces";
 
-class ThemeManager {
+class ThemeManager implements IThemeManager {
 
     _colorSet: SkedColorSet = LightColors
     _callbacks: ((colorScheme:ColorSchemeName) => void)[] = []

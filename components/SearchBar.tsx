@@ -5,12 +5,9 @@ import * as React from "react";
 import StylesManager from "../mex/StylesManager";
 import ThemeManager from "../mex/colors/ThemeManager";
 import {useState} from "react";
+import {SearchBarProps} from "@skedulo/mex-engine-proxy";
 
-const SearchBar = ({placeholder = '', onChangeText, style}: {
-    style?: StyleProp<ViewStyle>
-    placeholder: string|undefined,
-    onChangeText: (value: string) => void
-}) => {
+const SearchBar = ({placeholder = '', onChangeText, style}: SearchBarProps) => {
     let styleConst = StylesManager.getStyleConst()
     let colors = ThemeManager.getColorSet()
     const [searchText, setSearchText] = useState("");

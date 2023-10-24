@@ -1,17 +1,8 @@
 import ThemeManager from './colors/ThemeManager'
 import {Platform} from "react-native";
+import {IStylesManager, StyleConstant} from "@skedulo/mex-engine-proxy";
 
-type StyleConstant = {
-    defaultHorizontalPadding: number
-    defaultVerticalPadding: number,
-    smallVerticalPadding: number,
-    componentVerticalPadding: number,
-    betweenTextSpacing: number,
-    captionTextSize: number,
-    betweenComponentVerticalSpacing: number
-}
-
-class StylesManager {
+class StylesManager implements IStylesManager {
     styles: any;
     stylesConstant: StyleConstant = {
         defaultHorizontalPadding: 16,
