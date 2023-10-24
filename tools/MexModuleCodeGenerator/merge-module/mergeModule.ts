@@ -15,7 +15,7 @@ async function run() {
         let modulesConfig = JSON.parse(fs.readFileSync(moduleFolder + "/modules_config.json", 'utf-8'))
         let modulesInfo:{ name: string, destinationFolderPath: string }[] = []
 
-        let engineFolder = runningRootFolder + "/mex/modules/"
+        let engineFolder = runningRootFolder + "/mex/modules"
 
         try {
             fs.mkdirSync(engineFolder)
