@@ -27,7 +27,7 @@ async function run() {
             console.log("moduleFolderName", moduleFolderName)
 
             // First we need to move the source code folder of the module
-            let srcFolderPath = `${moduleFolder}/${moduleFolderName}/src`;
+            let srcFolderPath = `${moduleFolder}/${moduleFolderName}`;
             let destinationFolderPath = runningRootFolder + "/mex/modules/" + moduleFolderName
 
             copyCodes(srcFolderPath, destinationFolderPath)

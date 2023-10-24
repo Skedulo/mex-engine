@@ -5,6 +5,7 @@
   "main": "meregModule.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "install-packages": "npm install --force",
     "compile": "tsc"
   },
   "author": "Damien AICHEH",

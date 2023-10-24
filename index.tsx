@@ -281,7 +281,6 @@ const registerServices = () => {
     } as INativeHooks
     CoreContainer.bind(HooksProxy.NativeHooks).toConstant(nativeHooks)
 
-
     CoreContainer.bind(UtilsProxy.ExtHelper).toConstant(new ExtHelperImpl())
 }
 
