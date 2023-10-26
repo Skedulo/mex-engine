@@ -40,7 +40,7 @@ import {
 import ExpressionFunctions from "./mex/common/expression/Expressions";
 import {InternalUtilsType} from "@skedulo/mex-engine-proxy/dist/src/proxies/services/interfaces";
 import {IAPIHooks} from "@skedulo/mex-engine-proxy/dist/src/proxies/hooks/interfaces";
-import {useSkedAPI} from "./mex/hooks/useAPI";
+import {useAPI, useSkedAPI} from "./mex/hooks/useAPI";
 import {useAccessToken} from "./mex/hooks/useAccessToken";
 import {useBaseUrl} from "./mex/hooks/useBaseUrl";
 import {ExtHelperImpl} from "./mex/common/utils/ExtHelper";
