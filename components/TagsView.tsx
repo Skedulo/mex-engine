@@ -17,8 +17,8 @@ const TagsView = ({dataContext, uiDef}: Props) => {
     let { items } = uiDef
 
     let renderTag = useCallback((item: ListItemTagItemModel, index: number) => {
-        return (<TagView key={index}dataContext={dataContext} item={item} />)
-    }, [])
+        return (<TagView key={index} dataContext={dataContext} item={item} />)
+    }, [dataContext])
 
     return (
         <View style={{
