@@ -117,3 +117,42 @@ export const useSkedAPI = <TResponse = any, TBody = any>(config: AxiosRequestCon
 
     return {isLoading: axiosResult.loading, data: axiosResult.data};
 }
+
+export const useAPI = <TResponse = any, TBody = any>(config: AxiosRequestConfig<TBody> | string, options?: Options): APIResult<TResponse> =>
+{
+    let netInfo = useNetInfo()
+
+    options = {
+        ... {
+            manual: true,
+            useCache: false
+        },
+        ...options
+    }
+
+    let [axiosResult, executeApiReq] = useAxios<TResponse>(
+        config,
+        options
+    )
+
+    useEffect(() => {
+        if (netInfo.isConnected) {
+            executeApiReq()
+                .catch(err => {
+                    console.log("err when calling api", err)
+                })
+        }
+    }, [executeApiReq, netInfo.isConnected])
+
+    if (!netInfo.isConnected) {
+        return {isLoading: false, error: new NoInternetError()}
+    }
+
+    if (axiosResult.error) {
+        console.log("err when calling api", axiosResult.error)
+
+        return {isLoading: false, error: new Error("Something wrong when calling API")};
+    }
+
+    return {isLoading: axiosResult.loading, data: axiosResult.data};
+}

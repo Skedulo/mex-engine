@@ -289,7 +289,8 @@ const registerServices = () => {
     CoreContainer.bind(StylesProxy.StylesManager).toConstant(StylesManager)
 
     let apiHooks = {
-        useSkedAPI: useSkedAPI
+        useSkedAPI: useSkedAPI,
+        useAPI: useAPI
     } as IAPIHooks
     CoreContainer.bind(HooksProxy.APIHooks).toConstant(apiHooks)
 
