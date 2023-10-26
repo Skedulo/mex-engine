@@ -396,7 +396,8 @@ const InternalUtils =  {
         isTempUID,
         getFilterSourceByKeywords,
         orderListByExpression: sortListByExpression,
-        getMandatoryExpressionValue
+        getMandatoryExpressionValue,
+        generateUniqSerial: utils.data.generateUniqSerial
     },
     navigation: {
         exit: function () {
