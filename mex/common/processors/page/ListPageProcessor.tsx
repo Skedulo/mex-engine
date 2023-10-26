@@ -28,7 +28,8 @@ import {ListPageSearchBarComponent} from "../../../../components/list_page_compo
 import {ListPageComponentModel} from "@skedulo/mex-types";
 import {PageProcessorContext, useCrudOnPage} from "../../../hooks/useCrudOnPage";
 import {ImagesResource} from "../../../../img/Images";
-import SkedIcon, {IconTypes} from "../../../../components/SkedIcon";
+import SkedIcon from "../../../../components/SkedIcon";
+import {IconTypes} from "@skedulo/mex-engine-proxy";
 
 type ListPageProcessorRefFunctions = {
     toggleShowBarVisibility: () => void

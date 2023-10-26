@@ -8,11 +8,12 @@ import NavigationProcessManager from "../../NavigationProcessManager";
 import {translateOneLevelOfExpression} from "../../InternalUtils";
 import utils from "../../Utils";
 import ThemeManager from "../../../colors/ThemeManager";
-import SkedIcon, {IconTypes} from "../../../../components/SkedIcon";
+import SkedIcon from "../../../../components/SkedIcon";
 import StylesManager from "../../../StylesManager";
 import {ReadonlyText} from "../../../../components/ReadonlyText";
 import {MultiSelectEditorViewComponentModel, SelectPageConfig} from "@skedulo/mex-types";
 import {SelectScreenName} from "../../screens/select/SelectScreen";
+import {IconTypes} from "@skedulo/mex-engine-proxy";
 
 type MultiSelectEditorViewProps = EditorViewProps<MultiSelectEditorViewArgs, MultiSelectEditorViewComponentModel>
 

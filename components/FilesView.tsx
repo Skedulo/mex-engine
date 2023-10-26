@@ -8,12 +8,13 @@ import ImageView from "react-native-image-viewing";
 import * as React from "react";
 import SkeduloImage from "./SkeduloImage";
 import converters from "../mex/common/Converters";
-import SkedIcon, {IconTypes} from "./SkedIcon";
+import SkedIcon from "./SkedIcon";
 import AssetsManager from "../mex/assets/AssetsManager";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import stylesManager from "../mex/StylesManager";
 import { translate } from "../mex/assets/LocalizationManager";
 import {AttachmentMetadata} from "../Tools/MexModuleCodeGenerator/mex-engine-core/src/di/ServicesProxy";
+import {IconTypes} from "@skedulo/mex-engine-proxy";
 
 const FilesView = ({attachmentsMetadata, isSignature, readonly}: {
     attachmentsMetadata: AttachmentMetadata[],

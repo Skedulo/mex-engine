@@ -8,13 +8,14 @@ import * as RootNavigation from "../../RootNavigation";
 import NavigationProcessManager from "../../NavigationProcessManager";
 import MexAsyncText from "../../../../components/MexAsyncText";
 import ThemeManager from "../../../colors/ThemeManager";
-import SkedIcon, {IconTypes} from "../../../../components/SkedIcon";
+import SkedIcon from "../../../../components/SkedIcon";
 import {translateOneLevelOfExpression} from "../../InternalUtils";
 import {useCallback, useState} from "react";
 import {useFocusEffect} from "@react-navigation/native";
 import {ReadonlyText} from "../../../../components/ReadonlyText";
 import {SelectEditorViewComponentModel, SelectPageConfig} from "@skedulo/mex-types";
 import {SelectScreenName} from "../../screens/select/SelectScreen";
+import {IconTypes} from "@skedulo/mex-engine-proxy";
 
 type SelectEditorViewProps = EditorViewProps<SelectEditorViewArgs, SelectEditorViewComponentModel>
 

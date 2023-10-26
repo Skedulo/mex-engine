@@ -1,9 +1,10 @@
 import React from 'react'
 import {SafeAreaView, TouchableOpacity, View} from "react-native";
 import BarcodeMask from "react-native-barcode-mask";
-import SkedIcon, {IconTypes} from "../../../components/SkedIcon";
+import SkedIcon from "../../../components/SkedIcon";
 import ScanQRBarcodeView from "../../../components/ScanQrBarcodeView";
 import NavigationProcessManager from "../NavigationProcessManager";
+import {IconTypes} from "@skedulo/mex-engine-proxy";
 
 type Props = {
 

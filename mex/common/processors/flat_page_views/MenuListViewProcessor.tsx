@@ -4,13 +4,14 @@ import {Text, TouchableOpacity, View} from "react-native";
 import MexAsyncText from "../../../../components/MexAsyncText";
 import Expressions from "../../expression/Expressions";
 import * as React from "react";
-import SkedIcon, {IconTypes} from "../../../../components/SkedIcon";
+import SkedIcon from "../../../../components/SkedIcon";
 import Divider from "../../../../components/Divider";
 import {FC, useCallback} from "react";
 import NavigationProcessManager, {NavigationContext} from "../../NavigationProcessManager";
 import { observer } from "mobx-react";
 import ThemeManager from "../../../colors/ThemeManager";
 import {MenuListItem, MenuListViewComponentModel} from "@skedulo/mex-types";
+import {IconTypes} from "@skedulo/mex-engine-proxy";
 
 
 type MenuListViewProps = FlatPageViewProps<MenuListViewArgs, MenuListViewComponentModel>

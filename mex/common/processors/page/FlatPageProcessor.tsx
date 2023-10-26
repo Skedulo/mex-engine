@@ -8,7 +8,7 @@ import StylesManager from "../../../StylesManager";
 import Expressions from "../../expression/Expressions";
 import InternalUtils from "../../InternalUtils";
 import SkedButton from "../../../../components/SkedButton";
-import SkedIcon, {IconTypes} from "../../../../components/SkedIcon";
+import SkedIcon from "../../../../components/SkedIcon";
 import ThemeManager from "../../../colors/ThemeManager";
 import {FirstPageRightNavigationComponent} from "../../../../components/FirstPageRightNavigationComponent";
 import AssetsManager from "../../../assets/AssetsManager";
@@ -21,6 +21,7 @@ import {
     FlatPageRenderResult,
     useCrudOnPage
 } from "../../../hooks/useCrudOnPage";
+import {IconTypes} from "@skedulo/mex-engine-proxy";
 
 enum FlatPageType {
     Display,
@@ -158,7 +159,7 @@ class FlatPageProcessor extends AbstractPageProcessor<FlatPageComponentModel> {
                                 dataContext={dataContext}
                                 items={jsonDef.items}
                                 description={jsonDef.description}
-                                readonly={jsonDef.upsert?.readonly}/>
+                                readonly={jsonDef.upsert?.readonly ?? false}/>
                         </View>
                     </ScrollView>
 

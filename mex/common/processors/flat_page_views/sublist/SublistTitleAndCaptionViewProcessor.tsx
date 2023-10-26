@@ -6,8 +6,9 @@ import StylesManager from "../../../../StylesManager";
 import Expressions from "../../../expression/Expressions";
 import SkedStaticResourceIcon from "../../../../../components/SkedStaticResourceIcon";
 import MexAsyncText from "../../../../../components/MexAsyncText";
-import SkedIcon, {IconTypes} from "../../../../../components/SkedIcon";
+import SkedIcon from "../../../../../components/SkedIcon";
 import {SublistTitleAndCaptionViewComponentModel} from "@skedulo/mex-types";
+import {IconTypes} from "@skedulo/mex-engine-proxy";
 
 export default class SublistTitleAndCaptionViewProcessor extends AbstractSublistViewProcessor<SublistTitleAndCaptionViewComponentModel> {
 

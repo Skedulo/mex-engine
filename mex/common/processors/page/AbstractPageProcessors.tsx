@@ -6,14 +6,15 @@ import InternalUtils from "../../InternalUtils";
 import {Alert, AlertButton, BackHandler, Platform, TouchableOpacity} from "react-native";
 import converters from "../../Converters";
 import {translate} from "../../../assets/LocalizationManager";
-import AssetsManager, {PageLevelDataContext} from "../../../assets/AssetsManager";
+import AssetsManager from "../../../assets/AssetsManager";
 import DraftManager from "../../../assets/DraftManager";
 import DataUtils from "../../utils/DataUtils";
 import {FirstPageRightNavigationComponent} from "../../../../components/FirstPageRightNavigationComponent";
 import {NavigationItemsView, RightNavigationItem} from "../../../../components/NavigationItemsView";
-import SkedIcon, {IconTypes} from "../../../../components/SkedIcon";
+import SkedIcon from "../../../../components/SkedIcon";
 import ThemeManager from "../../../colors/ThemeManager";
 import { BasePageComponentModel } from "@skedulo/mex-types";
+import {IconTypes, PageLevelDataContext} from "@skedulo/mex-engine-proxy";
 
 export type PageComponentProps<TComponentDefinitionModel extends BasePageComponentModel> = StandardComponentProps<StandardPageComponentArgs<TComponentDefinitionModel>, TComponentDefinitionModel>
 

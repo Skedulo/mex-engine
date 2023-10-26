@@ -5,11 +5,11 @@ import AbstractListPageViewProcessor, {
 } from "./AbstractListPageViewProcessor";
 import {View} from "react-native";
 import StylesManager from "../../../StylesManager";
-import SkedIcon, {IconTypes} from "../../../../components/SkedIcon";
+import SkedIcon from "../../../../components/SkedIcon";
 import Expressions from "../../expression/Expressions";
 import MexAsyncText from "../../../../components/MexAsyncText";
 import {TitleAndCaptionViewComponentModel} from "@skedulo/mex-types";
-import {ContextProxy, CoreContainer, ServicesProxy} from "@skedulo/mex-engine-proxy";
+import {ContextProxy, CoreContainer, IconTypes, ServicesProxy} from "@skedulo/mex-engine-proxy";
 
 export default class TitleAndCaptionViewProcessor extends AbstractListPageViewProcessor<TitleAndCaptionViewComponentModel> {
 

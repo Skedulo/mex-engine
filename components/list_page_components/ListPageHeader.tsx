@@ -6,11 +6,12 @@ import ThemeManager from "../../mex/colors/ThemeManager";
 import Expressions from "../../mex/common/expression/Expressions";
 import {BehaviorManager} from "../../mex/common/processors/ButtonBehaviorManager";
 import {StyleSheet, Text, View} from "react-native";
-import SkedButton, {SkedButtonSize} from "../SkedButton";
+import SkedButton from "../SkedButton";
 import MexAsyncText from "../MexAsyncText";
 import Divider from "../Divider";
 import InternalUtils from "../../mex/common/InternalUtils";
 import {PageProcessorContext, PageProcessorContextObj} from "../../mex/hooks/useCrudOnPage";
+import {SkedButtonSize} from "@skedulo/mex-engine-proxy";
 
 type ListPageHeaderComponentProps = {
     jsonDef: ListPageComponentModel,
@@ -138,7 +139,7 @@ export const ListPageHeaderComponent : React.FC<ListPageHeaderComponentProps> = 
         return (
             <SkedButton
                 onPress={onPressCallback}
-                theme={buttonGroupItemData.theme}
+                theme={buttonGroupItemData.theme!}
                 textPromiseFn={Expressions.generateGetValueFromLocalizationExpressionFunc({dataContext, expressionStr: buttonData.data.text})}
                 size={isRightButton ? SkedButtonSize.SMALL : SkedButtonSize.LARGE}
             />

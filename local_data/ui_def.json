@@ -1,5 +1,5 @@
 {
-  "firstPage": "ModuleA_MyPageScreen",
+  "firstPage": "JobProductListPage",
   "pages": {
     "ModuleA_MyPageScreen": {
       "type": "custom"

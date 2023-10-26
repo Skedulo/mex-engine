@@ -8,7 +8,7 @@ import {
     UIManager,
     View
 } from "react-native";
-import SkedIcon, {IconTypes} from "../../../components/SkedIcon";
+import SkedIcon from "../../../components/SkedIcon";
 import NavigationProcessManager from "../NavigationProcessManager";
 import ThemeManager from "../../colors/ThemeManager";
 import converters from "../Converters";
@@ -16,6 +16,7 @@ import SkedButton from "../../../components/SkedButton";
 import CaptureSignatureView from "../../../components/CaptureSignatureView";
 import StylesManager from "../../StylesManager";
 import {isTablet} from 'react-native-device-info';
+import {IconTypes} from "@skedulo/mex-engine-proxy";
 
 type Props = {
     route: any,

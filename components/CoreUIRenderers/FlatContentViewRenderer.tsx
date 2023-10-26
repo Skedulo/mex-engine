@@ -21,7 +21,7 @@ export type Props = {
     description?: LocalizedKey
     navigationContext: NavigationContext
     dataContext: any
-    formValidator?: ValidatorDefinitionModel,
+    formValidator?: ValidatorDefinitionModel|undefined,
     readonly?: DataExpressionType|boolean
 }
 

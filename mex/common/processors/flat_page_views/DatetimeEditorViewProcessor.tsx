@@ -9,10 +9,11 @@ import ThemeManager from "../../../colors/ThemeManager";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import converters from "../../Converters";
 import moment from "moment";
-import SkedIcon, {IconTypes} from "../../../../components/SkedIcon";
+import SkedIcon from "../../../../components/SkedIcon";
 import {ReadonlyText} from "../../../../components/ReadonlyText";
 import {DateTimePickerViewComponentModel, TimezoneType} from "@skedulo/mex-types";
 import AssetsManager from "../../../assets/AssetsManager";
+import {IconTypes} from "@skedulo/mex-engine-proxy";
 
 type DateTimeEditorViewProps = EditorViewProps<DateTimeEditorViewArgs, DateTimePickerViewComponentModel>
 
