@@ -81,7 +81,7 @@ class GlobalConfig {
     private DevelopmentModeConfig = {
         [DevelopmentModeConfigEnum.UseLocalInstanceData]: false,
         [DevelopmentModeConfigEnum.UseLocalStaticData]: false,
-        [DevelopmentModeConfigEnum.UseLocalUIDefinition]: true,
+        [DevelopmentModeConfigEnum.UseLocalUIDefinition]: false,
         [DevelopmentModeConfigEnum.UseLocalTranslationFiles]: false,
         [DevelopmentModeConfigEnum.UseLocalCustomFunctions]: false,
         [DevelopmentModeConfigEnum.UseLocalFormMetadata]: false
