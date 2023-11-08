@@ -248,7 +248,7 @@ export class FetchValueExpression extends Expression {
     functionRegex = () => /[A-z0-9\.]+(.+)\((.*)\)/g;
     functionParamsRegex = () => /(.+)\((.*)\)/g;
     variableAndFunctionScopeRegex = () => /[a-zA-Z_][a-zA-Z0-9_\[\]]+\.?([a-zA-Z_][a-zA-Z0-9_\[\]]*[\.]?)*(\((.*)\))?/g;
-    constantRegex = () => /'(.)*'/g
+    constantRegex = () => /'([^'])*'/g
 
     constructor(args: ExpressionArgs) {
         super(args);
@@ -461,8 +461,47 @@ export class FetchValueExpression extends Expression {
         let functionStrWithoutParams = functionRegexMatch![1];
         let additionalParamsStr = functionRegexMatch![2]
 
+
         if (additionalParamsStr && additionalParamsStr.length > 0) {
+
+            let constantMapping:any = {}
+            let propertyIndex = 0
+
+            let constantRegex = this.constantRegex()
+
+            let tests = additionalParamsStr.match(constantRegex)
+
+            console.log(tests)
+
+            while ((match = constantRegex.exec(additionalParamsStr)) != null) {
+                let matchValue = match[0]
+
+                let propertyName = "__property_" + propertyIndex
+
+                constantMapping[propertyName] =  matchValue
+                propertyIndex++
+            }
+
+            // First we replace all constant into variables name
+            for(let property in constantMapping) {
+                additionalParamsStr = additionalParamsStr.replace(constantMapping[property], property)
+            }
+
             let additionalParams = additionalParamsStr.split(',');
+
+            let newAdditionalParams:any[] = []
+
+            // After the split, we change them back
+            additionalParams.forEach((value, index) => {
+                value = value.trim()
+                if (value.startsWith("__property_")) {
+                    newAdditionalParams.push(constantMapping[value])
+                } else {
+                    newAdditionalParams.push(additionalParams[index])
+                }
+            })
+
+            additionalParams = newAdditionalParams
 
             additionalParams.forEach((additionalParam) => {
                 finalParams.push(this.translateValue(additionalParam.trim(), dataContext))
