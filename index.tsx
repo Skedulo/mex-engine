@@ -22,7 +22,6 @@ import MexEngineScreen from "./mex/data_driven/MexEngineScreen";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import ScanQRBarCodeScreen from "./mex/common/screens/ScanQRBarCodeScreen";
 import CaptureSignatureScreen from "./mex/common/screens/CaptureSignatureScreen";
-import BodyMapScreen from "./components/BodyMapScreen";
 import RoutingModalScreen from "./mex/data_driven/RoutingModalScreen";
 import ErrorBoundary from "react-native-error-boundary";
 import LogManager from "./mex/common/LogManager";
@@ -219,17 +218,17 @@ const RootStack = ({packageId, formName, contextId, staticResourcesId} : RootSta
                                     }}
                                 />
 
-                                <Stack.Screen
-                                    name="bodyMapScreen"
-                                    component={BodyMapScreen}
-                                    options={{
-                                        headerShown: false,
-                                        presentation: 'fullScreenModal',
-                                        contentStyle: {
-                                            backgroundColor: ThemeManager.getColorSet().skedBlue900
-                                        },
-                                    }}
-                                />
+                                {/*<Stack.Screen*/}
+                                {/*    name="bodyMapScreen"*/}
+                                {/*    component={BodyMapScreen}*/}
+                                {/*    options={{*/}
+                                {/*        headerShown: false,*/}
+                                {/*        presentation: 'fullScreenModal',*/}
+                                {/*        contentStyle: {*/}
+                                {/*            backgroundColor: ThemeManager.getColorSet().skedBlue900*/}
+                                {/*        },*/}
+                                {/*    }}*/}
+                                {/*/>*/}
 
                                 <Stack.Screen
                                     name="routingModalScreen"

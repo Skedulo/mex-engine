@@ -284,6 +284,8 @@ class AssetsManager implements IAssetsManager {
         let instanceDataStr = JSON.stringify(instanceData)
         let originalInstanceDataStr = JSON.stringify(this.originalInstanceData)
 
+        console.log("originalInstanceDataStr", originalInstanceDataStr)
+
         if (!forceSync && instanceDataStr == originalInstanceDataStr) {
             // Two object are exactly the same, no point to sync again
             // save isCompleted state
