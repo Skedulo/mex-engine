@@ -1,5 +1,5 @@
 import * as React from "react";
-import {ColorValue, View, ViewStyle} from "react-native";
+import {View} from "react-native";
 import ThemeManager from "../mex/colors/ThemeManager";
 import {DividerProps} from "@skedulo/mex-engine-proxy";
 

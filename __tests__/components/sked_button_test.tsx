@@ -12,7 +12,7 @@ describe('SkedButton Component Tests', function () {
             return Promise.resolve("Test button")
         }
 
-        const tree = render(<SkedButton textPromiseFn={getText} />)
+        const tree = render(<SkedButton textPromiseFn={getText} style={{}} />)
 
         await act(async () => {
             await new Promise((r) => setTimeout(r, 10));

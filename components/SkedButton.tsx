@@ -2,9 +2,7 @@ import React, {useState} from "react";
 import {Text, TouchableWithoutFeedback, View} from "react-native";
 import ThemeManager from "../mex/colors/ThemeManager";
 import StylesManager from "../mex/StylesManager";
-import {PromiseFn} from "react-async";
 import MexAsyncText from "./MexAsyncText";
-import {SkedButtonTheme} from "@skedulo/mex-types";
 import {SkedButtonProps, SkedButtonSize} from "@skedulo/mex-engine-proxy";
 
 const buttonStyleConfig = {
