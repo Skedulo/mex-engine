@@ -109,6 +109,47 @@ describe('getValueFromLocalizationExpression', function () {
         expect(actualResult).toBe("Qty: 2 - Date: A random date")
     });
 
+    it ('complex function to be called - expect normal behavior', async function() {
+        jest
+            .doMock("../mex/common/Converters", () => {
+                let mock = jest.requireActual("../mex/common/Converters")
+
+                mock.default.date.dateFormat = (arg1:any, arg2:any): Promise<string> => {
+                    return Promise.resolve(arg1 + "+++" + arg2)
+                }
+
+                return mock
+            })
+            .doMock("../mex/assets/LocalizationManager", () => {
+                let mock:any;
+
+                mock = jest.requireActual("../mex/assets/LocalizationManager")
+
+                mock.default.loadFromLocalResources = () => {
+                    return [
+                        ["en"],
+                        {
+                            "en": {
+                                "stringWithDollarSign": "${dateFormat('complex regex - , with a parameter', 'parameter 2, with a comma')}"
+                            }
+                        }
+                    ]
+                }
+
+                return mock
+            })
+
+        const LocalizationManager = require("../mex/assets/LocalizationManager")
+
+        await LocalizationManager.default.initializeLocalization();
+
+        const Expressions = require("../mex/common/expression/Expressions")
+
+        let actualResult = await Expressions.default.getValueFromLocalizedKey({expressionStr: 'stringWithDollarSign', dataContext: SimpleProductData1()})
+
+        expect(actualResult).toBe("complex regex - , with a parameter+++parameter 2, with a comma")
+    })
+
 });
 
 describe('getDataValueExpression', function () {
@@ -178,8 +219,6 @@ describe('getValueFromDollarSignExpression', function () {
 
         expect(actualResult).toBe("Not set")
     });
-
-
 });
 
 
