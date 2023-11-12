@@ -7,11 +7,8 @@ import CustomFunctionExecutor from "../CustomFunctionExecutor";
 import {LocalizedKey, ValueExpressionLogic} from "@skedulo/mex-types";
 import moment from 'moment';
 import InternalUtils from "../InternalUtils";
-import {
-    DataValueExpressionArgs,
-    ExpressionArgs,
-    FunctionExpressionArgs
-} from "@skedulo/mex-engine-proxy";
+import {DataValueExpressionArgs, ExpressionArgs, FunctionExpressionArgs} from "@skedulo/mex-engine-proxy";
+import RegexManager from "../../assets/RegexManager";
 
 abstract class Expression {
     args : ExpressionArgs;
@@ -439,9 +436,7 @@ export class FetchValueExpression extends Expression {
             }
         })
 
-        let finalResult = this.evalInContext(translatedExpressionStrIntoVariables, variableStore)
-
-        return finalResult;
+        return this.evalInContext(translatedExpressionStrIntoVariables, variableStore);
     }
 
     translateFunctionOrVariable(expressionStr: string, dataContext: any): Promise<any>|any {
@@ -455,12 +450,12 @@ export class FetchValueExpression extends Expression {
 
         let functionStr = match[0]
 
-        let functionRegexMatch = this.functionParamsRegex().exec(functionStr)
-
         let finalParams: any[] = []
-        let functionStrWithoutParams = functionRegexMatch![1];
-        let additionalParamsStr = functionRegexMatch![2]
 
+        const openingParenthesisIndex = functionStr.indexOf('(');
+
+        const functionStrWithoutParams = functionStr.slice(0, openingParenthesisIndex).trim();
+        let additionalParamsStr = functionStr.slice(openingParenthesisIndex + 1, -1).trim();
 
         if (additionalParamsStr && additionalParamsStr.length > 0) {
 
@@ -468,10 +463,6 @@ export class FetchValueExpression extends Expression {
             let propertyIndex = 0
 
             let constantRegex = this.constantRegex()
-
-            let tests = additionalParamsStr.match(constantRegex)
-
-            console.log(tests)
 
             while ((match = constantRegex.exec(additionalParamsStr)) != null) {
                 let matchValue = match[0]
@@ -529,7 +520,8 @@ export class FetchValueExpression extends Expression {
             timeFormat: converters.date.timeFormat,
             dateTimeFormat: converters.date.dateTimeFormat,
             conLocale: ConditionMethods.conLocale,
-            now: utils.date.now
+            now: utils.date.now,
+            isRegexValid: ConditionMethods.isRegexValid
         }
 
         if (functionStrWithoutParams.startsWith('cf.')) {
@@ -574,6 +566,17 @@ class ConditionMethods {
             dataContext: dataContext
         })
 
+    }
+
+    static isRegexValid(stringToValidate: string, regexKey: string): boolean {
+        let regexFileString = RegexManager.getRegexListString()
+
+        const regexFunction = new Function('regexKey', 'stringToValidate', `
+            ${regexFileString}
+            return regex['${regexKey}'].test(stringToValidate);
+        `)
+
+        return regexFunction(regexKey, stringToValidate);
     }
 }
 

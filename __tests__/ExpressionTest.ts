@@ -412,3 +412,130 @@ describe('getValueFromValueExpression', function () {
         expect(actualResult).toBe("default")
     })
 });
+
+describe('isRegexValid', function () {
+    it('given a valid regex for email - expect return true', async function () {
+        jest.doMock("../mex/assets/RegexManager", () => {
+            let mock:any;
+
+            mock = jest.requireActual("../mex/assets/RegexManager")
+
+            mock.default.getRegexListString = () => {
+                return `const regex = {
+                    emailRegex: /^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$/i,
+                    urlRegex: /^(https?):\\/\\/[^\\s/$.?#].[^\\s]*$/i,
+                    commaRegex: /,/g
+                }
+                `
+            }
+
+            return mock
+        })
+
+        const RegexManager = require("../mex/assets/RegexManager")
+
+        await RegexManager.default.initialize();
+
+        const Expressions = require("../mex/common/expression/Expressions")
+
+        const actualResult = Expressions.default.getValueExpression({
+            expressionStr: `isRegexValid(pageData.userInfo.email, 'emailRegex')`,
+            dataContext: SimpleProductData1()
+        })
+
+        expect(actualResult).toBe(true)
+    })
+
+    it('given a valid regex for date (YYYY-MM-DD) - expect return true', async function () {
+        jest.doMock("../mex/assets/RegexManager", () => {
+            let mock:any;
+
+            mock = jest.requireActual("../mex/assets/RegexManager")
+
+            mock.default.getRegexListString = () => {
+                return `const regex = {
+                    dateRegex: /^\\d{4}-\\d{2}-\\d{2}$/i
+                }
+                `
+            }
+
+            return mock
+        })
+
+        const RegexManager = require("../mex/assets/RegexManager")
+
+        await RegexManager.default.initialize();
+
+        const Expressions = require("../mex/common/expression/Expressions")
+
+        const actualResult = Expressions.default.getValueExpression({
+            expressionStr: `isRegexValid(pageData.createdDate, 'dateRegex')`,
+            dataContext: SimpleProductData1()
+        })
+
+        expect(actualResult).toBe(true)
+    })
+
+    it('given a valid regex for https link - expect return true', async function () {
+        jest.doMock("../mex/assets/RegexManager", () => {
+            let mock:any;
+
+            mock = jest.requireActual("../mex/assets/RegexManager")
+
+            mock.default.getRegexListString = () => {
+                return `const regex = {
+                    urlRegex: /^(https?):\\/\\/[^\\s/$.?#].[^\\s]*$/i
+                }
+                `
+            }
+
+            return mock
+        })
+
+        const RegexManager = require("../mex/assets/RegexManager")
+
+        await RegexManager.default.initialize();
+
+        const Expressions = require("../mex/common/expression/Expressions")
+
+        const actualResult = Expressions.default.getValueExpression({
+            expressionStr: `isRegexValid(pageData.userInfo.url, 'urlRegex')`,
+            dataContext: SimpleProductData1()
+        })
+
+        expect(actualResult).toBe(true)
+    })
+
+    it('given an invalid regex - expect throw error', async function () {
+        try {
+            jest.doMock("../mex/assets/RegexManager", () => {
+                let mock:any;
+
+                mock = jest.requireActual("../mex/assets/RegexManager")
+
+                mock.default.getRegexListString = () => {
+                    return `const regex = {
+                    urlRegex: /[/i
+                }
+                `
+                }
+
+                return mock
+            })
+
+            const RegexManager = require("../mex/assets/RegexManager")
+
+            await RegexManager.default.initialize();
+
+            const Expressions = require("../mex/common/expression/Expressions")
+
+            Expressions.default.getValueExpression({
+                expressionStr: `isRegexValid(pageData.userInfo.url, 'urlRegex')`,
+                dataContext: SimpleProductData1()
+            })
+        } catch (e) {
+            expect(e).toBeDefined()
+        }
+    })
+})
+

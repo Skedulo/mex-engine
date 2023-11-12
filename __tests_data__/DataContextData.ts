@@ -18,8 +18,12 @@ export const SimpleProductData1 = (): PageLevelDataContext => {
             title: "My Product",
             qty: 2,
             createdDate: "2022-01-01",
-            userInfo: { Name: "Huy Vu" },
-            users: []
+            userInfo: {
+                Name: "Huy Vu",
+                email: 'hieu.bui@skedulo.com',
+                url: 'https://www.google.com.vn/'
+            },
+            users: [],
         },
         sharedData: {},
         metadata: {
