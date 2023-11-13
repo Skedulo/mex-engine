@@ -30,7 +30,7 @@ import {PageProcessorContext, useCrudOnPage} from "../../../hooks/useCrudOnPage"
 import {ImagesResource} from "../../../../img/Images";
 import SkedIcon from "../../../../components/SkedIcon";
 import {IconTypes} from "@skedulo/mex-engine-proxy";
-import {makeAutoObservable, runInAction} from "mobx";
+import {runInAction} from "mobx";
 
 type ListPageProcessorRefFunctions = {
     toggleShowBarVisibility: () => void
