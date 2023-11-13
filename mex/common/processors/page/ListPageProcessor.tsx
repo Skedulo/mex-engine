@@ -15,21 +15,22 @@ import ListViewProcessorManager from "../list_page_views/ListViewProcessorsManag
 import MexAsyncText from "../../../../components/MexAsyncText";
 import StylesManager from "../../../StylesManager";
 import ThemeManager from "../../../colors/ThemeManager";
-import InternalUtils, {FilterByExpressionInfo} from "../../InternalUtils";
-import {useCallback, useState, useRef, useMemo} from "react";
+import InternalUtils, {FilterByExpressionInfo, translateOneLevelOfExpression} from "../../InternalUtils";
+import {useCallback, useState, useRef, useMemo, useEffect, useReducer} from "react";
 import {RightNavigationItem} from "../../../../components/NavigationItemsView";
 import * as lodash from "lodash";
 import { Dictionary } from 'lodash';
-import {ListPageSectionHeaderComponent} from "../../../../components/list_page_components/ListPageSectionHeader";
-import {ListPageFooterComponent} from "../../../../components/list_page_components/ListPageFooter";
-import {ListPageHeaderComponent} from "../../../../components/list_page_components/ListPageHeader";
-import {ListPageChildComponent} from "../../../../components/list_page_components/ListPageChild";
-import {ListPageSearchBarComponent} from "../../../../components/list_page_components/ListPageSearchBar";
+import {ListPageSectionHeaderComponent} from "../../../../components/ListPage/ListPageSectionHeader";
+import {ListPageFooterComponent} from "../../../../components/ListPage/ListPageFooter";
+import {ListPageHeaderComponent} from "../../../../components/ListPage/ListPageHeader";
+import {ListPageChildComponent} from "../../../../components/ListPage/ListPageChild";
+import {ListPageSearchBarSectionComponent} from "../../../../components/ListPage/ListPageSearchBarSectionComponent";
 import {ListPageComponentModel} from "@skedulo/mex-types";
 import {PageProcessorContext, useCrudOnPage} from "../../../hooks/useCrudOnPage";
 import {ImagesResource} from "../../../../img/Images";
 import SkedIcon from "../../../../components/SkedIcon";
 import {IconTypes} from "@skedulo/mex-engine-proxy";
+import {makeAutoObservable, runInAction} from "mobx";
 
 type ListPageProcessorRefFunctions = {
     toggleShowBarVisibility: () => void
@@ -57,8 +58,11 @@ class ListPageProcessor extends AbstractPageProcessor<ListPageComponentModel> {
         let CurrentChildComponent = useRef<React.FC<any>|null>(null)
 
         let {jsonDef, dataContext} = args
+        if (jsonDef.search.advancedFilter.defaultData && !dataContext.filter) {
+            dataContext.filter = translateOneLevelOfExpression({jsonDef: jsonDef.search.advancedFilter.defaultData, dataContext: dataContext})
+        }
+
         const [searchText, setSearchText] = useState('')
-        const [advancedFilterObj, setAdvancedFilterObj] = useState<any|undefined>(undefined)
 
         let [showFilter, setShowFilter] = useState(false)
 
@@ -175,10 +179,9 @@ class ListPageProcessor extends AbstractPageProcessor<ListPageComponentModel> {
             if (!showFilter)
                 return <></>
 
-            return (<ListPageSearchBarComponent
+            return (<ListPageSearchBarSectionComponent
                 defaultSearchText={searchText}
                 navigationContext={args.navigationContext}
-                advancedFilterObj={advancedFilterObj ? {...advancedFilterObj} : undefined}
                 dataContext={dataContext}
                 jsonDef={jsonDef.search}
                 onFilterChanged={(searchText, advancedFilterObj) => {
@@ -188,16 +191,26 @@ class ListPageProcessor extends AbstractPageProcessor<ListPageComponentModel> {
                     }
 
                     if (jsonDef.search?.advancedFilter?.ui) {
-                        setAdvancedFilterObj(advancedFilterObj)
+                        console.log("jsonDef.search?.advancedFilter.events?.afterFilterSubmit", jsonDef.search?.advancedFilter.events?.afterFilterSubmit)
+
+                        if (jsonDef.search?.advancedFilter.events?.afterFilterSubmit) {
+                            Expressions.runFunctionExpression({dataContext: dataContext, functionExpression: jsonDef.search.advancedFilter.events.afterFilterSubmit})
+                        }
+
+                        runInAction(() => {
+                            dataContext.filter = advancedFilterObj
+                        })
                     }
 
                     toggleShowBarVisibility()
                 }}
                 toggleShowBarVisibility={toggleShowBarVisibility}/>)
-        }, [args.dataContext, searchText, advancedFilterObj, showFilter])
+        }, [args.dataContext, searchText, showFilter])
 
         if (jsonDef.search) {
             source = useMemo(() => {
+                console.log("filter again")
+
                 let filterOnProperties:string[]|undefined = undefined
                 let filterExpressions:FilterByExpressionInfo|undefined = undefined
 
@@ -207,10 +220,7 @@ class ListPageProcessor extends AbstractPageProcessor<ListPageComponentModel> {
 
                 if  (jsonDef.search?.advancedFilter?.expression) {
                     filterExpressions = {
-                        dataContext: {
-                            ...dataContext,
-                            filter: advancedFilterObj
-                        },
+                        dataContext: dataContext,
                         expression: jsonDef.search.advancedFilter.expression
                     }
                 }
@@ -226,7 +236,7 @@ class ListPageProcessor extends AbstractPageProcessor<ListPageComponentModel> {
                 }
 
                 return source
-            }, [source, source?.length, dataContext, searchText, advancedFilterObj])
+            }, [source, source?.length, dataContext, dataContext.filter, searchText])
         }
 
         let finalizedData = useMemo<{data:any[], title?: string}[]>(() => {
