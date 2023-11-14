@@ -51,6 +51,7 @@ import SearchBar from "./components/SearchBar";
 import SkedIcon from "./components/SkedIcon";
 import SkeduloImage from "./components/SkeduloImage";
 import StylesManager from "./mex/StylesManager";
+import RegexManager from "./mex/assets/RegexManager";
 LogBox.ignoreLogs(['Warning: ...', '[MobX]', 'Require cycle', 'Could not find image']); // Ignore log notification by message
 
 const Stack = createNativeStackNavigator();
@@ -101,6 +102,7 @@ const RootStack = ({packageId, formName, contextId, staticResourcesId} : RootSta
         // Initialize Localization
         Promise.all([
             LocalizationManager.initializeLocalization(),
+            RegexManager.initialize(),
             AssetsManager.loadMexData(),
             scanModulePages().then((registries) => {
                 registeredModules.current = registries ?? []
