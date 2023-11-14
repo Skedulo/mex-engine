@@ -57,6 +57,7 @@ export default class MultiSelectEditorViewProcessor
                 dataContext: {...dataContext, item}
             })
         }) : structureContextObj.map((item:any) => {
+            // for multi picklist field, transform selected value to { Label, Value } to make easier to compare
             return {
                 Label: item,
                 Value: item
@@ -122,13 +123,13 @@ export default class MultiSelectEditorViewProcessor
                                 } else {
                                     Expressions.setDataValueExpression(fetchStructureExpressionObj, result)
                                 }
-                            } else if (result?.[0]?.Value) {
-                                // From vocab
+                            } else if (result[0].Value) {
+                                // for multi picklist field
                                 const transformData = result.map((item: any) => item.Value)
-                                Expressions.setDataValueExpression(fetchStructureExpressionObj, transformData ?? null)
-                            } else {
-                                // Otherwise, the value we're expecting is just pure value
-                                Expressions.setDataValueExpression(fetchStructureExpressionObj, result ?? null)
+                                Expressions.setDataValueExpression(fetchStructureExpressionObj, transformData)
+                            } else if (!(result[0] instanceof Object)) {
+                                // pure value
+                                Expressions.setDataValueExpression(fetchStructureExpressionObj, result)
                             }
                         } else {
                             // the user has not chosen any options, just set data to null
