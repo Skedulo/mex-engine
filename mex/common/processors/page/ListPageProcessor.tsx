@@ -191,8 +191,6 @@ class ListPageProcessor extends AbstractPageProcessor<ListPageComponentModel> {
                     }
 
                     if (jsonDef.search?.advancedFilter?.ui) {
-                        console.log("jsonDef.search?.advancedFilter.events?.afterFilterSubmit", jsonDef.search?.advancedFilter.events?.afterFilterSubmit)
-
                         if (jsonDef.search?.advancedFilter.events?.afterFilterSubmit) {
                             Expressions.runFunctionExpression({dataContext: dataContext, functionExpression: jsonDef.search.advancedFilter.events.afterFilterSubmit})
                         }
