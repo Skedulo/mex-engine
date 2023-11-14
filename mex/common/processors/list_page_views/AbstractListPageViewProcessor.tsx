@@ -6,12 +6,12 @@ import {SublistPageViewArgs} from "../flat_page_views/sublist/AbstractSublistVie
 import InvalidBadge from "../../../../components/InvalidBadge";
 import {useCallback, useEffect, useReducer, useRef} from "react";
 import StylesManager from "../../../StylesManager";
-import {AttachmentMetadata} from "../../../../components/FilesView";
 import lodash from "lodash";
 import AttachmentsManager from "../../attachments/AttachmentsManager";
 import SkeduloImage from "../../../../components/SkeduloImage";
 import TagsView from "../../../../components/TagsView";
 import {BaseListPageViewComponentModel, ListPageComponentModel, UseAttachments} from "@skedulo/mex-types";
+import {AttachmentMetadata} from "@skedulo/mex-engine-proxy";
 
 export type ListPageViewProps<TComponentDefinitionModel extends BaseListPageViewComponentModel> = StandardComponentProps<ListPageViewArgs<TComponentDefinitionModel>, TComponentDefinitionModel>
 

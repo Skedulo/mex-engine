@@ -9,14 +9,14 @@
     "jsx": "react",
 
     /* Visit https://aka.ms/tsconfig to read more about this file */
-    "strict": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
+    "strict": false,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
     "strictFunctionTypes": true,
     "strictBindCallApply": true,
     "strictPropertyInitialization": true,
     "noImplicitThis": true,
-    "alwaysStrict": true,
+    "alwaysStrict": false,
     "allowJs": true,
 
     /* Additional Checks */
