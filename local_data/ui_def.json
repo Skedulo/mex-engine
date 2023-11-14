@@ -1,8 +1,661 @@
 {
-  "firstPage": "JobProductListPage",
+  "firstPage": "LandingPage",
   "pages": {
-    "ModuleA_MyPageScreen": {
-      "type": "custom"
+    "LandingPage": {
+      "type": "flat",
+      "title": "form.ShowCasePage.Title",
+      "items": [
+        {
+          "type": "menuList",
+          "items": [
+            {
+              "text": "form.LandingPage.AllControlsPage",
+              "itemClickDestination":  "ShowCasePage"
+            },
+            {
+              "text": "form.LandingPage.DynamicSelectorPage",
+              "showIfExpression": "formData.ShowCaseObject",
+              "itemClickDestination":  "DynamicSelectorPage",
+              "badgeText": "form.LandingPage.ShortBadgeSample"
+            },
+            {
+              "text": "form.ShowCasePage.CommunicationSection",
+              "itemClickDestination":  "CommunicationButtonsPage",
+              "badgeText": "form.LandingPage.LongBadgeSample"
+            },
+            {
+              "text": "form.LandingPage.JobProductPage",
+              "itemClickDestination":  "JobProductListPage",
+              "badgeText": "form.LandingPage.ProductsBadge",
+              "showIfExpression": "formData.ShowCaseObject"
+            },
+            {
+              "text": "form.LandingPage.ReadonlyFieldsPage",
+              "itemClickDestination":  "ReadonlyFieldsPage"
+            },
+            {
+              "text": "form.DateTimePickersPage.Title",
+              "itemClickDestination":  "DateTimeWithDifferentTimezone",
+              "showIfExpression": "formData.ShowCaseObject"
+            },
+            {
+              "text": "form.LandingPage.JobProductVIPOnlyPage",
+              "itemClickDestination": "JobProductVIPOnlyListPage"
+            },
+            {
+              "text": "form.LandingPage.PreLoadAndPreSavePage",
+              "itemClickDestination": "PreLoadAndPreSavePage"
+            }
+          ]
+        }
+      ]
+    },
+    "PreLoadAndPreSavePage": {
+      "type": "flat",
+      "title": "form.ShowCasePageWithEvents.Title",
+      "pageDataExpression": "formData.ShowCaseObject",
+      "events": {
+        "onPreDataSave": "cf.onPreDataSave(pageData)",
+        "onPreDataLoad": "cf.onPreDataLoad(pageData)"
+      },
+      "defaultPageData": {
+        "data": {
+          "SingleLineText": "Default string",
+          "FromDateTime": "${now('datetime')}",
+          "ToDateTime": "${now('datetime')}",
+          "JobId": "${metadata.contextObjectId}"
+        },
+        "objectName": "ShowCaseObject"
+      },
+      "upsert": {
+        "defaultDataForNewObject": {
+        },
+        "validator": [],
+        "saveDraft": {
+          "askWhenBack": true
+        }
+      },
+      "items": [{
+        "type": "section",
+        "body": "form.ShowCasePageWithEvents.StateData",
+        "items": [
+          {
+            "type": "toggleEditor",
+            "mode": "switch",
+            "items": [
+              {
+                "valueExpression": "pageData.hasValueOnSingleLineText",
+                "text": "form.ShowCasePageWithEvents.SinglelineText"
+              }
+            ]
+          },
+          {
+            "type": "toggleEditor",
+            "mode": "switch",
+            "items": [
+              {
+                "valueExpression": "pageData.hasValueOnMultilineText",
+                "text": "form.ShowCasePageWithEvents.MultilineText"
+              }
+            ]
+          }
+        ]
+      }]
+    },
+    "ShowCasePage": {
+      "type": "flat",
+      "title": "form.ShowCasePage.Title",
+      "pageDataExpression": "formData.ShowCaseObject",
+      "defaultPageData": {
+        "data": {
+          "SingleLineText": "Default string",
+          "FromDateTime": "${now('datetime')}",
+          "ToDateTime": "${now('datetime')}",
+          "JobId": "${metadata.contextObjectId}"
+        },
+        "objectName": "ShowCaseObject"
+      },
+      "upsert": {
+        "defaultDataForNewObject": {
+        },
+        "validator": [],
+        "saveDraft": {
+          "askWhenBack": true
+        }
+      },
+      "items": [
+        {
+          "type": "section",
+          "items": [
+            {
+              "type": "bodyMapEditor",
+              "attachmentCategoryName": "bodyMap",
+              "sourceExpression": "pageData"
+            },
+            {
+              "type": "textEditor",
+              "valueExpression": "pageData.SingleLineText",
+              "title": "form.ShowCasePage.SingleLineText",
+              "placeholder": "form.ShowCasePage.SingleLineTextHint"
+            },
+            {
+              "type": "textEditor",
+              "valueExpression": "pageData.MultilineText",
+              "title": "form.ShowCasePage.MultilineText",
+              "placeholder": "form.ShowCasePage.MultilineTextHint",
+              "multiline": true,
+              "validator": [
+                {
+                  "type": "expression",
+                  "errorMessage": "form.ShowCasePage.MultiLineTextValidationHint",
+                  "expression": "pageData.MultilineText && pageData.MultilineText.length > 0 && pageData.MultilineText.length <= 30"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "section",
+          "title": "form.ShowCasePage.SelectorSection",
+          "items": [
+            {
+              "type": "selectEditor",
+              "title": "form.ShowCasePage.SelectUser",
+              "structureExpression": "pageData.User",
+              "valueExpression": "pageData.UserId",
+              "sourceExpression": "sharedData.Users",
+              "displayExpression": "pageData.User.Name",
+              "placeholder": "form.ShowCasePage.SelectUserHint",
+              "selectPage": {
+                "itemTitle": "form.ShowCasePage.SelectUserItemTitle",
+                "emptyText": "form.ShowCasePage.SelectUserEmpty",
+                "title": "form.ShowCasePage.SelectUserTitle",
+                "searchBar": {
+                  "filterOnProperties": ["Name"]
+                }
+              },
+              "validator": [
+                {
+                  "type": "expression",
+                  "expression": "pageData.UserId",
+                  "errorMessage": "form.ShowCasePage.SelectUserValidation"
+                }
+              ]
+            },
+            {
+              "type": "selectEditor",
+              "title": "form.ShowCasePage.SelectUserOnline",
+              "structureExpression": "pageData.User",
+              "valueExpression": "pageData.UserId",
+              "sourceExpression": "sharedData.Users",
+              "displayExpression": "pageData.User.Name",
+              "placeholder": "form.ShowCasePage.SelectUserHint",
+              "onlineSource": {
+                "key": "ShowCaseUsers",
+                "variables": {
+                }
+              },
+              "selectPage": {
+                "itemTitle": "form.ShowCasePage.SelectUserItemTitle",
+                "emptyText": "form.ShowCasePage.SelectUserEmpty",
+                "title": "form.ShowCasePage.SelectUserTitle",
+                "searchBar": {
+                  "filterOnProperties": ["Name"]
+                }
+              },
+              "validator": [
+                {
+                  "type": "expression",
+                  "expression": "pageData.UserId",
+                  "errorMessage": "form.ShowCasePage.SelectUserValidation"
+                }
+              ]
+            },
+            {
+              "type": "selectEditor",
+              "title": "form.ShowCasePage.SelectDogTitle",
+              "valueExpression": "pageData.DogType",
+              "sourceExpression": "sharedData.__vocabulary.DogTypes",
+              "displayExpression": "pageData.DogType",
+              "placeholder": "form.ShowCasePage.SelectDogHint",
+              "selectPage": {
+                "itemTitle": "form.ShowCasePage.SelectDogItemTitle",
+                "emptyText": "form.ShowCasePage.SelectDogEmpty",
+                "title": "form.ShowCasePage.SelectDogTitle",
+                "searchBar": {
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "section",
+          "title": "form.ShowCasePage.DateTimeSection",
+          "body": "form.ShowCasePage.DateTimeSectionDescription",
+          "items": [
+            {
+              "type": "dateTimeEditor",
+              "mode": "datetime",
+              "valueExpression": "pageData.FromDateTime",
+              "title": "form.ShowCasePage.DateTimeFrom",
+              "placeholder": "form.ShowCasePage.DateTimeFromHint"
+            },
+            {
+              "type": "dateTimeEditor",
+              "mode": "datetime",
+              "valueExpression": "pageData.ToDateTime",
+              "title": "form.ShowCasePage.DateTimeTo",
+              "placeholder": "form.ShowCasePage.DateTimeToHint"
+            },
+            {
+              "type": "dateTimeEditor",
+              "mode": "date",
+              "valueExpression": "pageData.Date",
+              "title": "form.ShowCasePage.Date",
+              "placeholder": "form.ShowCasePage.DateHint",
+              "validator": [
+                {
+                  "type": "expression",
+                  "errorMessage": "form.ShowCasePage.DateIsRequired",
+                  "expression": "pageData.Date"
+                }
+              ]
+            },
+            {
+              "type": "dateTimeEditor",
+              "mode": "time",
+              "valueExpression": "pageData.Time",
+              "title": "form.ShowCasePage.Time",
+              "placeholder": "form.ShowCasePage.TimeHint",
+              "validator": [
+                {
+                  "type": "expression",
+                  "errorMessage": "form.ShowCasePage.DateIsRequired",
+                  "expression": "pageData.Time"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "form.ShowCasePage.SwitchSection",
+          "type": "section",
+          "items": [
+            {
+              "type": "toggleEditor",
+              "mode": "switch",
+              "items": [
+                {
+                  "valueExpression": "pageData.Switch1",
+                  "text": "form.ShowCasePage.Switch"
+                }
+              ]
+            },
+            {
+              "type": "toggleEditor",
+              "mode": "radio",
+              "title": "form.ShowCasePage.Radio",
+              "items": [
+                {
+                  "valueExpression": "pageData.Radio1",
+                  "onValue": 1,
+                  "text": "form.ShowCasePage.Radio1_1"
+                },
+                {
+                  "valueExpression": "pageData.Radio1",
+                  "onValue": 2,
+                  "text": "form.ShowCasePage.Radio1_2"
+                },
+                {
+                  "valueExpression": "pageData.Radio1",
+                  "onValue": 3,
+                  "text": "form.ShowCasePage.Radio1_3"
+                }
+              ]
+            },
+            {
+              "type": "toggleEditor",
+              "mode": "checkbox",
+              "title": "form.ShowCasePage.Checkbox",
+              "items": [
+                {
+                  "valueExpression": "pageData.Checkbox11",
+                  "text": "form.ShowCasePage.Checkbox1_1"
+                },
+                {
+                  "valueExpression": "pageData.Checkbox12",
+                  "text": "form.ShowCasePage.Checkbox1_2"
+                },
+                {
+                  "valueExpression": "pageData.Checkbox13",
+                  "text": "form.ShowCasePage.Checkbox1_3"
+                }
+              ],
+              "validator": [
+                {
+                  "type": "expression",
+                  "errorMessage": "form.ShowCasePage.CheckboxValidationHint",
+                  "expression": "pageData.Checkbox13 == true || pageData.Checkbox12  == true || pageData.Checkbox11  == true"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "form.ShowCasePage.FilesSection",
+          "type": "section",
+          "items": [
+            {
+              "type": "attachmentsEditor",
+              "sourceExpression": "pageData",
+              "title": "form.ShowCasePage.Attachments"
+            },
+            {
+              "type": "signatureEditor",
+              "sourceExpression": "pageData",
+              "title": "form.ShowCasePage.Signature",
+              "enableFullName": true
+            }
+          ]
+        },
+        {
+          "title": "form.ShowCasePage.ShowIfSection",
+          "type": "section",
+          "showIfExpression": "pageData.TurnOffSection === false || pageData.TurnOffSection === undefined",
+          "items": [
+            {
+              "type": "toggleEditor",
+              "mode": "switch",
+              "items": [
+                {
+                  "valueExpression": "pageData.CheckboxShowIf",
+                  "text": "form.ShowCasePage.CheckboxShowIf"
+                }
+              ]
+            },
+            {
+              "type": "readonlyTextView",
+              "title": "form.ShowCasePage.ElapsedTimeTitle",
+              "text": "form.ShowCasePage.ElapsedTime",
+              "showIfExpression": "pageData.CheckboxShowIf"
+            },
+            {
+              "type": "toggleEditor",
+              "mode": "switch",
+              "items": [
+                {
+                  "valueExpression": "pageData.TurnOffSection",
+                  "text": "form.ShowCasePage.TurnOffSection"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "form.ShowCasePage.ButtonGroupSection",
+          "type": "section",
+          "items": [
+            {
+              "type": "toggleEditor",
+              "mode": "switch",
+              "items": [
+                {
+                  "valueExpression": "pageData.CheckboxButtonGroupShowIf",
+                  "text": "form.ShowCasePage.CheckboxButtonGroupShowIf"
+                }
+              ]
+            },
+            {
+              "type": "readonlyTextView",
+              "title": "form.ShowCasePage.ButtonGroupProxyDataTitle",
+              "text": "form.ShowCasePage.ButtonGroupProxyData",
+              "showIfExpression": "pageData.CheckboxButtonGroupShowIf"
+            },
+            {
+              "type": "buttonGroup",
+              "showIfExpression": "pageData.CheckboxButtonGroupShowIf",
+              "items": [
+                {
+                  "text": "form.ShowCasePage.ButtonGroupOneBtn",
+                  "theme": "primary",
+                  "behavior": {
+                    "type": "custom",
+                    "functionExpression": "cf.setButtonGroupProxyData('From one button')"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "buttonGroup",
+              "showIfExpression": "pageData.CheckboxButtonGroupShowIf",
+              "items": [
+                {
+                  "text": "form.ShowCasePage.ButtonGroupTwoBtnLeft",
+                  "theme": "default",
+                  "behavior": {
+                    "type": "custom",
+                    "functionExpression": "cf.setButtonGroupProxyData('Two buttons - Left')"
+                  }
+                },
+                {
+                  "text": "form.ShowCasePage.ButtonGroupTwoBtnRight",
+                  "theme": "default",
+                  "behavior": {
+                    "type": "custom",
+                    "functionExpression": "cf.setButtonGroupProxyData('Two buttons - Right')"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "buttonGroup",
+              "showIfExpression": "pageData.CheckboxButtonGroupShowIf",
+              "items": [
+                {
+                  "text": "form.ShowCasePage.ButtonGroupThreeBtn1",
+                  "theme": "default",
+                  "behavior": {
+                    "type": "custom",
+                    "functionExpression": "cf.setButtonGroupProxyData('Three buttons - 1')"
+                  }
+                },
+                {
+                  "text": "form.ShowCasePage.ButtonGroupThreeBtn2",
+                  "theme": "default",
+                  "behavior": {
+                    "type": "custom",
+                    "functionExpression": "cf.setButtonGroupProxyData('Three buttons - 2')"
+                  }
+                },
+                {
+                  "text": "form.ShowCasePage.ButtonGroupThreeBtn3",
+                  "theme": "success",
+                  "behavior": {
+                    "type": "custom",
+                    "functionExpression": "cf.setButtonGroupProxyData('Three buttons - 3')"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "DynamicSelectorPage": {
+      "type": "flat",
+      "title": "form.DynamicSelectorPage.Title",
+      "pageDataExpression": "formData.ShowCaseObject",
+      "upsert": {
+        "defaultDataForNewObject": {
+        },
+        "validator": [],
+        "saveDraft": {
+          "askWhenBack": true
+        }
+      },
+      "defaultPageData": {
+        "data": {
+        },
+        "objectName": "ShowCaseObject"
+      },
+      "items": [
+        {
+          "type": "section",
+          "title": "form.ShowCasePage.SelectorSection",
+          "items": [
+            {
+              "type": "buttonGroup",
+              "items": [{
+                "text": "form.ShowCasePage.ChooseDogViaButton",
+                "theme": "default",
+                "behavior": {
+                  "type": "openSelector",
+                  "selectPage": {
+                    "itemTitle": "form.ShowCasePage.SelectDogItemTitle",
+                    "emptyText": "form.ShowCasePage.SelectDogEmpty",
+                    "title": "form.ShowCasePage.SelectDogTitle",
+                    "searchBar": {
+                      "filterOnProperties": ["Name"]
+                    },
+                    "dataSourceExpression": "sharedData.__vocabulary.DogTypes"
+                  },
+                  "events": {
+                    "onDataChosen": "cf.handleDogChosen(items, pageData)"
+                  }
+                }
+              }]
+            },
+            {
+              "type": "textEditor",
+              "valueExpression": "pageData.DogName",
+              "title": "form.ShowCasePage.DogNameTitle",
+              "readonly": true
+            },
+            {
+              "type": "selectEditor",
+              "title": "form.ShowCasePage.SelectProduct",
+              "structureExpression": "pageData.Product",
+              "valueExpression": "pageData.ProductId",
+              "sourceExpression": "sharedData.Products",
+              "displayExpression": "pageData.Product.Name",
+              "placeholder": "form.ShowCasePage.SelectProductHint",
+              "caption": "form.ShowCasePage.SelectProductCaption",
+              "selectPage": {
+                "itemTitle": "form.ShowCasePage.SelectProductItemTitle",
+                "emptyText": "form.ShowCasePage.SelectProductEmpty",
+                "title": "form.ShowCasePage.SelectProductTitle",
+                "searchBar": {
+                  "filterOnProperties": ["Name"]
+                }
+              }
+            },
+            {
+              "type": "selectEditor",
+              "title": "form.ShowCasePage.SelectProductDiscount",
+              "structureExpression": "pageData.ProductDiscount",
+              "valueExpression": "pageData.ProductDiscountId",
+              "sourceExpression": "sharedData.ProductDiscounts",
+              "displayExpression": "pageData.ProductDiscount.Name",
+              "placeholder": "form.ShowCasePage.SelectProductDiscountHint",
+              "caption": "form.ShowCasePage.SelectProductDiscountCaption",
+              "showIfExpression": "pageData.Product",
+              "filterExpression": "pageData.Product.Type === item.Type",
+              "selectPage": {
+                "itemTitle": "form.ShowCasePage.SelectProductDiscountItemTitle",
+                "emptyText": "form.ShowCasePage.SelectProductDiscountEmpty",
+                "title": "form.ShowCasePage.SelectProductDiscountTitle",
+                "searchBar": {
+                  "filterOnProperties": ["Name"]
+                }
+              },
+              "validator": [
+                {
+                  "type": "expression",
+                  "expression": "pageData.Product.Type === pageData.ProductDiscount.Type",
+                  "errorMessage": "form.ShowCasePage.ProductDiscountSameTypeErrorMessage"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "CommunicationButtonsPage": {
+      "type": "flat",
+      "title": "form.ShowCasePage.CommunicationSection",
+      "pageDataExpression": "formData.ShowCaseObject",
+      "defaultPageData": {
+        "data": {
+          "CallPhoneNumber": "0367788162",
+          "SmsPhoneNumber": "0367788162",
+          "EmailUser": "abc@skedulo.com",
+          "URL": "https://www.google.com"
+        },
+        "objectName": "ShowCaseObject"
+      },
+      "items": [
+        {
+          "type": "textEditor",
+          "valueExpression": "pageData.CallPhoneNumber",
+          "title": "form.ShowCasePage.CallTitle",
+          "placeholder": "form.ShowCasePage.CallTitle"
+        },
+        {
+          "type": "textEditor",
+          "valueExpression": "pageData.SmsPhoneNumber",
+          "title": "form.ShowCasePage.SMSTitle",
+          "placeholder": "form.ShowCasePage.SMSTitle"
+        },
+        {
+          "type": "textEditor",
+          "valueExpression": "pageData.EmailUser",
+          "title": "form.ShowCasePage.EmailTitle",
+          "placeholder": "form.ShowCasePage.EmailTitle"
+        },
+        {
+          "type": "textEditor",
+          "valueExpression": "pageData.URL",
+          "title": "form.ShowCasePage.OpenUrlTitle",
+          "placeholder": "form.ShowCasePage.OpenUrlTitle"
+        },
+        {
+          "type": "buttonGroup",
+          "items": [
+            {
+              "text": "form.ShowCasePage.Call",
+              "theme": "default",
+              "behavior": {
+                "type": "phone",
+                "phoneNumberExpression": "pageData.CallPhoneNumber"
+              }
+            },
+            {
+              "text": "form.ShowCasePage.SMS",
+              "theme": "default",
+              "behavior": {
+                "type": "sms",
+                "phoneNumberExpression": "pageData.SmsPhoneNumber"
+              }
+            },
+            {
+              "text": "form.ShowCasePage.Email",
+              "theme": "default",
+              "behavior": {
+                "type": "email",
+                "emailExpression": "pageData.EmailUser"
+              }
+            },
+            {
+              "text": "form.ShowCasePage.OpenUrlTitle",
+              "theme": "success",
+              "behavior": {
+                "type": "openUrl",
+                "urlExpression": "pageData.URL"
+              }
+            }
+          ]
+        }
+      ]
     },
     "JobProductListPage": {
       "title": "form.JobProductListPages.JobProductTitle",
@@ -21,13 +674,168 @@
       "emptyText": "form.JobProductListPages.Empty",
       "search": {
         "placeholder": "form.JobProductListPages.SearchPlaceholder",
-        "filterOnProperties": ["Product.Name", "Product.Description"]
+        "filterOnProperties": ["Product.Name", "Product.Description"],
+        "advancedFilter": {
+          "defaultData": {
+            "StartQty": 0,
+            "EndQty": 50
+          },
+          "ui": {
+            "items": [
+              {
+                "type": "selectEditor",
+                "title": "form.ShowCasePage.SelectProduct",
+                "structureExpression": "filter.Product",
+                "valueExpression": "filter.ProductId",
+                "sourceExpression": "sharedData.Products",
+                "displayExpression": "filter.Product.Name",
+                "placeholder": "form.ShowCasePage.SelectProductHint",
+                "selectPage": {
+                  "itemTitle": "form.ShowCasePage.SelectProductItemTitle",
+                  "emptyText": "form.ShowCasePage.SelectProductEmpty",
+                  "title": "form.ShowCasePage.SelectProductTitle",
+                  "searchBar": {
+                    "filterOnProperties": ["Name"]
+                  }
+                }
+              },
+              {
+                "type": "textEditor",
+                "keyboardType": "number-pad",
+                "valueExpression": "filter.StartQty",
+                "title": "form.JobProductListPages.StartQuantity",
+                "placeholder": "form.JobProductListPages.StartQuantityHint"
+              },
+              {
+                "type": "textEditor",
+                "keyboardType": "number-pad",
+                "valueExpression": "filter.EndQty",
+                "title": "form.JobProductListPages.EndQuantity",
+                "placeholder": "form.JobProductListPages.EndQuantityHint"
+              }
+            ]
+          },
+          "expression": "cf.useAdvancedFilter(filter,item)",
+          "events": {
+            "afterFilterSubmit": "cf.alert('Alert from advanced filter')"
+          }
+        }
+      },
+      "itemLayout": {
+        "type": "titleAndCaption",
+        "title": "form.JobProductListPages.ItemTitle",
+        "caption": "form.JobProductListPages.ItemCaption",
+        "tags": {
+          "type": "fixed",
+          "items": [
+            {
+              "text": "form.JobProductListPages.TagValue",
+              "themeValueExpression": [
+                {
+                  "condition": "item.Qty % 12 === 1",
+                  "value": "success"
+                },
+                {
+                  "condition": "item.Qty % 12 === 2",
+                  "value": "primary"
+                },
+                {
+                  "condition": "item.Qty % 12 === 3",
+                  "value": "default"
+                },
+                {
+                  "condition": "item.Qty % 12 === 4",
+                  "value": "focus"
+                },
+                {
+                  "condition": "item.Qty % 12 === 5",
+                  "value": "danger"
+                },
+                {
+                  "condition": "item.Qty % 12 === 6",
+                  "value": "warning"
+                },
+                {
+                  "condition": "item.Qty % 12 === 7",
+                  "value": "success_alt"
+                },
+                {
+                  "condition": "item.Qty % 12 === 8",
+                  "value": "primary_alt"
+                },
+                {
+                  "condition": "item.Qty % 12 === 9",
+                  "value": "default_alt"
+                },
+                {
+                  "condition": "item.Qty % 12 === 10",
+                  "value": "focus_alt"
+                },
+                {
+                  "condition": "item.Qty % 12 === 11",
+                  "value": "danger_alt"
+                },
+                {
+                  "condition": "item.Qty % 12 === 0",
+                  "value": "warning_alt"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "headerTitle": "form.JobProductListPages.headerTitle",
+      "headerDescription": "form.JobProductListPages.headerDescription",
+      "itemClickDestination": "UpsertJobProductPage",
+      "buttonGroup": {
+        "items": [
+          {
+            "text": "form.JobProductListPages.ButtonGroup1",
+            "theme": "primary",
+            "behavior": {
+              "type": "custom",
+              "functionExpression": "cf.alert('Alert from button 1')"
+            }
+          },
+          {
+            "text": "form.JobProductListPages.ButtonGroup2",
+            "theme": "default",
+            "behavior": {
+              "type": "custom",
+              "functionExpression": "cf.alert('Alert from button 2')"
+            }
+          }
+        ]
+      }
+    },
+    "JobProductVIPOnlyListPage": {
+      "title": "form.JobProductListPages.JobProductTitle",
+      "type": "list",
+      "addNew": {
+        "text": "form.JobProductListPages.Add",
+        "destinationPage": "UpsertJobProductPage",
+        "defaultData": {
+          "data": {
+            "JobId": "${metadata.contextObjectId}"
+          },
+          "objectName": "JobProducts"
+        }
+      },
+      "sourceExpression": "formData.JobProducts",
+      "emptyText": "form.JobProductListPages.Empty",
+      "search": {
+        "placeholder": "form.JobProductListPages.SearchPlaceholder",
+        "advancedFilter": {
+          "expression": "item.Product.UID == '01t5i000008M7eZAAS'"
+        }
       },
       "itemLayout": {
         "type": "titleAndCaption",
         "title": "form.JobProductListPages.ItemTitle",
         "caption": "form.JobProductListPages.ItemCaption"
       },
+      "headerTitle": "form.JobProductListPages.headerTitle",
+      "headerDescription": "form.JobProductListPages.headerDescription",
       "itemClickDestination": "UpsertJobProductPage"
     },
     "UpsertJobProductPage": {
@@ -40,7 +848,9 @@
         "defaultDataForNewObject": {
           "CreatedDate": "${now()}"
         },
-        "validator": [],
+        "validator": [
+
+        ],
         "saveDraft": {
           "askWhenBack": true
         }
@@ -61,14 +871,16 @@
       "items": [
         {
           "type": "selectEditor",
-          "title": "form.UpsertJobProductPage.SearchProduct",
+          "title": "form.UpsertJobProductPage.SelectProduct",
           "structureExpression": "pageData.Product",
           "valueExpression": "pageData.ProductId",
+          "caption": "form.UpsertJobProductPage.SelectProductCaption",
           "sourceExpression": "sharedData.Products",
           "displayExpression": "pageData.Product.Name",
           "placeholder": "form.UpsertJobProductPage.SelectProductHint",
           "selectPage": {
             "itemTitle": "form.JobProductSelectPage.ItemTitle",
+            "itemCaption": "form.JobProductSelectPage.ItemCaption",
             "emptyText": "form.JobProductSelectPage.Empty",
             "title": "form.JobProductSelectPage.Title",
             "searchBar": {
@@ -84,12 +896,6 @@
           ]
         },
         {
-          "type": "readonlyTextView",
-          "showIfExpression": "pageData.Product",
-          "title": "form.UpsertJobProductPage.DescriptionTitle",
-          "text": "form.UpsertJobProductPage.SelectProductDescription"
-        },
-        {
           "type": "textEditor",
           "keyboardType": "number-pad",
           "valueExpression": "pageData.Qty",
@@ -99,20 +905,228 @@
             {
               "type": "expression",
               "errorMessage": "form.UpsertJobProductPage.QuantityMustBeAbove0",
-              "expression": "pageData.Qty > 0 && pageData.Qty <= 1000"
+              "expression": "pageData.Qty > 0 && pageData.Qty < 100"
+            }
+          ]
+        }
+      ]
+    },
+    "ReadonlyFieldsPage": {
+      "type": "flat",
+      "title": "form.LandingPage.ReadonlyFieldsPage",
+      "pageDataExpression": "formData.ShowCaseObject",
+      "items": [{
+        "type": "section",
+        "items": [
+          {
+            "type": "toggleEditor",
+            "mode": "switch",
+            "items": [
+              {
+                "valueExpression": "pageData.Readonly",
+                "text": "form.ReadonlyFieldsPage.ToggleReadonly"
+              }
+            ]
+          },
+          {
+            "type": "textEditor",
+            "readonly": "pageData.Readonly",
+            "valueExpression": "pageData.SingleLineText",
+            "title": "form.ShowCasePage.SingleLineText",
+            "placeholder": "form.ShowCasePage.SingleLineTextHint"
+          },
+          {
+            "type": "selectEditor",
+            "title": "form.ShowCasePage.SelectUser",
+            "readonly": "pageData.Readonly",
+            "structureExpression": "pageData.User",
+            "valueExpression": "pageData.UserId",
+            "sourceExpression": "sharedData.Users",
+            "displayExpression": "pageData.User.Name",
+            "placeholder": "form.ShowCasePage.SelectUserHint",
+            "selectPage": {
+              "itemTitle": "form.ShowCasePage.SelectUserItemTitle",
+              "emptyText": "form.ShowCasePage.SelectUserEmpty",
+              "title": "form.ShowCasePage.SelectUserTitle",
+              "searchBar": {
+                "filterOnProperties": [
+                  "Name"
+                ]
+              }
+            }
+          },
+          {
+            "type": "multiSelectEditor",
+            "readonly": "pageData.Readonly",
+            "title": "form.ShowCasePage.MultiSelectUser",
+            "structureExpression": "pageData.ShowCaseMultiUsers",
+            "sourceExpression": "sharedData.Users",
+            "displayExpression": "item.ShowCaseUser.Name",
+            "displayDataInSearchPageExpression": "item.ShowCaseUser",
+            "placeholder": "form.ShowCasePage.MultiSelectUserHint",
+            "constructResultObject": {
+              "data" : {
+                "ShowCaseUser": "${item}",
+                "ShowCaseObjectId": "${pageData.UID}",
+                "ShowCaseUserId": "${item.UID}"
+              },
+              "objectName": "ShowCaseMultiUser",
+              "compareProperty": "ShowCaseUserId"
+            },
+            "selectPage": {
+              "itemTitle": "form.ShowCasePage.SelectUserItemTitle",
+              "emptyText": "form.ShowCasePage.SelectUserEmpty",
+              "title": "form.ShowCasePage.SelectUserTitle",
+              "searchBar": {
+                "filterOnProperties": ["Name"]
+              }
+            },
+            "validator": []
+          },
+          {
+            "type": "dateTimeEditor",
+            "mode": "datetime",
+            "readonly": "pageData.Readonly",
+            "valueExpression": "pageData.FromDateTime",
+            "title": "form.ShowCasePage.DateTimeFrom",
+            "placeholder": "form.ShowCasePage.DateTimeFromHint"
+          },
+          {
+            "type": "toggleEditor",
+            "readonly": "pageData.Readonly",
+            "mode": "switch",
+            "items": [
+              {
+                "valueExpression": "pageData.Switch1",
+                "text": "form.ShowCasePage.Switch"
+              }
+            ]
+          },
+          {
+            "type": "toggleEditor",
+            "readonly": "pageData.Readonly",
+            "mode": "radio",
+            "title": "form.ShowCasePage.Radio",
+            "items": [
+              {
+                "valueExpression": "pageData.Radio1",
+                "onValue": 1,
+                "text": "form.ShowCasePage.Radio1_1"
+              },
+              {
+                "valueExpression": "pageData.Radio1",
+                "onValue": 2,
+                "text": "form.ShowCasePage.Radio1_2"
+              },
+              {
+                "valueExpression": "pageData.Radio1",
+                "onValue": 3,
+                "text": "form.ShowCasePage.Radio1_3"
+              }
+            ]
+          },
+          {
+            "type": "toggleEditor",
+            "readonly": "pageData.Readonly",
+            "mode": "checkbox",
+            "title": "form.ShowCasePage.Checkbox",
+            "items": [
+              {
+                "valueExpression": "pageData.Checkbox11",
+                "text": "form.ShowCasePage.Checkbox1_1"
+              },
+              {
+                "valueExpression": "pageData.Checkbox12",
+                "text": "form.ShowCasePage.Checkbox1_2"
+              },
+              {
+                "valueExpression": "pageData.Checkbox13",
+                "text": "form.ShowCasePage.Checkbox1_3"
+              }
+            ],
+            "validator": [
+              {
+                "type": "expression",
+                "errorMessage": "form.ShowCasePage.CheckboxValidationHint",
+                "expression": "pageData.Checkbox13 == true || pageData.Checkbox12  == true || pageData.Checkbox11  == true"
+              }
+            ]
+          },
+          {
+            "type": "attachmentsEditor",
+            "readonly": "pageData.Readonly",
+            "sourceExpression": "pageData",
+            "title": "form.ShowCasePage.Attachments"
+          },
+          {
+            "type": "signatureEditor",
+            "readonly": "pageData.Readonly",
+            "sourceExpression": "pageData",
+            "title": "form.ShowCasePage.Signature",
+            "enableFullName": true
+          }
+        ]
+      }]
+    },
+    "DateTimeWithDifferentTimezone": {
+      "type": "flat",
+      "title": "form.DateTimePickersPage.Title",
+      "pageDataExpression": "formData.ShowCaseObject",
+      "upsert": {
+        "defaultDataForNewObject": {
+        },
+        "validator": [],
+        "saveDraft": {
+          "askWhenBack": true
+        }
+      },
+      "defaultPageData": {
+        "data": {
+        },
+        "objectName": "ShowCaseObject"
+      },
+      "items": [
+        {
+          "type": "section",
+          "items": [
+            {
+              "type": "dateTimeEditor",
+              "mode": "datetime",
+              "valueExpression": "pageData.FromDateTime",
+              "title": "form.DateTimePickersPage.DateTimeFromUtc",
+              "placeholder": "form.ShowCasePage.DateTimeFromHint"
             }
           ]
         },
         {
-          "type": "textEditor",
-          "valueExpression": "pageData.BatchNumber",
-          "title": "form.UpsertJobProductPage.BatchNumber",
-          "placeholder": "form.UpsertJobProductPage.BatchNumberHint",
-          "validator": [
+          "type": "section",
+          "title": "form.DateTimePickersPage.FromJob",
+          "items": [
             {
-              "type": "expression",
-              "errorMessage": "form.UpsertJobProductPage.BatchNumberMustBeBelow255",
-              "expression": "!pageData.BatchNumber || pageData.BatchNumber.length <= 255"
+              "type": "dateTimeEditor",
+              "mode": "datetime",
+              "valueExpression": "pageData.FromDateTime",
+              "title": "form.DateTimePickersPage.DateTimeFromJob",
+              "placeholder": "form.ShowCasePage.DateTimeFromHint",
+              "datetimeOptions": {
+                "timezone": "job"
+              }
+            }
+          ]
+        },
+        {
+          "type": "section",
+          "title": "form.DateTimePickersPage.FromLocal",
+          "items": [
+            {
+              "type": "dateTimeEditor",
+              "mode": "datetime",
+              "valueExpression": "pageData.FromDateTime",
+              "title": "form.DateTimePickersPage.DateTimeFromLocal",
+              "placeholder": "form.ShowCasePage.DateTimeFromHint",
+              "datetimeOptions": {
+                "timezone": "local"
+              }
             }
           ]
         }

@@ -7,11 +7,8 @@ import CustomFunctionExecutor from "../CustomFunctionExecutor";
 import {LocalizedKey, ValueExpressionLogic} from "@skedulo/mex-types";
 import moment from 'moment';
 import InternalUtils from "../InternalUtils";
-import {
-    DataValueExpressionArgs,
-    ExpressionArgs,
-    FunctionExpressionArgs
-} from "@skedulo/mex-engine-proxy";
+import {DataValueExpressionArgs, ExpressionArgs, FunctionExpressionArgs} from "@skedulo/mex-engine-proxy";
+import RegexManager from "../../assets/RegexManager";
 
 abstract class Expression {
     args : ExpressionArgs;
@@ -248,7 +245,7 @@ export class FetchValueExpression extends Expression {
     functionRegex = () => /[A-z0-9\.]+(.+)\((.*)\)/g;
     functionParamsRegex = () => /(.+)\((.*)\)/g;
     variableAndFunctionScopeRegex = () => /[a-zA-Z_][a-zA-Z0-9_\[\]]+\.?([a-zA-Z_][a-zA-Z0-9_\[\]]*[\.]?)*(\((.*)\))?/g;
-    constantRegex = () => /'(.)*'/g
+    constantRegex = () => /'([^'])*'/g
 
     constructor(args: ExpressionArgs) {
         super(args);
@@ -439,9 +436,7 @@ export class FetchValueExpression extends Expression {
             }
         })
 
-        let finalResult = this.evalInContext(translatedExpressionStrIntoVariables, variableStore)
-
-        return finalResult;
+        return this.evalInContext(translatedExpressionStrIntoVariables, variableStore);
     }
 
     translateFunctionOrVariable(expressionStr: string, dataContext: any): Promise<any>|any {
@@ -455,14 +450,49 @@ export class FetchValueExpression extends Expression {
 
         let functionStr = match[0]
 
-        let functionRegexMatch = this.functionParamsRegex().exec(functionStr)
-
         let finalParams: any[] = []
-        let functionStrWithoutParams = functionRegexMatch![1];
-        let additionalParamsStr = functionRegexMatch![2]
+
+        const openingParenthesisIndex = functionStr.indexOf('(');
+
+        const functionStrWithoutParams = functionStr.slice(0, openingParenthesisIndex).trim();
+        let additionalParamsStr = functionStr.slice(openingParenthesisIndex + 1, -1).trim();
 
         if (additionalParamsStr && additionalParamsStr.length > 0) {
+
+            let constantMapping:any = {}
+            let propertyIndex = 0
+
+            let constantRegex = this.constantRegex()
+
+            while ((match = constantRegex.exec(additionalParamsStr)) != null) {
+                let matchValue = match[0]
+
+                let propertyName = "__property_" + propertyIndex
+
+                constantMapping[propertyName] =  matchValue
+                propertyIndex++
+            }
+
+            // First we replace all constant into variables name
+            for(let property in constantMapping) {
+                additionalParamsStr = additionalParamsStr.replace(constantMapping[property], property)
+            }
+
             let additionalParams = additionalParamsStr.split(',');
+
+            let newAdditionalParams:any[] = []
+
+            // After the split, we change them back
+            additionalParams.forEach((value, index) => {
+                value = value.trim()
+                if (value.startsWith("__property_")) {
+                    newAdditionalParams.push(constantMapping[value])
+                } else {
+                    newAdditionalParams.push(additionalParams[index])
+                }
+            })
+
+            additionalParams = newAdditionalParams
 
             additionalParams.forEach((additionalParam) => {
                 finalParams.push(this.translateValue(additionalParam.trim(), dataContext))
@@ -490,7 +520,8 @@ export class FetchValueExpression extends Expression {
             timeFormat: converters.date.timeFormat,
             dateTimeFormat: converters.date.dateTimeFormat,
             conLocale: ConditionMethods.conLocale,
-            now: utils.date.now
+            now: utils.date.now,
+            isRegexValid: ConditionMethods.isRegexValid
         }
 
         if (functionStrWithoutParams.startsWith('cf.')) {
@@ -535,6 +566,17 @@ class ConditionMethods {
             dataContext: dataContext
         })
 
+    }
+
+    static isRegexValid(stringToValidate: string, regexKey: string): boolean {
+        let regexFileString = RegexManager.getRegexListString()
+
+        const regexFunction = new Function('regexKey', 'stringToValidate', `
+            ${regexFileString}
+            return regex['${regexKey}'].test(stringToValidate);
+        `)
+
+        return regexFunction(regexKey, stringToValidate);
     }
 }
 

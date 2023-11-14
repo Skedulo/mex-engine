@@ -7,6 +7,7 @@ export enum DevelopmentModeConfigEnum {
     UseLocalTranslationFiles = "UseLocalTranslationFiles",
     UseLocalCustomFunctions = "UseLocalCustomFunctions",
     UseLocalFormMetadata = "UseLocalFormMetadata",
+    UseLocalRegexFile = "UseLocalRegexFile",
 }
 
 export type DevelopmentFormConfig = {
@@ -15,6 +16,7 @@ export type DevelopmentFormConfig = {
     UiDef: () => any,
     Languages: [{ tag: string, content: () => any}],
     FormMetadata: () => any,
+    Regex: () => any,
 }
 
 class GlobalConfig {
@@ -34,6 +36,7 @@ class GlobalConfig {
                 content: () => require("../local_data/resources/locale/en.json")
             }],
             FormMetadata: () => require("../local_data/metadata.json"),
+            Regex: () => require("../local_data/resources/regex.js"),
         })
 
         // Uncomment these to reduce package size, otherwise these files will be included in the engine
@@ -84,7 +87,8 @@ class GlobalConfig {
         [DevelopmentModeConfigEnum.UseLocalUIDefinition]: false,
         [DevelopmentModeConfigEnum.UseLocalTranslationFiles]: false,
         [DevelopmentModeConfigEnum.UseLocalCustomFunctions]: false,
-        [DevelopmentModeConfigEnum.UseLocalFormMetadata]: false
+        [DevelopmentModeConfigEnum.UseLocalFormMetadata]: false,
+        [DevelopmentModeConfigEnum.UseLocalRegexFile]: false
     }
 
     canUseDevelopmentConfig(config: DevelopmentModeConfigEnum) {

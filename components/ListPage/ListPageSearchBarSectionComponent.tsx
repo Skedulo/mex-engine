@@ -12,39 +12,39 @@ import {useKeyboardVisible} from "../../mex/hooks/useKeyboardVisible";
 import {NavigationContext} from "../../mex/common/NavigationProcessManager";
 import SkedButton from "../SkedButton";
 import Divider from "../Divider";
+import lodash from "lodash";
 
 type ListPageSearchBarComponentProps = {
     dataContext: any
-    advancedFilterObj: any
     defaultSearchText: string
-    jsonDef?: ListPageSearchComponentModel
+    jsonDef?: ListPageSearchComponentModel|undefined
     onFilterChanged: (searchText:string, dataContext:any) => void
     toggleShowBarVisibility: () => void
     navigationContext: NavigationContext
 }
 
-export const ListPageSearchBarComponent : React.FC<ListPageSearchBarComponentProps> = (props) => {
+export const ListPageSearchBarSectionComponent : React.FC<ListPageSearchBarComponentProps> = (props) => {
 
     let { jsonDef,
-        dataContext, advancedFilterObj, defaultSearchText,
+        dataContext, defaultSearchText,
         onFilterChanged, toggleShowBarVisibility,
         navigationContext } = props
 
     let transformedDataContext = useMemo(() => {
         return makeObservable({
             ...dataContext,
-            filter: advancedFilterObj ?? {}
+            filter: lodash.cloneDeep(dataContext.filter)
         }, {
             filter: observable,
             pageData: observable
         })
-    }, [dataContext, advancedFilterObj])
+    }, [dataContext])
 
     const styleCons = StylesManager.getStyleConst()
     const styles = StylesManager.getStyles()
     const colors = ThemeManager.getColorSet()
 
-    let flatPageContentViewRefFunctions = useRef<FlatPageContentViewRefFunctions>(null)
+    let flatPageContentViewRefFunctions = useRef<FlatPageContentViewRefFunctions|null>(null)
 
     if (!jsonDef) {
         // If not defined, do not attempt to render any search bar at all
@@ -56,7 +56,7 @@ export const ListPageSearchBarComponent : React.FC<ListPageSearchBarComponentPro
         dataContext: dataContext
     }) as string
 
-    let searchBarRef = useRef<TextInput>(null)
+    let searchBarRef = useRef<TextInput|null>(null)
 
     let [searchBarText, setSearchBarText] = useState<string>(defaultSearchText)
 
