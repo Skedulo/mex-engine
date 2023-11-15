@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useCallback, useState } from "react";
 import {Pressable, StyleSheet, Text, View} from "react-native";
 import Expressions from "../../expression/Expressions";
 import AbstractEditorViewProcessor, {EditorViewArgs, EditorViewProps} from "./AbstractEditorViewProcessors";
@@ -14,6 +14,7 @@ import {ReadonlyText} from "../../../../components/ReadonlyText";
 import {MultiSelectEditorViewComponentModel, SelectPageConfig} from "@skedulo/mex-types";
 import {SelectScreenName} from "../../screens/select/SelectScreen";
 import {IconTypes} from "@skedulo/mex-engine-proxy";
+import {useFocusEffect} from "@react-navigation/native";
 
 type MultiSelectEditorViewProps = EditorViewProps<MultiSelectEditorViewArgs, MultiSelectEditorViewComponentModel>
 
@@ -29,10 +30,11 @@ export default class MultiSelectEditorViewProcessor
 
     generateEditorComponent(args: MultiSelectEditorViewArgs): JSX.Element {
         let {jsonDef, dataContext, hasError = false} = args;
+        const [isFocused, setIsFocused] = useState(false)
         let displayString = ""
         let selectPageJsonDef = jsonDef.selectPage;
 
-        let fetchStructureExpressionObj = { dataContext: dataContext, expressionStr: jsonDef.structureExpression };
+        let fetchStructureExpressionObj = { dataContext: dataContext, expressionStr: jsonDef.structureExpression ?? jsonDef.valueExpression };
 
         let structureContextObj = Expressions.getValueExpression(fetchStructureExpressionObj) ?? [];
 
@@ -48,14 +50,26 @@ export default class MultiSelectEditorViewProcessor
             result = result + (index === 0 ? "" : ", ") + itemDisplayStr;
             return result
         }, "");
-        selectedContextObj = structureContextObj.map((item:any) => {
+
+        selectedContextObj = jsonDef.structureExpression ? structureContextObj.map((item:any) => {
             return Expressions.getValueExpression({
                 expressionStr: jsonDef.displayDataInSearchPageExpression,
                 dataContext: {...dataContext, item}
             })
+        }) : structureContextObj.map((item:any) => {
+            // for multi picklist field, transform selected value to { Label, Value } to make easier to compare
+            return {
+                Label: item,
+                Value: item
+            }
         })
 
+        useFocusEffect(useCallback(()=>{
+            setIsFocused(false)
+        },[]))
+
         let handleOnFocus = () => {
+            setIsFocused(true)
 
             // Open selection page
             let selectPageConfig:SelectPageConfig = {
@@ -78,36 +92,62 @@ export default class MultiSelectEditorViewProcessor
 
             let routeName = SelectScreenName;
 
-            RootNavigation.navigate(routeName, {selectedData: selectedContextObj, jsonDef: selectPageConfig, dataContext})
+            RootNavigation.navigate(routeName, { selectedData: selectedContextObj, jsonDef: selectPageConfig, dataContext })
 
             NavigationProcessManager.addTrack(routeName)
                 .then(result => {
                     runInAction(() => {
-                        if(jsonDef.constructResultObject && result?.length > 0) {
-                            let transformData = result.map((item:any) => {
-                                const translatedItemData = translateOneLevelOfExpression({
-                                    jsonDef: jsonDef.constructResultObject.data,
-                                    dataContext: {...dataContext, item}
-                                });
+                        // the user has chosen some options, we need to handle them
+                        if (result?.length > 0) {
+                            // the value is an array of objects, we need to
+                            if (jsonDef.structureExpression) {
+                                if (jsonDef.constructResultObject) {
+                                    let transformData = result.map((item: any) => {
+                                        const translatedItemData = translateOneLevelOfExpression({
+                                            jsonDef: jsonDef.constructResultObject.data,
+                                            dataContext: {...dataContext, item}
+                                        });
 
-                                const existItem = structureContextObj.find((it:any) =>
-                                    it.ShowCaseObjectId === translatedItemData[jsonDef.constructResultObject.compareProperty]);
+                                        const existItem = structureContextObj.find((it: any) =>
+                                            it[jsonDef.constructResultObject.compareProperty] === translatedItemData[jsonDef.constructResultObject.compareProperty]);
 
-                                if (existItem) return existItem;
+                                        if (existItem) return existItem;
 
-                                return {
-                                    ...translatedItemData,
-                                    __typename: jsonDef.constructResultObject.objectName,
-                                    UID: utils.data.generateUniqSerial()
+                                        return {
+                                            ...translatedItemData,
+                                            __typename: jsonDef.constructResultObject.objectName,
+                                            UID: utils.data.generateUniqSerial()
+                                        }
+                                    });
+                                    Expressions.setDataValueExpression(fetchStructureExpressionObj, transformData.length > 0 ? transformData : null)
+                                } else {
+                                    Expressions.setDataValueExpression(fetchStructureExpressionObj, result)
                                 }
-                            });
-
-                            Expressions.setDataValueExpression(fetchStructureExpressionObj, transformData.length > 0 ? transformData : null)
+                            } else if (result[0].Value) {
+                                // for multi picklist field
+                                const transformData = result.map((item: any) => item.Value)
+                                Expressions.setDataValueExpression(fetchStructureExpressionObj, transformData)
+                            } else if (!(result[0] instanceof Object)) {
+                                // pure value
+                                Expressions.setDataValueExpression(fetchStructureExpressionObj, result)
+                            }
                         } else {
+                            // the user has not chosen any options, just set data to null
                             Expressions.setDataValueExpression(fetchStructureExpressionObj, null)
                         }
                     })
-                });
+                }
+            )
+        }
+
+        const getBorderColor = () => {
+            if (hasError) {
+                return ThemeManager.getColorSet().red800
+            }
+            if (isFocused) {
+                return ThemeManager.getColorSet().skedBlue800
+            }
+            return ThemeManager.getColorSet().navy100
         }
 
         if (readonly) {
@@ -118,7 +158,7 @@ export default class MultiSelectEditorViewProcessor
         return (
             <Pressable onPress={handleOnFocus}>
                 <View pointerEvents="none">
-                    <View style={[StylesManager.getStyles().selector, componentStyles.inputContainer, { borderColor: hasError ? ThemeManager.getColorSet().red800 : ThemeManager.getColorSet().navy100}]}>
+                    <View style={[StylesManager.getStyles().selector, componentStyles.inputContainer, { borderColor: getBorderColor() }]}>
                         <Text
                             style={[
                                 StylesManager.getStyles().textRegular,
