@@ -8,7 +8,7 @@ import {Attributes, FC} from "react";
 import {observer} from "mobx-react";
 import MexAsyncText from "../../../../components/MexAsyncText";
 import ThemesManager from "../../../colors/ThemeManager";
-import {RadioButton} from "../../../../components/RadioButton";
+import {RadioButton} from "../../../../components/Editors/RadioButton";
 import {CheckBox} from "../../../../components/CheckBox";
 import {ToggleEditorItemModel, ToggleEditorViewComponentModel} from "@skedulo/mex-types";
 

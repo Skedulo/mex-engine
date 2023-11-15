@@ -1,16 +1,11 @@
 import React from 'react'
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import ThemeManager from "../mex/colors/ThemeManager";
+import ThemeManager from "../../mex/colors/ThemeManager";
 import {Platform, StyleSheet, View} from "react-native";
-import StylesManager from "../mex/StylesManager";
+import StylesManager from "../../mex/StylesManager";
+import {RadioButtonProps} from "@skedulo/mex-engine-proxy";
 
-export const RadioButton = ({ readonly = false, isChecked, handleOnPress, disableText = true, textComponent } : {
-    readonly?: Boolean
-    isChecked: Boolean
-    handleOnPress: () => void
-    disableText?: Boolean
-    textComponent?: React.ReactNode
-}) => {
+export const RadioButton = ({ readonly = false, isChecked, handleOnPress, disableText = true, textComponent } : RadioButtonProps) => {
     const styles =  StylesManager.getStyles()
     const colors = ThemeManager.getColorSet()
 

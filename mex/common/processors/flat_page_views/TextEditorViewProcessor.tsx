@@ -14,6 +14,7 @@ import ThemeManager from "../../../colors/ThemeManager";
 import {ReadonlyText} from "../../../../components/ReadonlyText";
 import {TextEditorViewComponentModel} from "@skedulo/mex-types";
 import {PageProcessorContext, PageProcessorContextObj} from "../../../hooks/useCrudOnPage";
+import {TextEditorView} from "../../../../components/Editors/TextEditorView";
 
 type TextEditorViewProps = EditorViewProps<TextEditorViewArgs, TextEditorViewComponentModel>
 
@@ -44,39 +45,6 @@ export default class TextEditorViewProcessor extends AbstractEditorViewProcessor
 
         if (jsonDef.multiline) {
             value.multiline = jsonDef.multiline
-        }
-
-        return value
-    }
-
-    getStyles({jsonDef, hasError = false}: TextEditorViewArgs, isFocus: boolean, height: number) : TextStyle {
-        let value: TextStyle = {};
-        let colors = ThemeManager.getColorSet()
-
-        value.color = colors.skeduloText
-
-        if (height !== 0) {
-            // Not smaller 40 pixels
-            value.height = Math.max(height, 40);
-
-            // Not over 200 pixels
-            value.height = Math.min(value.height, 200);
-        }
-
-        if (jsonDef.multiline) {
-            // Limit the field can be expanded
-            value.height = undefined
-            value.maxHeight = 200
-            value.minHeight = 48
-            value.lineHeight = 20
-            value.paddingTop = Platform.OS === 'android' ? 8 : 12
-            value.paddingBottom = Platform.OS === 'android' ? 8 : 12
-        }
-
-        value.borderColor = isFocus ? colors.skedBlue800 : colors.navy100
-
-        if (hasError) {
-            value.borderColor = colors.red800
         }
 
         return value
@@ -153,17 +121,6 @@ export default class TextEditorViewProcessor extends AbstractEditorViewProcessor
 
         const s = StylesManager.getStyles();
 
-        let [focus, setFocus] = useState(false)
-        let [height, _] = useState(0)
-
-        let handleOnFocus = useCallback(() => {
-            setFocus(true)
-        }, [])
-
-        let handleOnBlur = useCallback(() => {
-            setFocus(false)
-        }, [])
-
         let value = textDataExpression.getValue()?.toString() ?? ""
 
         if (readonly) {
@@ -171,21 +128,17 @@ export default class TextEditorViewProcessor extends AbstractEditorViewProcessor
             return (<ReadonlyText  text={value} />)
         }
 
-        return (<TextInput
+        return (<TextEditorView
             ref={inputRef}
-            onFocus={handleOnFocus}
-            onBlur={handleOnBlur}
-            style={[
-                s.editText,
-                this.getStyles(args, focus, height)]}
-            value={value}
-            underlineColorAndroid="transparent"
-            onChangeText={newText => handleTextChange(newText)}
-            onSubmitEditing={() => {
-                pageContext?.actions.controlRequestOutFocus(inputRef.current)
+            textInputProps={{
+                onChangeText:newText => handleTextChange(newText),
+                onSubmitEditing:() => {
+                    pageContext?.actions.controlRequestOutFocus(inputRef.current)
+                },
+                ...this.getAdditionalProperties(args)
             }}
-            placeholderTextColor={ThemeManager.getColorSet().navy300}
-            {...this.getAdditionalProperties(args)}
+            value={value}
+            hasError={args.hasError}
         />)
     }
 }
