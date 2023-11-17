@@ -35,10 +35,6 @@ export default class TextEditorViewProcessor extends AbstractEditorViewProcessor
             value.placeholder = Expressions.getValueFromLocalizedKey({expressionStr: jsonDef.placeholder, dataContext: args.dataContext}) as string // We only allow simple, therefore it won't be a Promise
         }
 
-        if (jsonDef.editable) {
-            value.editable = jsonDef.editable;
-        }
-
         if (jsonDef.keyboardType) {
             value.keyboardType = jsonDef.keyboardType
         }
