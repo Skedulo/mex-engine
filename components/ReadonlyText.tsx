@@ -1,7 +1,8 @@
 import {StyleSheet, Text, View} from "react-native";
 import React from "react";
-import SkedIcon, {SkedIconDef} from "./SkedIcon";
+import SkedIcon from "./SkedIcon";
 import ThemeManager from "../mex/colors/ThemeManager";
+import {SkedIconDef} from "@skedulo/mex-engine-proxy";
 
 type Props = {
     text: string,

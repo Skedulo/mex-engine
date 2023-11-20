@@ -58,7 +58,7 @@ class ListPageProcessor extends AbstractPageProcessor<ListPageComponentModel> {
         let CurrentChildComponent = useRef<React.FC<any>|null>(null)
 
         let {jsonDef, dataContext} = args
-        if (jsonDef.search.advancedFilter.defaultData && !dataContext.filter) {
+        if (jsonDef.search?.advancedFilter?.defaultData && !dataContext.filter) {
             dataContext.filter = translateOneLevelOfExpression({jsonDef: jsonDef.search.advancedFilter.defaultData, dataContext: dataContext})
         }
 
@@ -207,7 +207,6 @@ class ListPageProcessor extends AbstractPageProcessor<ListPageComponentModel> {
 
         if (jsonDef.search) {
             source = useMemo(() => {
-                console.log("filter again")
 
                 let filterOnProperties:string[]|undefined = undefined
                 let filterExpressions:FilterByExpressionInfo|undefined = undefined

@@ -5,7 +5,7 @@ import {Text, TouchableOpacity, View} from "react-native";
 import MexAsyncText from "../../../../components/MexAsyncText";
 import {useCallback} from "react";
 import {CheckBox} from "../../../../components/CheckBox";
-import {RadioButton} from "../../../../components/RadioButton";
+import {RadioButton} from "../../../../components/Editors/RadioButton";
 import {SelectPageConfig} from "@skedulo/mex-types";
 
 type SelectScreenRowProps = {

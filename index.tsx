@@ -52,6 +52,9 @@ import SkedIcon from "./components/SkedIcon";
 import SkeduloImage from "./components/SkeduloImage";
 import StylesManager from "./mex/StylesManager";
 import RegexManager from "./mex/assets/RegexManager";
+import {DatetimeEditorView} from "./components/Editors/DatetimeEditorView";
+import {RadioButton} from "./components/Editors/RadioButton";
+import {TextEditorView} from "./components/Editors/TextEditorView";
 LogBox.ignoreLogs(['Warning: ...', '[MobX]', 'Require cycle', 'Could not find image']); // Ignore log notification by message
 
 const Stack = createNativeStackNavigator();
@@ -277,6 +280,9 @@ const registerServices = () => {
     CoreContainer.bind(ComponentsProxy.SearchBar).toConstant(SearchBar)
     CoreContainer.bind(ComponentsProxy.SkedIcon).toConstant(SkedIcon)
     CoreContainer.bind(ComponentsProxy.SkeduloImage).toConstant(SkeduloImage)
+    CoreContainer.bind(ComponentsProxy.DatetimeEditorView).toConstant(DatetimeEditorView)
+    CoreContainer.bind(ComponentsProxy.RadioButton).toConstant(RadioButton)
+    CoreContainer.bind(ComponentsProxy.TextEditorView).toConstant(TextEditorView)
 
     CoreContainer.bind(ServicesProxy.AssetsManager).toConstant(AssetsManager)
     CoreContainer.bind(ServicesProxy.NavigationProcessManager).toConstant(NavigationProcessManager)
