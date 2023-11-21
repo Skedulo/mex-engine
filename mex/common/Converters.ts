@@ -18,7 +18,7 @@ let converters = {
                 let timeValues = value.split(":")
                 let dashes = value.split("-")
 
-                if (dashes.length == 0 && timeValues.length == 3) {
+                if (dashes.length == 1 && timeValues.length == 3) {
                     let [hour, minutes, seconds] = value.split(":")
 
                     // Remove ticks in case of "Time"
