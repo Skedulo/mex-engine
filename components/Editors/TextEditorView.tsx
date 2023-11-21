@@ -1,4 +1,4 @@
-import {Platform, TextInput, TextInputProps, TextStyle} from "react-native";
+import {Platform, TextInput, TextStyle} from "react-native";
 import {ReadonlyText} from "../ReadonlyText";
 import ThemeManager from "../../mex/colors/ThemeManager";
 import React, {ForwardedRef, useCallback, useState} from "react";
@@ -7,7 +7,7 @@ import {TextEditorViewProps} from "@skedulo/mex-engine-proxy";
 
 export const TextEditorView = React.forwardRef((props: TextEditorViewProps, inputRef: ForwardedRef<any>) => {
 
-    let { textInputProps, value, hasError, multiline } = props
+    let { textInputProps, value, hasError } = props
     let [focus, setFocus] = useState(false)
     let [height, _] = useState(0)
 
@@ -25,7 +25,7 @@ export const TextEditorView = React.forwardRef((props: TextEditorViewProps, inpu
             textStyle.height = Math.min(textStyle.height, 200);
         }
 
-        if (multiline) {
+        if (textInputProps.multiline) {
             // Limit the field can be expanded
             textStyle.height = undefined
             textStyle.maxHeight = 200

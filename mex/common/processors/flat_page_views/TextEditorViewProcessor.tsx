@@ -1,5 +1,4 @@
-import {Platform, TextInput, TextInputProps, TextStyle} from "react-native";
-import StylesManager from "../../../StylesManager";
+import {TextInput, TextInputProps} from "react-native";
 import Expressions, {DataExpression} from "../../expression/Expressions";
 import AbstractEditorViewProcessor, {EditorViewArgs, EditorViewProps} from "./AbstractEditorViewProcessors";
 import {runInAction} from "mobx";
@@ -10,7 +9,6 @@ import React, {
     useRef,
     useState
 } from "react";
-import ThemeManager from "../../../colors/ThemeManager";
 import {ReadonlyText} from "../../../../components/ReadonlyText";
 import {TextEditorViewComponentModel} from "@skedulo/mex-types";
 import {PageProcessorContext, PageProcessorContextObj} from "../../../hooks/useCrudOnPage";
@@ -115,7 +113,6 @@ export default class TextEditorViewProcessor extends AbstractEditorViewProcessor
             })
         }, [forceRenderFlag])
 
-        const s = StylesManager.getStyles();
 
         let value = textDataExpression.getValue()?.toString() ?? ""
 

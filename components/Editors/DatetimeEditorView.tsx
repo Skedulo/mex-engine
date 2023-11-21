@@ -1,11 +1,9 @@
-import {Platform, Pressable, StyleSheet, Text, TextInput, TextInputProps, TextStyle, View} from "react-native";
+import {Platform, Pressable, StyleSheet, Text, View} from "react-native";
 import {ReadonlyText} from "../ReadonlyText";
 import ThemeManager from "../../mex/colors/ThemeManager";
-import React, {ForwardedRef, useCallback, useEffect, useMemo, useRef, useState} from "react";
+import React, { useEffect, useMemo, useRef, useState} from "react";
 import StylesManager from "../../mex/StylesManager";
-import Expressions from "../../mex/common/expression/Expressions";
 import moment from "moment";
-import {runInAction} from "mobx";
 import converters from "../../mex/common/Converters";
 import {DatetimeEditorViewProps, IconTypes} from "@skedulo/mex-engine-proxy";
 import SkedIcon from "../SkedIcon";
