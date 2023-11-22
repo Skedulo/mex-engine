@@ -27,7 +27,7 @@ export const TextEditorView = React.forwardRef((props: TextEditorViewProps, inpu
 
         if (textInputProps.multiline) {
             // Limit the field can be expanded
-            textStyle.height = undefined
+            textStyle.height = props.textInputProps?.style?.height ?? undefined
             textStyle.maxHeight = 200
             textStyle.minHeight = 48
             textStyle.lineHeight = 20
@@ -60,6 +60,7 @@ export const TextEditorView = React.forwardRef((props: TextEditorViewProps, inpu
     }
 
     return (<TextInput
+        {...textInputProps}
         ref={inputRef}
         onFocus={handleOnFocus}
         onBlur={handleOnBlur}
@@ -69,6 +70,5 @@ export const TextEditorView = React.forwardRef((props: TextEditorViewProps, inpu
         value={value}
         underlineColorAndroid="transparent"
         placeholderTextColor={ThemeManager.getColorSet().navy300}
-        {...textInputProps}
     />)
 })
