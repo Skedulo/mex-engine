@@ -1,7 +1,7 @@
 import * as React from "react";
 import {Text, TouchableOpacity, View} from "react-native";
 import StylesManager from "../../../StylesManager";
-import Expressions, from "../../expression/Expressions";
+import Expressions from "../../expression/Expressions";
 import AbstractEditorViewProcessor, {EditorViewArgs, EditorViewProps} from "./AbstractEditorViewProcessors";
 import {makeAutoObservable, runInAction} from "mobx";
 import {MutableRefObject, useContext, useEffect, useMemo, useReducer, useRef} from "react";
