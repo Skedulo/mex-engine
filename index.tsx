@@ -55,6 +55,7 @@ import RegexManager from "./mex/assets/RegexManager";
 import {DatetimeEditorView} from "./components/Editors/DatetimeEditorView";
 import {RadioButton} from "./components/Editors/RadioButton";
 import {TextEditorView} from "./components/Editors/TextEditorView";
+import {AttachmentsEditorView} from "./components/Editors/AttachmentsEditorView";
 LogBox.ignoreLogs(['Warning: ...', '[MobX]', 'Require cycle', 'Could not find image']); // Ignore log notification by message
 
 const Stack = createNativeStackNavigator();
@@ -152,9 +153,6 @@ const RootStack = ({packageId, formName, contextId, staticResourcesId} : RootSta
         let screens = module.getRegisteredScreens()
         screens.forEach(screen => {
             let screenKey = module.resolveScreenKey(screen)
-
-            console.log("screenKey", screenKey, uiDefinitions.firstPage)
-
             pagesDef.push(<Stack.Screen
                 key={screenKey}
                 name={screenKey as never}
@@ -283,6 +281,7 @@ const registerServices = () => {
     CoreContainer.bind(ComponentsProxy.DatetimeEditorView).toConstant(DatetimeEditorView)
     CoreContainer.bind(ComponentsProxy.RadioButton).toConstant(RadioButton)
     CoreContainer.bind(ComponentsProxy.TextEditorView).toConstant(TextEditorView)
+    CoreContainer.bind(ComponentsProxy.AttachmentsEditorView).toConstant(AttachmentsEditorView)
 
     CoreContainer.bind(ServicesProxy.AssetsManager).toConstant(AssetsManager)
     CoreContainer.bind(ServicesProxy.NavigationProcessManager).toConstant(NavigationProcessManager)

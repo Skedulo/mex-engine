@@ -1,7 +1,7 @@
 import * as React from "react";
 import {Text, TouchableOpacity, View} from "react-native";
 import StylesManager from "../../../StylesManager";
-import Expressions, {ExpressionArgs} from "../../expression/Expressions";
+import Expressions, from "../../expression/Expressions";
 import AbstractEditorViewProcessor, {EditorViewArgs, EditorViewProps} from "./AbstractEditorViewProcessors";
 import {makeAutoObservable, runInAction} from "mobx";
 import {MutableRefObject, useContext, useEffect, useMemo, useReducer, useRef} from "react";
@@ -13,11 +13,12 @@ import ThemeManager from "../../../colors/ThemeManager";
 import converters from "../../Converters";
 import MexAsyncText from "../../../../components/MexAsyncText";
 import BottomSheet from "../../plugins/BottomSheet";
-import FilesView, {AttachmentMetadata} from "../../../../components/FilesView";
+import FilesView from "../../../../components/FilesView";
 import lodash from "lodash";
 import ErrorTextWithRef from "../../../../components/ErrorText";
 import {AttachmentsEditorViewComponentModel} from "@skedulo/mex-types";
 import {PageProcessorContext, PageProcessorContextObj} from "../../../hooks/useCrudOnPage";
+import {AttachmentMetadata, ExpressionArgs} from "@skedulo/mex-engine-proxy";
 let {translate} = converters.localization
 
 type AttachmentsEditorViewProps = EditorViewProps<AttachmentsEditorViewArgs, AttachmentsEditorViewComponentModel>
@@ -43,13 +44,12 @@ export default class AttachmentsEditorViewProcessor
     generateEditorComponent(args: AttachmentsEditorViewArgs): JSX.Element {
 
         const _isMounted = useRef(true);
+        const readonly = this.isComponentReadonly(args.jsonDef.readonly, args.dataContext)
 
         const viewInput = useRef<null>() as MutableRefObject<any>;
         const attachmentRef = useRef()
 
         let pageContext = useContext<PageProcessorContextObj|undefined>(PageProcessorContext)
-
-        const readonly = this.isComponentReadonly(args.jsonDef.readonly, args.dataContext)
 
         useEffect(() => {
             pageContext?.focusableControls.push({
