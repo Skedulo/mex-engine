@@ -1,0 +1,53 @@
+# Deploy Mex Engine
+
+trigger: none
+pr: none
+
+parameters:
+- name: MINIMUM_APP_VERSION
+  displayName: Minimum App Version
+  default: 3.0.0
+  type: string
+- name: MEX_ENGINE_VERSION
+  displayName: Mex Engine Version
+  type: string
+  default: 1.0.0
+- name: ADMIN_TOKEN
+  displayName: Admin Token
+  type: string
+- name: TARGET_ENVIRONMENT
+  displayName: Target Environment
+  type: string
+  default: dev
+  values:
+    - DEV
+    - STAGING
+    - PERF
+    - PROD
+
+resources:
+  - repo: self
+
+pool:
+  vmImage: 'macOS-12'
+
+stages:
+- stage: BuildAndDeploy
+  displayName: "Build and Deploy"
+  jobs:
+  - job: BuildMexAndDeploy
+    displayName: "Build And Deploy Mex Engine"
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSource: 'spec'
+        versionSpec: '18.x'
+    - task: CmdLine@2
+      displayName: 'Deploy tag'
+      inputs:
+        script: |
+          ./upload_base_engine.sh \
+            --env ${{parameters.TARGET_ENVIRONMENT}} \
+            --engineVersion ${{parameters.MEX_ENGINE_VERSION}} \
+            --appVersion ${{parameters.MINIMUM_APP_VERSION}} \
+            --adminToken ${{parameters.ADMIN_TOKEN}}
