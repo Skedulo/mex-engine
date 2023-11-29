@@ -5,6 +5,6 @@ const exclusionList = require('metro-config/src/defaults/exclusionList');
 
 module.exports = {
     resolver: {
-        blockList: exclusionList([/Tools\/.*/, /mex-test-forms\/.*\/custom-functions\/.*]/])
+        blockList: exclusionList([/tools\/.*/])
     }
 };
