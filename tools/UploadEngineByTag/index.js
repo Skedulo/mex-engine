@@ -36,7 +36,7 @@ let URLS = {
     ]
 };
 function run() {
-    var _a;
+    var _a, _b, _c;
     return __awaiter(this, void 0, void 0, function* () {
         try {
             let adminToken = argv['adminToken'];
@@ -61,28 +61,37 @@ function run() {
             formData.append("appVersion", appVersion);
             formData.append("engineVersion", engineVersion);
             formData.append("tag", engineVersion);
+            let postObj = {
+                appVersion: appVersion,
+                engineVersion: engineVersion,
+                tag: engineVersion
+            };
             let failedUploadUrls = [];
             for (let index in urls) {
                 let url = urls[index];
                 try {
                     logProcess("Uploading base engine for" + url);
-                    let result = yield axios_1.default.post(`${url}/form/engine/base`, formData, {
+                    let result = yield axios_1.default.post(`${url}/form/engine/base`, postObj, {
                         headers: {
                             "Authorization": "Bearer " + adminToken
                         }
                     });
-                    if (result.status != 200)
+                    if (result.status != 200 || !((_c = (_b = result.data) === null || _b === void 0 ? void 0 : _b.result) === null || _c === void 0 ? void 0 : _c.uid))
                         throw new Error(result.data);
                 }
                 catch (e) {
                     failedUploadUrls.push(url);
-                    throw new Error("Failed to upload base engine for " + url);
+                    console.log("Failed to upload base engine for " + url);
                 }
                 logProcess("Done uploading base engine for " + url, true);
             }
             if (failedUploadUrls.length > 0) {
                 console.log(chalk_1.default.red.bgWhite.bold('HOLD UP!!!'));
                 console.log(chalk_1.default.red.bgWhite.bold("These environment has been failed to upload"), failedUploadUrls);
+                task.setResult(task.TaskResult.Failed, "");
+            }
+            else {
+                task.setResult(task.TaskResult.Succeeded, "Successfully uploaded");
             }
         }
         catch (err) {

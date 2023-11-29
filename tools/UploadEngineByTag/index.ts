@@ -54,6 +54,12 @@ async function run() {
         formData.append("engineVersion", engineVersion)
         formData.append("tag", engineVersion)
 
+        let postObj = {
+            appVersion: appVersion,
+            engineVersion: engineVersion,
+            tag: engineVersion
+        }
+
         let failedUploadUrls = []
 
         for(let index in urls) {
@@ -63,21 +69,20 @@ async function run() {
              try {
                  logProcess("Uploading base engine for" + url)
 
-                 let result = await axios.post(`${url}/form/engine/base`, formData, {
+                 let result = await axios.post(`${url}/form/engine/base`, postObj, {
                      headers: {
                          "Authorization" : "Bearer " + adminToken
                      }
                  })
 
-                 if (result.status != 200)
+                 if (result.status != 200 || !result.data?.result?.uid)
                      throw new Error(result.data)
 
              } catch (e) {
                  failedUploadUrls.push(url)
 
-                 throw new Error("Failed to upload base engine for " + url)
+                 console.log("Failed to upload base engine for " + url)
              }
-
 
             logProcess("Done uploading base engine for " + url, true)
         }
@@ -86,6 +91,10 @@ async function run() {
             console.log(chalk.red.bgWhite.bold('HOLD UP!!!'));
 
             console.log(chalk.red.bgWhite.bold("These environment has been failed to upload"), failedUploadUrls)
+
+            task.setResult(task.TaskResult.Failed, "");
+        } else {
+            task.setResult(task.TaskResult.Succeeded, "Successfully uploaded");
         }
 
     } catch (err) {
