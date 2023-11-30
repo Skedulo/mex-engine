@@ -40,7 +40,9 @@ async function run() {
         await appendResolveModulesCode(modulesInfo, runningRootFolder)
 
     } catch (err) {
-        task.setResult(task.TaskResult.Failed, err.message);
+        task.setResult(task.TaskResult.Failed, err.message)
+
+        throw err
     }
 }
 

@@ -42,6 +42,7 @@ function run() {
         }
         catch (err) {
             task.setResult(task.TaskResult.Failed, err.message);
+            throw err;
         }
     });
 }
