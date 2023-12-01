@@ -22,7 +22,7 @@ import {PageProcessorContext, PageProcessorContextObj} from "../../mex/hooks/use
 import Expression from "../../mex/common/expression/Expressions";
 import lodash from "lodash";
 import Expressions from "../../mex/common/expression/Expressions";
-import {translate} from "i18n-js";
+import {translate} from "../../mex/assets/LocalizationManager";
 
 export const AttachmentsEditorView = React.forwardRef((props: AttachmentsEditorViewProps, inputRef: ForwardedRef<any>) => {
 
