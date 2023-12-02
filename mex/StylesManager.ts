@@ -121,7 +121,6 @@ class StylesManager implements IStylesManager {
                borderRadius: 8,
                justifyContent: "center",
                height: 32,
-               paddingVertical: 8,
                paddingHorizontal: 20
            },
            buttonDefault: {
