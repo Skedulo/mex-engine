@@ -10,7 +10,7 @@ import {
     FormMetadata,
     IAssetsManager,
     InternalUtilsType,
-    Metadatacontext, PageLevelDataContext,
+    Metadatacontext, OrgPreferences, PageLevelDataContext,
     TimezoneMetadata,
     UserMetadata
 } from "@skedulo/mex-engine-proxy"
@@ -160,6 +160,13 @@ class AssetsManager implements IAssetsManager {
             });
     }
 
+    loadOrgPreferencesAsync(): Promise<OrgPreferences> {
+        return MexResourcesModule.getOrgPreferences()
+            .then((dataStr: string) => {
+                return JSON.parse(dataStr)
+            });
+    }
+
     loadTimezones(): Promise<any> {
         return MexResourcesModule.getTimezones(this.cachedContextId)
             .then((dataStr: string) => {
@@ -230,6 +237,13 @@ class AssetsManager implements IAssetsManager {
                 this.metadata!.timezones = timezones
             })
 
+        const loadOrgPreferencesTask = this.loadOrgPreferencesAsync()
+            .then((orgPreferences: OrgPreferences) => {
+                this.validateAndBindData(orgPreferences, "Org Preferences", () => {
+                    this.metadata!.orgPreferences = orgPreferences
+                })
+            })
+
         return Promise.all([
             jsonDefTask,
             formDataTask,
@@ -237,7 +251,9 @@ class AssetsManager implements IAssetsManager {
             customFunctionTask,
             loadUserMetadataTask,
             loadFormMetadataTask,
-            loadTimezones])
+            loadTimezones,
+            loadOrgPreferencesTask
+        ])
             .then((_) => {
                 return this.resources
             });

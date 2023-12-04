@@ -141,6 +141,7 @@ export default class SelectEditorViewProcessor
                                 placeholder={Expressions.getValueFromLocalizedKey({expressionStr: jsonDef.placeholder, dataContext: dataContext}) as string}
                                 style={[StylesManager.getStyles().textRegular, { flex: 1 }]}
                                 value={displayString}
+                                placeholderTextColor={ThemeManager.getColorSet().navy300}
                                 underlineColorAndroid="transparent"
                             />
                             <SkedIcon style={{ marginLeft: 4, height: 10, width: 10 }} iconType={IconTypes.DownArrow}/>

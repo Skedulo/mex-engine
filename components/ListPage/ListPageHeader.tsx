@@ -199,6 +199,7 @@ const componentStyles = StyleSheet.create({
     titleRowContainer: {
         justifyContent: 'space-between',
         flexDirection: 'row',
+        alignItems: 'center',
         marginHorizontal: 16,
     },
     textTitle: {

@@ -147,7 +147,7 @@ export const FlatContentViewRenderer = React.forwardRef<FlatPageContentViewRefFu
                         <Text style={[
                             styles.textCaption,
                             {
-                                paddingTop: styleConst.defaultVerticalPadding,
+                                paddingBottom: styleConst.smallVerticalPadding,
                                 paddingHorizontal: styleConst.defaultHorizontalPadding,
                                 backgroundColor: ThemeManager.getColorSet().white
                             }
