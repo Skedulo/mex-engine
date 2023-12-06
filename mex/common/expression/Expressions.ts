@@ -698,7 +698,7 @@ export class ExpressionFunctionsImpl implements IExpressionFunctions {
     }
 
     runFunctionExpression(args: FunctionExpressionArgs): any {
-        runFunctionExpression(args)
+        return runFunctionExpression(args)
     }
 
     scanValueFromDollarSignExpression(args: ExpressionArgs): void {
