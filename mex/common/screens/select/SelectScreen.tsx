@@ -7,7 +7,7 @@ import {
     FlatList,
     Image,
     LayoutChangeEvent,
-    Platform,
+    Platform, SectionList,
     StatusBar,
     StyleProp,
     Text,
@@ -33,6 +33,8 @@ import {translate} from '../../../assets/LocalizationManager';
 import InternalUtils from "../../InternalUtils";
 import {ImagesResource} from "../../../../img/Images";
 import {SelectPageConfig} from "@skedulo/mex-types";
+import {useOrderBy} from "../../../hooks/list/useOrderBy";
+import {useHasSection} from "../../../hooks/list/useHasSection";
 
 const { height: screenHeight } = Dimensions.get('window');
 
@@ -70,7 +72,7 @@ const SelectScreen: React.FC<Props> = ({route}) => {
     }
 
     let [searchText, setSearchText] = useState("")
-    const [, forceUpdate] = useReducer(x => x + 1, 0)
+    const [, forceUpdate] = useReducer(x => x + 1, 0, arg => {})
     let selectedItemsRef = useRef<any[]>(selectedData)
     let [showSearchBarWhenHasEnoughSpace, setShowSearchBarWhenHasEnoughSpace] = useState(false)
     let [flatListHeight, setFlatListHeight] = useState<number|undefined>(undefined)
@@ -110,7 +112,7 @@ const SelectScreen: React.FC<Props> = ({route}) => {
 
     let finalSource = data;
 
-    let debounceFunc = lodash.debounce(function(height) {
+    let debounceFunc = lodash.debounce(function(height: number) {
         if (flatListHeight) {
             // Nothing, we already have the height
             return
@@ -269,7 +271,7 @@ const SelectScreen: React.FC<Props> = ({route}) => {
             dataContext: dataContext
         }) as string
 
-        let debounceFunc = lodash.debounce(function(text) {
+        let debounceFunc = lodash.debounce(function(text: string) {
             setSearchText(text)
         }, 500, {'leading': false})
 
@@ -370,19 +372,29 @@ const SelectScreen: React.FC<Props> = ({route}) => {
             }
         }
 
-        return (<FlatList
-            style={style}
-            onLayout={onFlatListLayout}
-            data={finalSource}
-            contentContainerStyle={{paddingBottom: styleConst.smallVerticalPadding}}
-            contentInsetAdjustmentBehavior="never"
-            renderItem={renderItem}
-            scrollEnabled={showSearchBarWhenHasEnoughSpace}
-            initialNumToRender={20}
-            ListEmptyComponent={renderEmptyLayout}
-            keyExtractor={(item, index) => item?.UID ?? item?.Value ?? index}
-            ItemSeparatorComponent={renderSeparatorItems}
-        />)
+        if (selectPageConfig.orderBy) {
+            finalSource = useOrderBy(finalSource, selectPageConfig.orderBy)
+        }
+
+        let [finalizedData, renderSectionHeader] = useHasSection(finalSource, dataContext, selectPageConfig.hasSection)
+
+        return (
+            <SectionList
+                style={style}
+                renderItem={renderItem}
+                stickyHeaderHiddenOnScroll={true}
+                scrollEnabled={showSearchBarWhenHasEnoughSpace}
+                onLayout={onFlatListLayout}
+                contentContainerStyle={{paddingBottom: styleConst.smallVerticalPadding}}
+                contentInsetAdjustmentBehavior="never"
+                initialNumToRender={20}
+                ListEmptyComponent={renderEmptyLayout}
+                renderSectionHeader={renderSectionHeader}
+                keyExtractor={(item, index) => item?.UID ?? item?.Value ?? index}
+                ItemSeparatorComponent={renderSeparatorItems}
+                stickyHeaderIndices={[1]}
+                sections={finalizedData}/>
+        )
     }
 
     let containerStyle:StyleProp<ViewStyle> = {maxHeight: maxHeight, paddingBottom: safeAreaInsets.bottom !== 0 ? safeAreaInsets.bottom : 32};

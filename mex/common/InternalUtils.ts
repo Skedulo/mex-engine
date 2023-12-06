@@ -345,7 +345,7 @@ function getExtrasForCustomFunctionCall (): any {
     };
 }
 
-function sortListByExpression(source: any[], orderBy: OrderByModel) {
+function orderListByExpression(source: any[], orderBy: OrderByModel) {
     if (!source) {
         return source
     }
@@ -395,7 +395,7 @@ const InternalUtils =  {
         isSavingOnFormData,
         isTempUID,
         getFilterSourceByKeywords,
-        orderListByExpression: sortListByExpression,
+        orderListByExpression,
         getMandatoryExpressionValue,
         generateUniqSerial: utils.data.generateUniqSerial
     },

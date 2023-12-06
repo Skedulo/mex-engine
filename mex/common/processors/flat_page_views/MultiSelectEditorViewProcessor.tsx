@@ -87,7 +87,9 @@ export default class MultiSelectEditorViewProcessor
                 searchBar: selectPageJsonDef.searchBar,
                 isMultiSelect: true,
                 filterExpression: jsonDef.filterExpression,
-                onlineSource: jsonDef.onlineSource
+                onlineSource: jsonDef.onlineSource,
+                hasSection: jsonDef.selectPage.hasSection,
+                orderBy: jsonDef.selectPage.orderBy
             }
 
             let routeName = SelectScreenName;

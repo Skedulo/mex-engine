@@ -66,7 +66,9 @@ export default class SelectEditorViewProcessor
                 },
                 searchBar: selectPageJsonDef.searchBar,
                 filterExpression: jsonDef.filterExpression,
-                onlineSource: jsonDef.onlineSource
+                onlineSource: jsonDef.onlineSource,
+                hasSection: jsonDef.selectPage.hasSection,
+                orderBy: jsonDef.selectPage.orderBy
             }
 
             let routeName = SelectScreenName;

@@ -31,6 +31,8 @@ import {ImagesResource} from "../../../../img/Images";
 import SkedIcon from "../../../../components/SkedIcon";
 import {IconTypes} from "@skedulo/mex-engine-proxy";
 import {runInAction} from "mobx";
+import {useHasSection} from "../../../hooks/list/useHasSection";
+import {useOrderBy} from "../../../hooks/list/useOrderBy";
 
 type ListPageProcessorRefFunctions = {
     toggleShowBarVisibility: () => void
@@ -100,10 +102,6 @@ class ListPageProcessor extends AbstractPageProcessor<ListPageComponentModel> {
             expressionStr: jsonDef.sourceExpression
         })
 
-        if (jsonDef.orderBy) {
-            source = useMemo(() => InternalUtils.data.orderListByExpression(source, jsonDef.orderBy!), [source, source.length])
-        }
-
         const renderItem = (props: any) => {
 
             const {item}: ListRenderItemInfo<any> = props
@@ -160,18 +158,6 @@ class ListPageProcessor extends AbstractPageProcessor<ListPageComponentModel> {
 
         const renderFooterLayout = useCallback((): React.ReactElement => {
            return <ListPageFooterComponent dataContext={dataContext} jsonDef={args.jsonDef}/>
-        }, [args.dataContext]);
-
-        const renderSectionHeader = useCallback(({section: {title}}:any) => {
-            if (!jsonDef.hasSection)
-                return <></>
-
-            let dataContext:any = {
-                ...args.dataContext,
-                sectionItem: {title: title}
-            }
-
-            return <ListPageSectionHeaderComponent title={jsonDef.hasSection!.sectionTitleText} dataContext={dataContext} />
         }, [args.dataContext]);
 
         const renderSearchBar = useCallback(() => {
@@ -236,29 +222,11 @@ class ListPageProcessor extends AbstractPageProcessor<ListPageComponentModel> {
             }, [source, source?.length, dataContext, dataContext.filter, searchText])
         }
 
-        let finalizedData = useMemo<{data:any[], title?: string}[]>(() => {
+        if (jsonDef.orderBy) {
+            source = useOrderBy(source, jsonDef.orderBy)
+        }
 
-            if (!source || source.length === 0) {
-                // If there is no data, return empty
-                return []
-            }
-
-            if (!jsonDef.hasSection) {
-                // Make a new list, otherwise mobx will yield some errors regarding incorrect usage inside SectionList
-                return [{ data: [...source]}]
-            }
-
-            let groupByData = lodash.groupBy(source, jsonDef.hasSection!.sectionTitleProperty) as Dictionary<any[]>
-
-            let result: {data:any[], title?: string}[]  = []
-
-            for (let key in groupByData) {
-
-                result.push({ title: key === 'undefined' ? undefined : key, data: groupByData[key] })
-            }
-
-            return result
-        }, [source, source.length])
+        let [finalizedData, renderSectionHeader] = useHasSection(source, dataContext, jsonDef.hasSection)
 
         return [(
             <PageProcessorContext.Provider value={pageProcessorContextObj}>
