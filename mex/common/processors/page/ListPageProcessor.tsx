@@ -160,6 +160,18 @@ class ListPageProcessor extends AbstractPageProcessor<ListPageComponentModel> {
            return <ListPageFooterComponent dataContext={dataContext} jsonDef={args.jsonDef}/>
         }, [args.dataContext]);
 
+        const renderSectionHeader = useCallback(({section: {title}}:any) => {
+            if (!jsonDef.hasSection)
+                return <></>
+
+            let dataContext:any = {
+                ...args.dataContext,
+                sectionItem: {title: title}
+            }
+
+            return <ListPageSectionHeaderComponent title={jsonDef.hasSection!.sectionTitleText} dataContext={dataContext} />
+        }, [args.dataContext]);
+
         const renderSearchBar = useCallback(() => {
 
             if (!showFilter)
@@ -226,7 +238,7 @@ class ListPageProcessor extends AbstractPageProcessor<ListPageComponentModel> {
             source = useOrderBy(source, jsonDef.orderBy)
         }
 
-        let [finalizedData, renderSectionHeader] = useHasSection(source, dataContext, jsonDef.hasSection)
+        let finalizedData = useHasSection(source, jsonDef.hasSection)
 
         return [(
             <PageProcessorContext.Provider value={pageProcessorContextObj}>

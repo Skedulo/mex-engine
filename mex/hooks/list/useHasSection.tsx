@@ -1,34 +1,21 @@
-import {useCallback, useMemo} from "react";
+import { useMemo} from "react";
 import * as lodash from "lodash";
 import * as React from "react";
 import {Dictionary} from "lodash";
 import {GroupByFeatureModel} from "@skedulo/mex-types/dist/common/CommonTypes";
-import {ListPageSectionHeaderComponent} from "../../../components/ListPage/ListPageSectionHeader";
 
-export const useHasSection = (source: any[], dataContext: any, hasSection?: GroupByFeatureModel): [any[], ({section: {title}}: any) => (JSX.Element)] => {
+export const useHasSection = (source: any[], dataContext: any, hasSection?: GroupByFeatureModel): any[] => {
 
-    const renderSectionHeader = useCallback(({section: {title}}:any) => {
-        if (!hasSection)
-            return <></>
-
-        let dataContext:any = {
-            ...dataContext,
-            sectionItem: {title: title}
-        }
-
-        return <ListPageSectionHeaderComponent title={hasSection!.sectionTitleText} dataContext={dataContext} />
-    }, [dataContext])
-
-    return useMemo<[{ data: any[], title?: string }[], ({section: {title}}: any) => (JSX.Element)]>(() => {
+    return useMemo<{ data: any[], title?: string }[]>(() => {
 
         if (!source || source.length === 0) {
             // If there is no data, return empty
-            return [[], renderSectionHeader]
+            return []
         }
 
         if (!hasSection) {
             // Make a new list, otherwise mobx will yield some errors regarding incorrect usage inside SectionList
-            return [[{data: [...source]}], renderSectionHeader]
+            return [{data: [...source]}]
         }
 
         let groupByData = lodash.groupBy(source, hasSection.sectionTitleProperty) as Dictionary<any[]>
@@ -40,6 +27,6 @@ export const useHasSection = (source: any[], dataContext: any, hasSection?: Grou
             result.push({title: key === 'undefined' || key === 'null' ? undefined : key, data: groupByData[key]})
         }
 
-        return [result, renderSectionHeader]
-    }, [source, source.length, renderSectionHeader])
+        return result
+    }, [source, source.length])
 };
