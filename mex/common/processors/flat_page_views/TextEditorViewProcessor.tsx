@@ -15,6 +15,8 @@ import {PageProcessorContext, PageProcessorContextObj} from "../../../hooks/useC
 import {TextEditorView} from "../../../../components/Editors/TextEditorView";
 import SkedIcon from "../../../../components/SkedIcon";
 import {IconTypes} from "@skedulo/mex-engine-proxy";
+import StylesManager from "../../../StylesManager";
+import NavigationProcessManager from "../../NavigationProcessManager";
 
 type TextEditorViewProps = EditorViewProps<TextEditorViewArgs, TextEditorViewComponentModel>
 
@@ -53,6 +55,8 @@ export default class TextEditorViewProcessor extends AbstractEditorViewProcessor
         let pageContext = useContext<PageProcessorContextObj|undefined>(PageProcessorContext)
 
         let readonly = this.isComponentReadonly(args.jsonDef.readonly, args.dataContext)
+
+        const styleConst = StylesManager.getStyleConst()
 
         useEffect(() => {
 
@@ -118,19 +122,35 @@ export default class TextEditorViewProcessor extends AbstractEditorViewProcessor
 
         let value = textDataExpression.getValue()?.toString() ?? ""
 
-        const renderRightIconIfPossible = useCallback(() => {
-            console.log("what", args.jsonDef.features?.useBarcodeAndQRScanner)
+        const hasUseFeatures = args.jsonDef.features?.useBarcodeAndQRScanner ?? false;
 
+        const renderRightIconIfPossible = useCallback(() => {
             if (!args.jsonDef.features?.useBarcodeAndQRScanner) {
                 return null
             }
 
-            console.log("wow")
+            function scanQRBarCode() {
+                NavigationProcessManager.navigate("scanQRBarcodeScreen", {})
+                    .then((text) => {
+                        if (text) {
+                            handleTextChange(text)
+                        }
+                    })
+            }
 
             return (
-            <TouchableOpacity>
+            <TouchableOpacity
+                onPress={scanQRBarCode}
+                style={{
+                    alignSelf: "center",
+                    alignContent: "center",
+                    position: "absolute",
+                    right: styleConst.betweenTextSpacing,
+                }}>
                 <SkedIcon iconType={IconTypes.Camera} style={{
-                    height: 30, width: 30
+                    marginTop: 5,
+                    height: 30,
+                    width: 30
                 }} />
             </TouchableOpacity>)
         }, [])
@@ -145,18 +165,21 @@ export default class TextEditorViewProcessor extends AbstractEditorViewProcessor
                 flex: 1,
                 flexDirection: 'row',
             }}>
-                <TextEditorView
-                    ref={inputRef}
-                    textInputProps={{
-                        onChangeText:newText => handleTextChange(newText),
-                        onSubmitEditing:() => {
-                            pageContext?.actions.controlRequestOutFocus(inputRef.current)
-                        },
-                        ...this.getAdditionalProperties(args)
-                    }}
-                    value={value}
-                    hasError={args.hasError}
-                />
+                <View style={{flex: 1}}>
+                    <TextEditorView
+                        ref={inputRef}
+                        textInputProps={{
+                            style: hasUseFeatures ? { paddingRight: 40 } : undefined,
+                            onChangeText:newText => handleTextChange(newText),
+                            onSubmitEditing:() => {
+                                pageContext?.actions.controlRequestOutFocus(inputRef.current)
+                            },
+                            ...this.getAdditionalProperties(args)
+                        }}
+                        value={value}
+                        hasError={args.hasError}
+                    />
+                </View>
 
                 {renderRightIconIfPossible()}
             </View>)
