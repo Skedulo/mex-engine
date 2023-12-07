@@ -30,7 +30,14 @@ abstract class Expression {
         if (expressionContent.charAt(0) === "'" && expressionContent.charAt(expressionContent.length - 1) === "'"){
             // it's a constant value
             return expressionContent.substring(1, expressionContent.length - 1)
-        } else {
+        }
+        else if (expressionContent == 'null') {
+            return null
+        }
+        else if(expressionContent == 'undefined'){
+            return undefined
+        }
+        else {
             return this.getValueFromExpressionStr(expressionContent, dataContext);
         }
     }
@@ -334,6 +341,8 @@ export class FetchValueExpression extends Expression {
                 return this.translateFunctionOrVariable(expressionStr, dataContext);
             }
         }
+
+        console.log("yo", matches)
 
         // There is logical expression complex side
         return this.translateParser(matches, expressionStr, dataContext)
