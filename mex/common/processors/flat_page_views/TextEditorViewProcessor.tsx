@@ -1,4 +1,4 @@
-import {TextInput, TextInputProps} from "react-native";
+import {TextInput, TextInputProps, TouchableOpacity, View} from "react-native";
 import Expressions, {DataExpression} from "../../expression/Expressions";
 import AbstractEditorViewProcessor, {EditorViewArgs, EditorViewProps} from "./AbstractEditorViewProcessors";
 import {runInAction} from "mobx";
@@ -13,6 +13,8 @@ import {ReadonlyText} from "../../../../components/ReadonlyText";
 import {TextEditorViewComponentModel} from "@skedulo/mex-types";
 import {PageProcessorContext, PageProcessorContextObj} from "../../../hooks/useCrudOnPage";
 import {TextEditorView} from "../../../../components/Editors/TextEditorView";
+import SkedIcon from "../../../../components/SkedIcon";
+import {IconTypes} from "@skedulo/mex-engine-proxy";
 
 type TextEditorViewProps = EditorViewProps<TextEditorViewArgs, TextEditorViewComponentModel>
 
@@ -116,22 +118,47 @@ export default class TextEditorViewProcessor extends AbstractEditorViewProcessor
 
         let value = textDataExpression.getValue()?.toString() ?? ""
 
+        const renderRightIconIfPossible = useCallback(() => {
+            console.log("what", args.jsonDef.features?.useBarcodeAndQRScanner)
+
+            if (!args.jsonDef.features?.useBarcodeAndQRScanner) {
+                return null
+            }
+
+            console.log("wow")
+
+            return (
+            <TouchableOpacity>
+                <SkedIcon iconType={IconTypes.Camera} style={{
+                    height: 30, width: 30
+                }} />
+            </TouchableOpacity>)
+        }, [])
+
         if (readonly) {
             /* Read only field */
             return (<ReadonlyText  text={value} />)
         }
 
-        return (<TextEditorView
-            ref={inputRef}
-            textInputProps={{
-                onChangeText:newText => handleTextChange(newText),
-                onSubmitEditing:() => {
-                    pageContext?.actions.controlRequestOutFocus(inputRef.current)
-                },
-                ...this.getAdditionalProperties(args)
-            }}
-            value={value}
-            hasError={args.hasError}
-        />)
+        return (
+            <View style={{
+                flex: 1,
+                flexDirection: 'row',
+            }}>
+                <TextEditorView
+                    ref={inputRef}
+                    textInputProps={{
+                        onChangeText:newText => handleTextChange(newText),
+                        onSubmitEditing:() => {
+                            pageContext?.actions.controlRequestOutFocus(inputRef.current)
+                        },
+                        ...this.getAdditionalProperties(args)
+                    }}
+                    value={value}
+                    hasError={args.hasError}
+                />
+
+                {renderRightIconIfPossible()}
+            </View>)
     }
 }
