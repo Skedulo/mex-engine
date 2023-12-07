@@ -3,6 +3,7 @@ export const ImagesResource = {
     NoInternet: require("./NoInternet.png"),
     LoadingError: require("./LoadingError.png"),
     Search: require("./Search.png"),
+    QrCodeScanner: require("./QrCodeScanner.png"),
 }
 
 

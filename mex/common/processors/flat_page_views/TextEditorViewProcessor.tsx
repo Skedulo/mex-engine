@@ -1,4 +1,4 @@
-import {TextInput, TextInputProps, TouchableOpacity, View} from "react-native";
+import {TextInput, TextInputProps, TouchableOpacity, View, Image} from "react-native";
 import Expressions, {DataExpression} from "../../expression/Expressions";
 import AbstractEditorViewProcessor, {EditorViewArgs, EditorViewProps} from "./AbstractEditorViewProcessors";
 import {runInAction} from "mobx";
@@ -13,11 +13,10 @@ import {ReadonlyText} from "../../../../components/ReadonlyText";
 import {TextEditorViewComponentModel} from "@skedulo/mex-types";
 import {PageProcessorContext, PageProcessorContextObj} from "../../../hooks/useCrudOnPage";
 import {TextEditorView} from "../../../../components/Editors/TextEditorView";
-import SkedIcon from "../../../../components/SkedIcon";
-import {IconTypes} from "@skedulo/mex-engine-proxy";
 import StylesManager from "../../../StylesManager";
 import NavigationProcessManager from "../../NavigationProcessManager";
 import ThemeManager from "../../../colors/ThemeManager";
+import {ImagesResource} from "../../../../img/Images";
 
 type TextEditorViewProps = EditorViewProps<TextEditorViewArgs, TextEditorViewComponentModel>
 
@@ -136,6 +135,8 @@ export default class TextEditorViewProcessor extends AbstractEditorViewProcessor
                     .then((text) => {
                         if (text) {
                             handleTextChange(text)
+
+                            pageContext?.actions.controlRequestOutFocus(inputRef.current)
                         }
                     })
             }
@@ -144,19 +145,28 @@ export default class TextEditorViewProcessor extends AbstractEditorViewProcessor
             <TouchableOpacity
                 onPress={scanQRBarCode}
                 style={{
+                    marginLeft: 12,
                     alignSelf: "center",
-                    alignContent: "center",
-                    position: "absolute",
-                    right: styleConst.betweenTextSpacing,
+                    alignContent: "center"
                 }}>
-                <SkedIcon
-                    iconType={IconTypes.Camera}
-                    androidTintColor={colors.skeduloText}
+                <View
                     style={{
-                        marginTop: 5,
-                        height: 30,
-                        width: 30
-                    }}/>
+                        backgroundColor: colors.navy100,
+                        marginTop: 10,
+                        padding: styleConst.betweenTextSpacing,
+                        borderRadius: 5
+                    }}>
+
+                    <Image
+                        resizeMode={"contain"}
+                        source={ImagesResource.QrCodeScanner}
+                        style={{
+                            alignSelf: "center",
+                            alignContent: "center",
+                            height: 30,
+                            width: 30
+                        }}/>
+                </View>
             </TouchableOpacity>)
         }, [])
 
@@ -174,7 +184,6 @@ export default class TextEditorViewProcessor extends AbstractEditorViewProcessor
                     <TextEditorView
                         ref={inputRef}
                         textInputProps={{
-                            style: hasUseFeatures ? { paddingRight: 40 } : undefined,
                             onChangeText:newText => handleTextChange(newText),
                             onSubmitEditing:() => {
                                 pageContext?.actions.controlRequestOutFocus(inputRef.current)
