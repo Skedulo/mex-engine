@@ -67,7 +67,7 @@ export const TextEditorView = React.forwardRef((props: TextEditorViewProps, inpu
         style={[
             s.editText,
             getStyles(height),
-            {width: "100%"}
+            textInputProps.style ?? {}
         ]}
         value={value}
         underlineColorAndroid="transparent"

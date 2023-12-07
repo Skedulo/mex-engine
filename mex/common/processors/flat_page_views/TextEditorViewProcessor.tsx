@@ -17,6 +17,7 @@ import SkedIcon from "../../../../components/SkedIcon";
 import {IconTypes} from "@skedulo/mex-engine-proxy";
 import StylesManager from "../../../StylesManager";
 import NavigationProcessManager from "../../NavigationProcessManager";
+import ThemeManager from "../../../colors/ThemeManager";
 
 type TextEditorViewProps = EditorViewProps<TextEditorViewArgs, TextEditorViewComponentModel>
 
@@ -57,6 +58,7 @@ export default class TextEditorViewProcessor extends AbstractEditorViewProcessor
         let readonly = this.isComponentReadonly(args.jsonDef.readonly, args.dataContext)
 
         const styleConst = StylesManager.getStyleConst()
+        const colors = ThemeManager.getColorSet()
 
         useEffect(() => {
 
@@ -147,11 +149,14 @@ export default class TextEditorViewProcessor extends AbstractEditorViewProcessor
                     position: "absolute",
                     right: styleConst.betweenTextSpacing,
                 }}>
-                <SkedIcon iconType={IconTypes.Camera} style={{
-                    marginTop: 5,
-                    height: 30,
-                    width: 30
-                }} />
+                <SkedIcon
+                    iconType={IconTypes.Camera}
+                    androidTintColor={colors.skeduloText}
+                    style={{
+                        marginTop: 5,
+                        height: 30,
+                        width: 30
+                    }}/>
             </TouchableOpacity>)
         }, [])
 

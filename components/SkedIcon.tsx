@@ -3,7 +3,7 @@ import VectorDrawable from "@klarna/react-native-vector-drawable";
 import React from "react";
 import {SkedIconProps} from "@skedulo/mex-engine-proxy";
 
-const SkedIcon = ({iconType, style}: SkedIconProps) => {
+const SkedIcon = ({iconType, style, androidTintColor}: SkedIconProps) => {
 
     let iconName:string
 
@@ -21,7 +21,7 @@ const SkedIcon = ({iconType, style}: SkedIconProps) => {
     } else {
         // Probably Android
         return (<VectorDrawable
-            style={{ ...style, resizeMode: 'contain' }}
+            style={{ ...style, resizeMode: 'contain', tintColor: androidTintColor }}
             resourceName={iconName}/>)
     }
 }
