@@ -1,4 +1,4 @@
-import {TextInput, TextInputProps, TouchableOpacity, View, Image} from "react-native";
+import {TextInput, TextInputProps, TouchableOpacity, View, Image, Text} from "react-native";
 import Expressions, {DataExpression} from "../../expression/Expressions";
 import AbstractEditorViewProcessor, {EditorViewArgs, EditorViewProps} from "./AbstractEditorViewProcessors";
 import {runInAction} from "mobx";
@@ -17,6 +17,7 @@ import StylesManager from "../../../StylesManager";
 import NavigationProcessManager from "../../NavigationProcessManager";
 import ThemeManager from "../../../colors/ThemeManager";
 import {ImagesResource} from "../../../../img/Images";
+import {translate} from "../../../assets/LocalizationManager";
 
 type TextEditorViewProps = EditorViewProps<TextEditorViewArgs, TextEditorViewComponentModel>
 
@@ -57,6 +58,7 @@ export default class TextEditorViewProcessor extends AbstractEditorViewProcessor
         let readonly = this.isComponentReadonly(args.jsonDef.readonly, args.dataContext)
 
         const styleConst = StylesManager.getStyleConst()
+        const styles = StylesManager.getStyles()
         const colors = ThemeManager.getColorSet()
 
         useEffect(() => {
@@ -151,10 +153,13 @@ export default class TextEditorViewProcessor extends AbstractEditorViewProcessor
                 }}>
                 <View
                     style={{
-                        backgroundColor: colors.navy100,
+                        backgroundColor: colors.navy50,
                         marginTop: 10,
-                        padding: styleConst.betweenTextSpacing,
-                        borderRadius: 5
+                        paddingHorizontal: 10,
+                        paddingVertical: 10,
+                        borderRadius: 5,
+                        height: 44,
+                        flexDirection: "row",
                     }}>
 
                     <Image
@@ -163,9 +168,22 @@ export default class TextEditorViewProcessor extends AbstractEditorViewProcessor
                         style={{
                             alignSelf: "center",
                             alignContent: "center",
-                            height: 30,
-                            width: 30
+                            height: 20,
+                            width: 20
                         }}/>
+
+                    <Text style={[
+                        styles.textHeadingBold,
+                        {
+                            fontSize: 16,
+                            marginLeft: styleConst.betweenTextSpacing,
+                            color: colors.navy800,
+                            alignSelf: "center",
+                            alignContent: "center",
+                            justifyContent: "center"
+                        }]}>
+                        {translate("builtin_scan")}
+                    </Text>
                 </View>
             </TouchableOpacity>)
         }, [])

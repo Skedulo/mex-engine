@@ -161,8 +161,6 @@ class AssetsManager implements IAssetsManager {
     }
 
     loadOrgPreferencesAsync(): Promise<OrgPreferences> {
-        return Promise.resolve({})
-
         return MexResourcesModule.getOrgPreferences()
             .then((dataStr: string) => {
                 return JSON.parse(dataStr)
