@@ -56,6 +56,7 @@ import {DatetimeEditorView} from "./components/Editors/DatetimeEditorView";
 import {RadioButton} from "./components/Editors/RadioButton";
 import {TextEditorView} from "./components/Editors/TextEditorView";
 import {AttachmentsEditorView} from "./components/Editors/AttachmentsEditorView";
+import {scanModulePages} from "./ModuleRegistration";
 LogBox.ignoreLogs(['Warning: ...', '[MobX]', 'Require cycle', 'Could not find image']); // Ignore log notification by message
 
 const Stack = createNativeStackNavigator();
@@ -315,6 +316,3 @@ registerServices();
 // Module name
 AppRegistry.registerComponent('RNHighScores', () => RootStack);
 AppRegistry.registerComponent('MexApp', () => RootStack);
-
-async function scanModulePages(): Promise<CustomComponentRegistry[]> {
-}
