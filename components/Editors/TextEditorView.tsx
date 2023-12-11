@@ -66,7 +66,9 @@ export const TextEditorView = React.forwardRef((props: TextEditorViewProps, inpu
         onBlur={handleOnBlur}
         style={[
             s.editText,
-            getStyles(height)]}
+            getStyles(height),
+            textInputProps.style ?? {}
+        ]}
         value={value}
         underlineColorAndroid="transparent"
         placeholderTextColor={ThemeManager.getColorSet().navy300}

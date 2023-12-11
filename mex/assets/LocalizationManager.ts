@@ -11,8 +11,7 @@ let RNFS = require('react-native-fs');
 const defaultLocalizationFiles: any = {
     // lazy requires (metro bundler does not support symlinks)
     en: () => require("../assets/default_localization/en.json"),
-    fr: () => require("../assets/default_localization/fr.json"),
-    vi: () => require("../assets/default_localization/vi.json"),
+    es: () => require("../assets/default_localization/es.json")
 };
 
 let translate = memoize(

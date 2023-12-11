@@ -342,8 +342,6 @@ export class FetchValueExpression extends Expression {
             }
         }
 
-        console.log("yo", matches)
-
         // There is logical expression complex side
         return this.translateParser(matches, expressionStr, dataContext)
     }
