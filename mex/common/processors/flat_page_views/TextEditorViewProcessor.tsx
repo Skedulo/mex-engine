@@ -1,4 +1,4 @@
-import {TextInput, TextInputProps} from "react-native";
+import {TextInput, TextInputProps, TouchableOpacity, View, Image, Text} from "react-native";
 import Expressions, {DataExpression} from "../../expression/Expressions";
 import AbstractEditorViewProcessor, {EditorViewArgs, EditorViewProps} from "./AbstractEditorViewProcessors";
 import {runInAction} from "mobx";
@@ -13,6 +13,11 @@ import {ReadonlyText} from "../../../../components/ReadonlyText";
 import {TextEditorViewComponentModel} from "@skedulo/mex-types";
 import {PageProcessorContext, PageProcessorContextObj} from "../../../hooks/useCrudOnPage";
 import {TextEditorView} from "../../../../components/Editors/TextEditorView";
+import StylesManager from "../../../StylesManager";
+import NavigationProcessManager from "../../NavigationProcessManager";
+import ThemeManager from "../../../colors/ThemeManager";
+import {ImagesResource} from "../../../../img/Images";
+import {translate} from "../../../assets/LocalizationManager";
 
 type TextEditorViewProps = EditorViewProps<TextEditorViewArgs, TextEditorViewComponentModel>
 
@@ -51,6 +56,10 @@ export default class TextEditorViewProcessor extends AbstractEditorViewProcessor
         let pageContext = useContext<PageProcessorContextObj|undefined>(PageProcessorContext)
 
         let readonly = this.isComponentReadonly(args.jsonDef.readonly, args.dataContext)
+
+        const styleConst = StylesManager.getStyleConst()
+        const styles = StylesManager.getStyles()
+        const colors = ThemeManager.getColorSet()
 
         useEffect(() => {
 
@@ -116,22 +125,95 @@ export default class TextEditorViewProcessor extends AbstractEditorViewProcessor
 
         let value = textDataExpression.getValue()?.toString() ?? ""
 
+        const hasUseFeatures = args.jsonDef.features?.useBarcodeAndQRScanner ?? false;
+
+        const renderRightIconIfPossible = useCallback(() => {
+            if (!args.jsonDef.features?.useBarcodeAndQRScanner) {
+                return null
+            }
+
+            function scanQRBarCode() {
+                NavigationProcessManager.navigate("scanQRBarcodeScreen", {})
+                    .then((text) => {
+                        if (text) {
+                            handleTextChange(text)
+
+                            pageContext?.actions.controlRequestOutFocus(inputRef.current)
+                        }
+                    })
+            }
+
+            return (
+            <TouchableOpacity
+                onPress={scanQRBarCode}
+                style={{
+                    marginLeft: 12,
+                    alignSelf: "center",
+                    alignContent: "center"
+                }}>
+                <View
+                    style={{
+                        backgroundColor: colors.navy50,
+                        marginTop: 10,
+                        paddingHorizontal: 10,
+                        paddingVertical: 10,
+                        borderRadius: 5,
+                        height: 44,
+                        flexDirection: "row",
+                    }}>
+
+                    <Image
+                        resizeMode={"contain"}
+                        source={ImagesResource.QrCodeScanner}
+                        style={{
+                            alignSelf: "center",
+                            alignContent: "center",
+                            height: 20,
+                            width: 20
+                        }}/>
+
+                    <Text style={[
+                        styles.textHeadingBold,
+                        {
+                            fontSize: 16,
+                            marginLeft: styleConst.betweenTextSpacing,
+                            color: colors.navy800,
+                            alignSelf: "center",
+                            alignContent: "center",
+                            justifyContent: "center"
+                        }]}>
+                        {translate("builtin_scan")}
+                    </Text>
+                </View>
+            </TouchableOpacity>)
+        }, [])
+
         if (readonly) {
             /* Read only field */
             return (<ReadonlyText  text={value} />)
         }
 
-        return (<TextEditorView
-            ref={inputRef}
-            textInputProps={{
-                onChangeText:newText => handleTextChange(newText),
-                onSubmitEditing:() => {
-                    pageContext?.actions.controlRequestOutFocus(inputRef.current)
-                },
-                ...this.getAdditionalProperties(args)
-            }}
-            value={value}
-            hasError={args.hasError}
-        />)
+        return (
+            <View style={{
+                flex: 1,
+                flexDirection: 'row',
+            }}>
+                <View style={{flex: 1}}>
+                    <TextEditorView
+                        ref={inputRef}
+                        textInputProps={{
+                            onChangeText:newText => handleTextChange(newText),
+                            onSubmitEditing:() => {
+                                pageContext?.actions.controlRequestOutFocus(inputRef.current)
+                            },
+                            ...this.getAdditionalProperties(args)
+                        }}
+                        value={value}
+                        hasError={args.hasError}
+                    />
+                </View>
+
+                {renderRightIconIfPossible()}
+            </View>)
     }
 }
