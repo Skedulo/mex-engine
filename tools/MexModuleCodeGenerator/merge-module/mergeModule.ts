@@ -2,7 +2,7 @@ import task = require('azure-pipelines-task-lib/task');
 import fs = require('fs');
 import fse = require('fs-extra');
 import {Project} from "ts-morph";
-import {ModuleRegistration} from "../../../ModuleRegistration";
+import {ModuleRegistration} from "../../../ModuleRegistration.js";
 
 let argv = require('minimist')(process.argv.slice(2));
 
@@ -49,10 +49,10 @@ async function run() {
 
 async function appendResolveModulesCode(modulesInfo: { name: string, destinationFolderPath: string }[], runningRootFolder: string) {
     let project = new Project()
-    project.addSourceFileAtPath(runningRootFolder + "/ModuleRegistration.ts")
+    project.addSourceFileAtPath(runningRootFolder + "/ModuleRegistration.js")
     project.resolveSourceFileDependencies();
 
-    let moduleRegistrationSourceFile = project.getSourceFile("ModuleRegistration.ts")
+    let moduleRegistrationSourceFile = project.getSourceFile("ModuleRegistration.js")
 
     const moduleRegistrationClass = moduleRegistrationSourceFile.getClass("ModuleRegistration");
 

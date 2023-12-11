@@ -28,10 +28,5 @@
 
     "skipLibCheck": true,                                 /* Skip type checking all .d.ts files. */
     "esModuleInterop": true
-  },
-  "exclude": [
-    "ModuleRegistration.ts",
-    "index.tsx",
-    "/mex/common/processors/flat_page_views/FlatPageViewProcessorsManager.tsx"
-  ]
+  }
 }
