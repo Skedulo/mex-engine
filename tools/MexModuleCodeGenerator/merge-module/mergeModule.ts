@@ -49,10 +49,10 @@ async function run() {
 
 async function appendResolveModulesCode(modulesInfo: { name: string, destinationFolderPath: string }[], runningRootFolder: string) {
     let project = new Project()
-    project.addSourceFileAtPath(runningRootFolder + "/ModuleRegistration.ts")
+    project.addSourceFileAtPath(runningRootFolder + "/index.tsx")
     project.resolveSourceFileDependencies();
 
-    let moduleRegistrationSourceFile = project.getSourceFile("ModuleRegistration.ts")
+    let moduleRegistrationSourceFile = project.getSourceFile("index.tsx")
 
     const scanModulePagesFunc = moduleRegistrationSourceFile.getFunction("scanModulePages")
     scanModulePagesFunc.setBodyText(writer => {

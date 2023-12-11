@@ -10,8 +10,4 @@ export class ModuleRegistration {
         return this.registeredModules
     }
 }
-
-// @ts-ignore
-export const scanModulePages = async (): Promise<CustomComponentRegistry[]> => {
-}
 export const ModuleRegistrationInstance = new ModuleRegistration()

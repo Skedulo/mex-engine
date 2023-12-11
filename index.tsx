@@ -34,7 +34,7 @@ import {
     CoreContainer,
     ContextProxy,
     ExpressionProxy,
-    ServicesProxy, HooksProxy, INativeHooks, UtilsProxy, StylesProxy
+    ServicesProxy, HooksProxy, INativeHooks, UtilsProxy, StylesProxy, CustomComponentRegistry
 } from "@skedulo/mex-engine-proxy";
 import ExpressionFunctions from "./mex/common/expression/Expressions";
 import {InternalUtilsType} from "@skedulo/mex-engine-proxy/dist/src/proxies/services/interfaces";
@@ -55,7 +55,7 @@ import {DatetimeEditorView} from "./components/Editors/DatetimeEditorView";
 import {RadioButton} from "./components/Editors/RadioButton";
 import {TextEditorView} from "./components/Editors/TextEditorView";
 import {AttachmentsEditorView} from "./components/Editors/AttachmentsEditorView";
-import {ModuleRegistrationInstance, scanModulePages} from "./ModuleRegistration";
+import {ModuleRegistrationInstance} from "./ModuleRegistration";
 import FlatPageViewProcessorsManager from "./mex/common/processors/flat_page_views/FlatPageViewProcessorsManager";
 LogBox.ignoreLogs(['Warning: ...', '[MobX]', 'Require cycle', 'Could not find image']); // Ignore log notification by message
 
@@ -314,3 +314,6 @@ registerServices();
 // Module name
 AppRegistry.registerComponent('RNHighScores', () => RootStack);
 AppRegistry.registerComponent('MexApp', () => RootStack);
+
+export async function scanModulePages(): Promise<CustomComponentRegistry[]> {
+}
