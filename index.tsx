@@ -55,7 +55,7 @@ import {DatetimeEditorView} from "./components/Editors/DatetimeEditorView";
 import {RadioButton} from "./components/Editors/RadioButton";
 import {TextEditorView} from "./components/Editors/TextEditorView";
 import {AttachmentsEditorView} from "./components/Editors/AttachmentsEditorView";
-import {ModuleRegistrationInstance} from "./ModuleRegistration";
+import {ModuleRegistrationInstance, scanModulePages} from "./ModuleRegistration";
 import FlatPageViewProcessorsManager from "./mex/common/processors/flat_page_views/FlatPageViewProcessorsManager";
 LogBox.ignoreLogs(['Warning: ...', '[MobX]', 'Require cycle', 'Could not find image']); // Ignore log notification by message
 
@@ -107,7 +107,9 @@ const RootStack = ({packageId, formName, contextId, staticResourcesId} : RootSta
             LocalizationManager.initializeLocalization(),
             RegexManager.initialize(),
             AssetsManager.loadMexData(),
-            ModuleRegistrationInstance.initialize()
+            scanModulePages().then(registries => {
+                ModuleRegistrationInstance.setRegisteredModules(registries)
+            })
         ])
             .then((_) => {
                 FlatPageViewProcessorsManager.loadCustomProcessors()
