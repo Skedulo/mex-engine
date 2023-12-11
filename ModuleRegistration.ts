@@ -1,5 +1,5 @@
 import {CustomComponentRegistry} from "@skedulo/mex-engine-proxy";
-class ModuleRegistration {
+export class ModuleRegistration {
 
     registeredModules: CustomComponentRegistry[] = []
 

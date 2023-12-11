@@ -2,6 +2,7 @@ import task = require('azure-pipelines-task-lib/task');
 import fs = require('fs');
 import fse = require('fs-extra');
 import {Project} from "ts-morph";
+import {ModuleRegistration} from "../../../ModuleRegistration";
 
 let argv = require('minimist')(process.argv.slice(2));
 
@@ -53,14 +54,14 @@ async function appendResolveModulesCode(modulesInfo: { name: string, destination
 
     let moduleRegistrationSourceFile = project.getSourceFile("ModuleRegistration.ts")
 
-    const moduleRegistrationClass = moduleRegistrationSourceFile.getClass("ModuleRegistrationInstance");
+    const moduleRegistrationClass = moduleRegistrationSourceFile.getClass("ModuleRegistration");
 
     if (!moduleRegistrationClass) {
         console.log("Not found Module Registration class")
         return
     }
 
-    const scanModulePagesFunc = moduleRegistrationClass.getInstanceMethod("scanModulePages")
+    const scanModulePagesFunc = moduleRegistrationClass.getMethod("scanModulePages")
     scanModulePagesFunc.setBodyText(writer => {
         writer.writeLine("let result:CustomComponentRegistry[] = []")
 
