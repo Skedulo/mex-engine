@@ -324,6 +324,25 @@ const SelectScreen: React.FC<Props> = ({route}) => {
 
     let renderBaseOnStatus = () => {
 
+        if (selectPageConfig.orderBy) {
+            finalSource = useOrderBy(finalSource, selectPageConfig.orderBy)
+        }
+
+        const renderSectionHeader = useCallback(({section: {title}}:any) => {
+            if (!selectPageConfig.hasSection)
+                return <></>
+
+            let dataContext:any = {
+                ...dataContext,
+                sectionItem: {title: title}
+            }
+
+            return <ListPageSectionHeaderComponent title={selectPageConfig.hasSection!.sectionTitleText} dataContext={dataContext} />
+        }, [dataContext])
+
+
+        let finalizedData = useHasSection(finalSource, dataContext, selectPageConfig.hasSection)
+
         if (status == OnlineSourceStatus.Loading) {
             return (<ActivityIndicator color={ThemeManager.getColorSet().skedBlue900} size="large" />)
         }
@@ -372,25 +391,6 @@ const SelectScreen: React.FC<Props> = ({route}) => {
                 height: flatListHeight
             }
         }
-
-        if (selectPageConfig.orderBy) {
-            finalSource = useOrderBy(finalSource, selectPageConfig.orderBy)
-        }
-
-        const renderSectionHeader = useCallback(({section: {title}}:any) => {
-            if (!selectPageConfig.hasSection)
-                return <></>
-
-            let dataContext:any = {
-                ...dataContext,
-                sectionItem: {title: title}
-            }
-
-            return <ListPageSectionHeaderComponent title={selectPageConfig.hasSection!.sectionTitleText} dataContext={dataContext} />
-        }, [dataContext])
-
-
-        let finalizedData = useHasSection(finalSource, dataContext, selectPageConfig.hasSection)
 
         return (
             <SectionList
