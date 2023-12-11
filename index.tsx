@@ -110,7 +110,7 @@ const RootStack = ({packageId, formName, contextId, staticResourcesId} : RootSta
             scanModulePages()
         ])
             .then(([,,,registries]) => {
-                ModuleRegistrationInstance.setRegisteredModules(registries)
+                ModuleRegistrationInstance.setRegisteredModules(registries ?? [])
                 FlatPageViewProcessorsManager.loadCustomProcessors()
                 setIsLoaded(true)
             })
