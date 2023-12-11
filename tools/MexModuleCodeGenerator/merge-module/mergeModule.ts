@@ -53,7 +53,14 @@ async function appendResolveModulesCode(modulesInfo: { name: string, destination
 
     let moduleRegistrationSourceFile = project.getSourceFile("ModuleRegistration.ts")
 
-    const scanModulePagesFunc = moduleRegistrationSourceFile.getFunction("scanModulePages")
+    const moduleRegistrationClass = moduleRegistrationSourceFile.getClass("ModuleRegistrationInstance");
+
+    if (!moduleRegistrationClass) {
+        console.log("Not found Module Registration class")
+        return
+    }
+
+    const scanModulePagesFunc = moduleRegistrationClass.getInstanceMethod("scanModulePages")
     scanModulePagesFunc.setBodyText(writer => {
         writer.writeLine("let result:CustomComponentRegistry[] = []")
 

@@ -162,7 +162,7 @@ const SelectScreen: React.FC<Props> = ({route}) => {
         handleCloseButtonClick();
     }
 
-    const handleCloseButtonClick =  useCallback(() => {
+    const handleCloseButtonClick = useCallback(() => {
         if (selectedItemsRef.current.length > 0) {
             NavigationProcessManager.goBack(selectPageConfig.isMultiSelect ? selectedItemsRef.current : selectedItemsRef.current[0])
         } else {
@@ -321,6 +321,18 @@ const SelectScreen: React.FC<Props> = ({route}) => {
             <View style={{ height: 12 }} />
         )
     }, [])
+
+    const renderSectionHeader = useCallback(({section: {title}}:any) => {
+        if (!selectPageConfig.hasSection)
+            return <></>
+
+        let newDataContext:any = {
+            ...dataContext,
+            sectionItem: {title: title}
+        }
+
+        return <ListPageSectionHeaderComponent title={selectPageConfig.hasSection!.sectionTitleText} dataContext={newDataContext} />
+    }, [dataContext])
 
     let renderBaseOnStatus = () => {
 

@@ -12,6 +12,10 @@ import ContactDetailsLayoutProcessor from "./contact_details/ContactDetailsViewP
 import BodyMapEditorViewProcessor from "./BodyMapEditorViewProcessor";
 import ButtonGroupViewProcessor from "./ButtonGroupViewProcessor";
 import MenuListViewProcessor from "./MenuListViewProcessor";
+import {ModuleRegistrationInstance} from "../../../../ModuleRegistration";
+import AbstractFlatPageViewProcessor from "./AbstractFlatPageViewProcessor";
+
+type CustomFlatPageViewProcessor = AbstractFlatPageViewProcessor<any, any, any>
 
 type ProcessorType = TextEditorViewProcessor
     |SelectEditorViewProcessor
@@ -27,6 +31,7 @@ type ProcessorType = TextEditorViewProcessor
     |BodyMapEditorViewProcessor
     |ButtonGroupViewProcessor
     |MenuListViewProcessor
+    |CustomFlatPageViewProcessor
 
 class FlatPageViewProcessorsManager {
     processors: ProcessorType[]
@@ -48,6 +53,14 @@ class FlatPageViewProcessorsManager {
             new ButtonGroupViewProcessor(),
             new MenuListViewProcessor()
         ]
+    }
+
+    loadCustomProcessors() {
+        ModuleRegistrationInstance.getRegisteredModules().forEach(module => {
+            // const customFlatPageProcessors = module.getRegisteredFlatPageComponentProcessors[] ?? []
+            const customFlatPageProcessors = []
+            this.processors = [...this.processors, ...customFlatPageProcessors]
+        })
     }
 
     findProcessor(typeName: string): ProcessorType|null {
