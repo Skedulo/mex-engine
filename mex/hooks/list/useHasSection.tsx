@@ -28,5 +28,5 @@ export const useHasSection = (source: any[], dataContext: any, hasSection?: Grou
         }
 
         return result
-    }, [source, source.length])
+    }, [source, source?.length])
 };
