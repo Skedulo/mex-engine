@@ -2,7 +2,6 @@ import task = require('azure-pipelines-task-lib/task');
 import fs = require('fs');
 import fse = require('fs-extra');
 import {Project} from "ts-morph";
-import {ModuleRegistration} from "../../../ModuleRegistration";
 
 let argv = require('minimist')(process.argv.slice(2));
 
