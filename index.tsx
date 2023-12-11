@@ -34,7 +34,7 @@ import {
     CoreContainer,
     ContextProxy,
     ExpressionProxy,
-    ServicesProxy, HooksProxy, INativeHooks, UtilsProxy, StylesProxy, CustomComponentRegistry
+    ServicesProxy, HooksProxy, INativeHooks, UtilsProxy, StylesProxy
 } from "@skedulo/mex-engine-proxy";
 import ExpressionFunctions from "./mex/common/expression/Expressions";
 import {InternalUtilsType} from "@skedulo/mex-engine-proxy/dist/src/proxies/services/interfaces";
@@ -107,10 +107,9 @@ const RootStack = ({packageId, formName, contextId, staticResourcesId} : RootSta
             LocalizationManager.initializeLocalization(),
             RegexManager.initialize(),
             AssetsManager.loadMexData(),
-            scanModulePages()
+            ModuleRegistrationInstance.registerCustomModules()
         ])
-            .then(([,,,registries]) => {
-                ModuleRegistrationInstance.setRegisteredModules(registries ?? [])
+            .then((_) => {
                 FlatPageViewProcessorsManager.loadCustomProcessors()
                 setIsLoaded(true)
             })
@@ -314,6 +313,3 @@ registerServices();
 // Module name
 AppRegistry.registerComponent('RNHighScores', () => RootStack);
 AppRegistry.registerComponent('MexApp', () => RootStack);
-
-export async function scanModulePages(): Promise<CustomComponentRegistry[]> {
-}
