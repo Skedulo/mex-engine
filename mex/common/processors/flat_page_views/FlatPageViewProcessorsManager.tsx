@@ -12,7 +12,7 @@ import ContactDetailsLayoutProcessor from "./contact_details/ContactDetailsViewP
 import BodyMapEditorViewProcessor from "./BodyMapEditorViewProcessor";
 import ButtonGroupViewProcessor from "./ButtonGroupViewProcessor";
 import MenuListViewProcessor from "./MenuListViewProcessor";
-import {ModuleRegistrationInstance, registeredModules} from "../../../../ModuleRegistration";
+import {ModuleRegistrationInstance} from "../../../../ModuleRegistration";
 import AbstractFlatPageViewProcessor from "./AbstractFlatPageViewProcessor";
 
 type CustomFlatPageViewProcessor = AbstractFlatPageViewProcessor<any, any, any>

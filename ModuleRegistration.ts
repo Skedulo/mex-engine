@@ -12,6 +12,6 @@ export class ModuleRegistration {
 }
 
 // @ts-ignore
-export async function scanModulePages(): Promise<CustomComponentRegistry[]> {
+export const scanModulePages = async (): Promise<CustomComponentRegistry[]> => {
 }
 export const ModuleRegistrationInstance = new ModuleRegistration()
