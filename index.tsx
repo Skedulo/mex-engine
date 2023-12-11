@@ -107,11 +107,10 @@ const RootStack = ({packageId, formName, contextId, staticResourcesId} : RootSta
             LocalizationManager.initializeLocalization(),
             RegexManager.initialize(),
             AssetsManager.loadMexData(),
-            scanModulePages().then(registries => {
-                ModuleRegistrationInstance.setRegisteredModules(registries)
-            })
+            scanModulePages()
         ])
-            .then((_) => {
+            .then(([,,,registries]) => {
+                ModuleRegistrationInstance.setRegisteredModules(registries)
                 FlatPageViewProcessorsManager.loadCustomProcessors()
                 setIsLoaded(true)
             })
