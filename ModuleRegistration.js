@@ -15,7 +15,7 @@ class ModuleRegistration {
         return this.registeredModules
     }
 
-    setRegisteredModules() {
+    setRegisteredModules(registeredModules) {
         this.registeredModules = registeredModules
     }
 }

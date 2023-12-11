@@ -63,10 +63,10 @@ async function appendResolveModulesCode(modulesInfo: { name: string, destination
 
     const scanModulePagesFunc = moduleRegistrationClass.getMethod("scanCustomModules")
     scanModulePagesFunc.setBodyText(writer => {
-        writer.writeLine("let result:CustomComponentRegistry[] = []")
+        writer.writeLine("let result = []")
 
         modulesInfo.forEach(module => {
-            writer.writeLine(`let mainFunction${module.name} = (await import("${module.destinationFolderPath}/index")) as any`)
+            writer.writeLine(`let mainFunction${module.name} = (await import("${module.destinationFolderPath}/index"))`)
             writer.writeLine(`result.push(mainFunction${module.name}.default())`)
         })
 
