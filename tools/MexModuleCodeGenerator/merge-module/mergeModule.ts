@@ -63,7 +63,7 @@ async function appendResolveModulesCode(modulesInfo: { name: string, destination
             writer.writeLine(`result.push(mainFunction${module.name}.default())`)
         })
 
-        writer.writeLine(`console.log("result", result)`)
+        writer.writeLine(`console.log(result)`)
 
         writer.writeLine("return result")
     })
