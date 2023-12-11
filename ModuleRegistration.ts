@@ -1,9 +1,12 @@
+import {CustomComponentRegistry} from "@skedulo/mex-engine-proxy";
+
+
 class ModuleRegistration {
 
-    registeredModules = []
+    registeredModules: CustomComponentRegistry[] = []
 
     // @ts-ignore
-    async scanCustomModules() {
+    async scanCustomModules(): Promise<CustomComponentRegistry[]> {
     }
 
     async registerCustomModules() {
@@ -11,11 +14,11 @@ class ModuleRegistration {
         this.setRegisteredModules(registries ?? [])
     }
 
-    getRegisteredModules() {
+    getRegisteredModules(): CustomComponentRegistry[] {
         return this.registeredModules
     }
 
-    setRegisteredModules(registeredModules) {
+    setRegisteredModules(registeredModules: CustomComponentRegistry[]) {
         this.registeredModules = registeredModules
     }
 }

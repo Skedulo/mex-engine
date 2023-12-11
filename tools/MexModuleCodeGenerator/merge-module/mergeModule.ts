@@ -2,7 +2,7 @@ import task = require('azure-pipelines-task-lib/task');
 import fs = require('fs');
 import fse = require('fs-extra');
 import {Project} from "ts-morph";
-import {ModuleRegistration} from "../../../ModuleRegistration.js";
+import {ModuleRegistration} from "../../../ModuleRegistration";
 
 let argv = require('minimist')(process.argv.slice(2));
 
@@ -49,10 +49,10 @@ async function run() {
 
 async function appendResolveModulesCode(modulesInfo: { name: string, destinationFolderPath: string }[], runningRootFolder: string) {
     let project = new Project()
-    project.addSourceFileAtPath(runningRootFolder + "/ModuleRegistration.js")
+    project.addSourceFileAtPath(runningRootFolder + "/ModuleRegistration.ts")
     project.resolveSourceFileDependencies();
 
-    let moduleRegistrationSourceFile = project.getSourceFile("ModuleRegistration.js")
+    let moduleRegistrationSourceFile = project.getSourceFile("ModuleRegistration.ts")
 
     const moduleRegistrationClass = moduleRegistrationSourceFile.getClass("ModuleRegistration");
 
@@ -63,10 +63,10 @@ async function appendResolveModulesCode(modulesInfo: { name: string, destination
 
     const scanModulePagesFunc = moduleRegistrationClass.getMethod("scanCustomModules")
     scanModulePagesFunc.setBodyText(writer => {
-        writer.writeLine("let result = []")
+        writer.writeLine("let result:CustomComponentRegistry[] = []")
 
         modulesInfo.forEach(module => {
-            writer.writeLine(`let mainFunction${module.name} = (await import("${module.destinationFolderPath}/index"))`)
+            writer.writeLine(`let mainFunction${module.name} = (await import("${module.destinationFolderPath}/index")) as any`)
             writer.writeLine(`result.push(mainFunction${module.name}.default())`)
         })
 
