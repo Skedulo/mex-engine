@@ -1,6 +1,10 @@
 import TitleAndCaptionViewProcessor from "./TitleAndCaptionViewProcessor";
+import {ModuleRegistrationInstance} from "../../../../ModuleRegistration";
+import {ListPageItemComponentProcessor} from "../../../../../mex-engine-proxy/src";
+import {BaseListPageViewComponentModel} from "@skedulo/mex-types";
 
-type ProcessorType = TitleAndCaptionViewProcessor
+type CustomFlatPageViewProcessor = ListPageItemComponentProcessor<BaseListPageViewComponentModel>
+type ProcessorType = TitleAndCaptionViewProcessor | CustomFlatPageViewProcessor
 
 class ListViewProcessorManager {
     processors: ProcessorType[]
@@ -9,6 +13,13 @@ class ListViewProcessorManager {
         this.processors = [
             new TitleAndCaptionViewProcessor(),
         ]
+    }
+
+    loadCustomProcessors() {
+        ModuleRegistrationInstance.getRegisteredModules().forEach(module => {
+            const customListPageViewComponentProcessors = module.getRegisteredListPageItemComponentProcessors() ?? []
+            this.processors = [...this.processors, ...customListPageViewComponentProcessors]
+        })
     }
 
     findProcessor(typeName: string): ProcessorType|null {

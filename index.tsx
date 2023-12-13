@@ -57,6 +57,7 @@ import {TextEditorView} from "./components/Editors/TextEditorView";
 import {AttachmentsEditorView} from "./components/Editors/AttachmentsEditorView";
 import {ModuleRegistrationInstance} from "./ModuleRegistration";
 import FlatPageViewProcessorsManager from "./mex/common/processors/flat_page_views/FlatPageViewProcessorsManager";
+import ListViewProcessorManager from "./mex/common/processors/list_page_views/ListViewProcessorsManager";
 LogBox.ignoreLogs(['Warning: ...', '[MobX]', 'Require cycle', 'Could not find image']); // Ignore log notification by message
 
 const Stack = createNativeStackNavigator();
@@ -111,6 +112,7 @@ const RootStack = ({packageId, formName, contextId, staticResourcesId} : RootSta
         ])
             .then((_) => {
                 FlatPageViewProcessorsManager.loadCustomProcessors()
+                ListViewProcessorManager.loadCustomProcessors()
                 setIsLoaded(true)
             })
             .catch((err) => {

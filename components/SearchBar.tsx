@@ -1,5 +1,5 @@
 import * as lodash from "lodash";
-import {StyleProp, View, ViewStyle} from "react-native";
+import {View} from "react-native";
 import SearchRN from "react-native-dynamic-search-bar";
 import * as React from "react";
 import StylesManager from "../mex/StylesManager";

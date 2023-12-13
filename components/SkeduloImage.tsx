@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {View, ActivityIndicator, ViewProps, StyleProp} from "react-native";
+import {View, ActivityIndicator} from "react-native";
 import ThemesManager from "../mex/colors/ThemeManager";
 import AssetsManager from "../mex/assets/AssetsManager";
 import FastImage from 'react-native-fast-image';

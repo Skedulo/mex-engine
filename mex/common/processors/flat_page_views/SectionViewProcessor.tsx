@@ -6,7 +6,7 @@ import Expressions from "../../expression/Expressions";
 import MexAsyncText from "../../../../components/MexAsyncText";
 import FlatPageViewProcessorsManager from "./FlatPageViewProcessorsManager";
 import ThemeManager from "../../../colors/ThemeManager";
-import AbstractFlatPageViewProcessor, {FlatPageViewArgs, FlatPageViewProps} from "./AbstractFlatPageViewProcessor";
+import {AbstractFlatPageViewProcessor, FlatPageViewArgs, FlatPageViewProps} from "@skedulo/mex-engine-proxy";
 import {BaseComponentModel, SectionViewComponentModel} from "@skedulo/mex-types";
 
 type SectionPageViewProps = FlatPageViewProps<SectionPageViewArgs, SectionViewComponentModel>

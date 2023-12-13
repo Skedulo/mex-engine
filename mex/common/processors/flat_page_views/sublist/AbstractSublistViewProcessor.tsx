@@ -1,4 +1,4 @@
-import AbstractProcessor, {StandardComponentArgs, StandardComponentProps} from "../../AbstractProcessor";
+import {AbstractProcessor, StandardComponentArgs, StandardComponentProps} from "@skedulo/mex-engine-proxy";
 import {View} from "react-native";
 import * as React from "react";
 import InvalidBadge from "../../../../../components/InvalidBadge";

@@ -1,27 +1,20 @@
-import {Platform, Text, TextInput, TextStyle, TouchableOpacity, View} from "react-native";
-import MexAsyncText from "../MexAsyncText";
+import {Text, TouchableOpacity, View} from "react-native";
 import StylesManager from "../../mex/StylesManager";
 import ThemeManager from "../../mex/colors/ThemeManager";
-import ErrorTextWithRef from "../ErrorText";
 import FilesView from "../FilesView";
 import * as React from "react";
 import {
     AttachmentMetadata,
-    AttachmentsEditorViewProps,
-    ExpressionArgs,
-    TextEditorViewProps
+    AttachmentsEditorViewProps
 } from "@skedulo/mex-engine-proxy";
-import {ForwardedRef, useCallback, useContext, useEffect, useMemo, useReducer, useRef, useState} from "react";
-import {ReadonlyText} from "../ReadonlyText";
+import {ForwardedRef, useContext, useEffect, useReducer, useRef} from "react";
 import BottomSheet from "../../mex/common/plugins/BottomSheet";
 import {ImagePickerResponse, launchCamera, launchImageLibrary} from "react-native-image-picker";
-import {makeAutoObservable, runInAction} from "mobx";
+import {runInAction} from "mobx";
 import AttachmentsManager from "../../mex/common/attachments/AttachmentsManager";
 import utils from "../../mex/common/Utils";
 import {PageProcessorContext, PageProcessorContextObj} from "../../mex/hooks/useCrudOnPage";
-import Expression from "../../mex/common/expression/Expressions";
 import lodash from "lodash";
-import Expressions from "../../mex/common/expression/Expressions";
 import {translate} from "../../mex/assets/LocalizationManager";
 
 export const AttachmentsEditorView = React.forwardRef((props: AttachmentsEditorViewProps, inputRef: ForwardedRef<any>) => {

@@ -1,7 +1,7 @@
 import * as React from "react";
 import {ActivityIndicator, Text, TouchableOpacity, View} from "react-native";
 import StylesManager from "../../../StylesManager";
-import Expressions, {ExpressionArgs} from "../../expression/Expressions";
+import Expressions from "../../expression/Expressions";
 import AbstractEditorViewProcessor, {EditorViewArgs, EditorViewProps} from "./AbstractEditorViewProcessors";
 import {makeAutoObservable, runInAction} from "mobx";
 import {useEffect, useMemo, useReducer, useRef} from "react";
@@ -10,12 +10,13 @@ import AttachmentsManager from "../../attachments/AttachmentsManager";
 import utils from "../../Utils";
 import ThemeManager from "../../../colors/ThemeManager";
 import MexAsyncText from "../../../../components/MexAsyncText";
-import FilesView, {AttachmentMetadata} from "../../../../components/FilesView";
+import FilesView from "../../../../components/FilesView";
 import * as RootNavigation from "../../RootNavigation";
 import NavigationProcessManager from "../../NavigationProcessManager";
 import lodash from "lodash";
 import ErrorTextWithRef from "../../../../components/ErrorText";
 import {SignatureEditorViewComponentModel} from "@skedulo/mex-types";
+import {AttachmentMetadata, ExpressionArgs} from "@skedulo/mex-engine-proxy";
 type SignatureEditorViewProps = EditorViewProps<SignatureEditorViewArgs, SignatureEditorViewComponentModel>
 
 type SignatureEditorViewArgs = EditorViewArgs<SignatureEditorViewComponentModel> & {
@@ -65,8 +66,8 @@ export default class SignatureEditorViewProcessor
 
         dataContext = transformedDataContextRef.current
 
-        let hasAttachmentsDataArgs:ExpressionArgs = {dataContext: dataContext, expressionStr: jsonDef.sourceExpression + ".__hasAttachments"}
-        let parentContextValueArgs:ExpressionArgs = {dataContext: dataContext, expressionStr: jsonDef.sourceExpression}
+        let hasAttachmentsDataArgs: ExpressionArgs = {dataContext: dataContext, expressionStr: jsonDef.sourceExpression + ".__hasAttachments"}
+        let parentContextValueArgs: ExpressionArgs = {dataContext: dataContext, expressionStr: jsonDef.sourceExpression}
 
         let parentContext = Expression.getRawDataValueExpression(parentContextValueArgs);
         let attachmentCategoryName = jsonDef.attachmentCategoryName
