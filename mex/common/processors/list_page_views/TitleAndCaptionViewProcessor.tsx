@@ -7,9 +7,9 @@ import Expressions from "../../expression/Expressions";
 import MexAsyncText from "../../../../components/MexAsyncText";
 import {TitleAndCaptionViewComponentModel} from "@skedulo/mex-types";
 import {IconTypes, ListPageViewArgs} from "@skedulo/mex-engine-proxy";
-import AbstractListPageViewWithAttachmentsProcessor from "./AbstractListPageViewWithAttachmentsProcessor";
+import AbstractListPageViewProcessor from "./AbstractListPageViewProcessor";
 
-export default class TitleAndCaptionViewProcessor extends AbstractListPageViewWithAttachmentsProcessor<TitleAndCaptionViewComponentModel> {
+export default class TitleAndCaptionViewProcessor extends AbstractListPageViewProcessor<TitleAndCaptionViewComponentModel> {
 
     getTypeName(): string {
         return "titleAndCaption";

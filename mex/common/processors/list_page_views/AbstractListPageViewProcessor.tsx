@@ -10,7 +10,7 @@ import TagsView from "../../../../components/TagsView";
 import {BaseListPageViewComponentModel} from "@skedulo/mex-types";
 import {AttachmentsView} from "../../../../components/AttachmentsView";
 
-abstract class AbstractListPageViewWithAttachmentsProcessor<TComponentDefinitionModel extends BaseListPageViewComponentModel>
+abstract class AbstractListPageViewProcessor<TComponentDefinitionModel extends BaseListPageViewComponentModel>
     extends AbstractProcessor<
         ListPageViewProps<TComponentDefinitionModel>,
         ListPageViewArgs<TComponentDefinitionModel>,
@@ -96,4 +96,4 @@ abstract class AbstractListPageViewWithAttachmentsProcessor<TComponentDefinition
     abstract generateInnerSublistViewComponent(args: SublistPageViewArgs<TComponentDefinitionModel>): JSX.Element;
 }
 
-export default AbstractListPageViewWithAttachmentsProcessor
+export default AbstractListPageViewProcessor
