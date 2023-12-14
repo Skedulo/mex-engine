@@ -1,11 +1,11 @@
 import {UseAttachments} from "@skedulo/mex-types";
 import {useEffect, useReducer, useRef} from "react";
-import {AttachmentMetadata} from "../../mex-engine-proxy/src";
 import lodash from "lodash";
 import AttachmentsManager from "../mex/common/attachments/AttachmentsManager";
 import {View} from "react-native";
 import SkeduloImage from "./SkeduloImage";
 import * as React from "react";
+import { AttachmentMetadata } from "@skedulo/mex-engine-proxy";
 
 type AttachmentsViewProps = {
     dataContext: any,

@@ -34,10 +34,9 @@ import {
     CoreContainer,
     ContextProxy,
     ExpressionProxy,
-    ServicesProxy, HooksProxy, INativeHooks, UtilsProxy, StylesProxy
+    ServicesProxy, HooksProxy, INativeHooks, UtilsProxy, StylesProxy, InternalUtilsType
 } from "@skedulo/mex-engine-proxy";
 import ExpressionFunctions from "./mex/common/expression/Expressions";
-import {InternalUtilsType} from "@skedulo/mex-engine-proxy/dist/src/proxies/services/interfaces";
 import {IAPIHooks} from "@skedulo/mex-engine-proxy/dist/src/proxies/hooks/interfaces";
 import {useAPI, useSkedAPI} from "./mex/hooks/useAPI";
 import {useAccessToken} from "./mex/hooks/useAccessToken";

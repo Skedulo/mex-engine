@@ -13,10 +13,9 @@ import BodyMapEditorViewProcessor from "./BodyMapEditorViewProcessor";
 import ButtonGroupViewProcessor from "./ButtonGroupViewProcessor";
 import MenuListViewProcessor from "./MenuListViewProcessor";
 import {ModuleRegistrationInstance} from "../../../../ModuleRegistration";
-import {FlatPageComponentProcessor} from "@skedulo/mex-engine-proxy";
-import {BaseFlatPageViewComponentModel} from "@skedulo/mex-types";
+import {AbstractFlatPageViewProcessor} from "@skedulo/mex-engine-proxy";
 
-type CustomFlatPageViewProcessor = FlatPageComponentProcessor<BaseFlatPageViewComponentModel>
+type CustomFlatPageViewProcessor = AbstractFlatPageViewProcessor<any, any, any>
 
 type ProcessorType = TextEditorViewProcessor
     |SelectEditorViewProcessor

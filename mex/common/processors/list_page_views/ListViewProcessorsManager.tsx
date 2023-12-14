@@ -1,9 +1,8 @@
 import TitleAndCaptionViewProcessor from "./TitleAndCaptionViewProcessor";
 import {ModuleRegistrationInstance} from "../../../../ModuleRegistration";
-import {ListPageItemComponentProcessor} from "../../../../../mex-engine-proxy/src";
-import {BaseListPageViewComponentModel} from "@skedulo/mex-types";
+import { AbstractProcessor } from "@skedulo/mex-engine-proxy";
 
-type CustomFlatPageViewProcessor = ListPageItemComponentProcessor<BaseListPageViewComponentModel>
+type CustomFlatPageViewProcessor = AbstractProcessor<any, any, any>
 type ProcessorType = TitleAndCaptionViewProcessor | CustomFlatPageViewProcessor
 
 class ListViewProcessorManager {

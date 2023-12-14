@@ -3,7 +3,7 @@ import {NativeModules} from 'react-native';
 import {BaseStructureObject} from "./models/BaseStructureObject";
 import moment from "moment";
 import AssetsManager from "../assets/AssetsManager";
-import {TimeZoneType} from "@skedulo/mex-engine-proxy/dist/src/proxies/utils/models";
+import { TimeZoneType } from "@skedulo/mex-engine-proxy";
 
 let cache = require('js-cache')();
 
