@@ -107,7 +107,7 @@ const RootStack = ({packageId, formName, contextId, staticResourcesId} : RootSta
         Promise.all([
             LocalizationManager.initializeLocalization(),
             RegexManager.initialize(),
-            AssetsManager.loadMexData(),
+            AssetsManager.loadMexData(CoreContainer.get(ExpressionProxy.ExpressionFunctions)),
             scanModulePages().then((registries) => {
                 registeredModules.current = registries ?? []
             })

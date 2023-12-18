@@ -1,5 +1,5 @@
 import React from 'react';
-import {requireNativeComponent, ViewProps} from 'react-native';
+import {requireNativeComponent} from 'react-native';
 import {CaptureSignatureViewProps} from "@skedulo/mex-engine-proxy";
 
 const RCTSignatureView = requireNativeComponent<CaptureSignatureViewProps>('RCTSignatureView');

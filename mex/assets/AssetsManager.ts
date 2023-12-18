@@ -8,7 +8,7 @@ import custom_function from "../../local_data/custom_function";
 import LogManager from "../common/LogManager";
 import {
     FormMetadata,
-    IAssetsManager,
+    IAssetsManager, IExpressionFunctions,
     InternalUtilsType,
     Metadatacontext, OrgPreferences, PageLevelDataContext,
     TimezoneMetadata,
@@ -40,7 +40,7 @@ class AssetsManager implements IAssetsManager {
     metadata?: Metadatacontext
 
     resources: AssetsResource =  {
-        jsonDef: { firstPage: "", pages: [], readonly: false },
+        jsonDef: { firstPage: "", pages: [], readonly: false, events: {} },
         formData: {},
         sharedData: {}
     }
@@ -191,7 +191,7 @@ class AssetsManager implements IAssetsManager {
      *
      * @return Promise
      */
-    loadMexData(): Promise<AssetsResource> {
+    loadMexData(expressions: IExpressionFunctions): Promise<AssetsResource> {
         let jsonDefTask = this.loadFormJsonDefResourcesAsync()
             .then((jsonDef: any) => {
                 this.validateAndBindData(jsonDef, "UI Definition",
@@ -255,6 +255,20 @@ class AssetsManager implements IAssetsManager {
             loadOrgPreferencesTask
         ])
             .then((_) => {
+                // Process Global events for data initialization
+                let events = this.resources.jsonDef.events;
+
+                if (events?.onDataInitialized) {
+                    let { sharedData, formData } = Expressions.runFunctionExpression(
+                        { functionExpression: events.onDataInitialized!, dataContext: { formData: this.resources.formData, sharedData: this.resources.sharedData }})
+
+                    if (sharedData)
+                        this.resources.sharedData = sharedData
+
+                    if (formData)
+                        this.resources.formData = formData
+                }
+
                 return this.resources
             });
     }
