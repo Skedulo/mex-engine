@@ -259,7 +259,7 @@ class AssetsManager implements IAssetsManager {
                 let events = this.resources.jsonDef.events;
 
                 if (events?.onDataInitialized) {
-                    let { sharedData, formData } = Expressions.runFunctionExpression(
+                    let { sharedData, formData } = expressions.runFunctionExpression(
                         { functionExpression: events.onDataInitialized!, dataContext: { formData: this.resources.formData, sharedData: this.resources.sharedData }})
 
                     if (sharedData)
