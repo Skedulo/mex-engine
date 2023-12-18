@@ -14,7 +14,7 @@ import {
     TimezoneMetadata,
     UserMetadata
 } from "@skedulo/mex-engine-proxy"
-
+import Expressions from "../common/expression/Expressions";
 
 const { MexResourcesModule } = NativeModules;
 
@@ -180,6 +180,8 @@ class AssetsManager implements IAssetsManager {
             return Promise.resolve(custom_function);
         } else{
             return MexResourcesModule.getCustomFunction(this.cachedPackageId).then((customFunction: any) => {
+                console.log("custom Fnuction", customFunction)
+
                 this.cachedCustomFunction = customFunction
 
                 return customFunction
@@ -255,6 +257,20 @@ class AssetsManager implements IAssetsManager {
             loadOrgPreferencesTask
         ])
             .then((_) => {
+                // Process Global events for data initialization
+                let events = this.resources.jsonDef.events;
+
+                if (events?.onDataInitialized) {
+                    let { sharedData, formData } = Expressions.runFunctionExpression(
+                        { functionExpression: events.onDataInitialized!, dataContext: { formData: this.resources.formData, sharedData: this.resources.sharedData }})
+
+                    if (sharedData)
+                        this.resources.sharedData = sharedData
+
+                    if (formData)
+                        this.resources.formData = formData
+                }
+
                 return this.resources
             });
     }
