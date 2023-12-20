@@ -236,7 +236,7 @@ class ListPageProcessor extends AbstractPageProcessor<ListPageComponentModel> {
             source = useOrderBy(source, jsonDef.orderBy)
         }
 
-        let finalizedData = useHasSection(source, jsonDef.hasSection)
+        let finalizedData = useHasSection(source, dataContext, jsonDef.hasSection)
 
         return [(
             <PageProcessorContext.Provider value={pageProcessorContextObj}>
