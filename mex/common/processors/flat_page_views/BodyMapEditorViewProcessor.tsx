@@ -93,7 +93,7 @@ export default class BodyMapEditorViewProcessor
                 let hasAttachment = Expressions.getRawDataValueExpression(hasAttachmentsDataArgs)
                 let hasAttachmentNewValue = attachments != null && attachments.length > 0
 
-                if (hasAttachment != hasAttachmentNewValue) {
+                if (hasAttachmentNewValue && hasAttachment != hasAttachmentNewValue) {
                     runInAction(() => {
                         Expression.setDataValueExpression(hasAttachmentsDataArgs , hasAttachmentNewValue)
                     })
