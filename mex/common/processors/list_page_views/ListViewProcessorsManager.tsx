@@ -15,7 +15,8 @@ class ListViewProcessorManager {
 
     loadCustomProcessors() {
         const customProcessors = ModuleRegistrationInstance.getRegisteredModules()
-            .flatMap(module => module.getRegisteredListPageItemComponentProcessors() ?? [])
+            .flatMap(module => module.getRegisteredListPageItemComponentProcessors()
+                .flatMap(registryInfo => registryInfo.componentProcessor)) ?? []
         this.processors = [...this.processors, ...customProcessors]
     }
 

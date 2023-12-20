@@ -55,7 +55,8 @@ class FlatPageViewProcessorsManager {
 
     loadCustomProcessors() {
         const customProcessors = ModuleRegistrationInstance.getRegisteredModules()
-            .flatMap(module => module.getRegisteredFlatPageComponentProcessors() ?? [])
+            .flatMap(module => module.getRegisteredFlatPageComponentProcessors()
+                    .flatMap(registryInfo => registryInfo.componentProcessor)) ?? []
         this.processors = [...this.processors, ...customProcessors]
     }
 
