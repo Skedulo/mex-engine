@@ -4,7 +4,7 @@ import StylesManager from "../../../StylesManager";
 import Expressions from "../../expression/Expressions";
 import AbstractEditorViewProcessor, {EditorViewArgs, EditorViewProps} from "./AbstractEditorViewProcessors";
 import {makeAutoObservable, runInAction} from "mobx";
-import {useEffect, useMemo, useReducer, useRef} from "react";
+import {MutableRefObject, useEffect, useMemo, useReducer, useRef} from "react";
 import Expression from "../../expression/Expressions";
 import AttachmentsManager from "../../attachments/AttachmentsManager";
 import utils from "../../Utils";
@@ -40,6 +40,10 @@ export default class SignatureEditorViewProcessor
     generateEditorComponent(args: SignatureEditorViewArgs): JSX.Element {
 
         const _isMounted = useRef(true);
+        const readonly = this.isComponentReadonly(args.jsonDef.readonly, args.dataContext)
+
+        const viewInput = useRef<null>() as MutableRefObject<any>;
+        const attachmentRef = useRef()
 
         useEffect(() => {
             return () => {
@@ -51,7 +55,6 @@ export default class SignatureEditorViewProcessor
         const [, forceUpdate] = useReducer(x => x + 1, 0);
 
         let attachmentsMetadata = useRef<AttachmentMetadata[]>([])
-        let attachmentsRef = useRef()
 
         let {jsonDef, dataContext} = args;
 
@@ -73,18 +76,20 @@ export default class SignatureEditorViewProcessor
         let attachmentCategoryName = jsonDef.attachmentCategoryName
         let parentId = parentContext.UID
 
-        const readonly = this.isComponentReadonly(args.jsonDef.readonly, args.dataContext)
-
         // subscribe for changes
         useEffect(() => {
 
             let getAttachmentsDebounce = lodash.throttle(function(attachments: AttachmentMetadata[]) {
                 attachmentsMetadata.current = attachments;
 
+                runInAction(() => {
+                    transformedDataContextRef.current.attachments = attachments;
+                })
+
                 let hasAttachment = Expressions.getRawDataValueExpression(hasAttachmentsDataArgs)
                 let hasAttachmentNewValue = attachments != null && attachments.length > 0
 
-                if (hasAttachment != hasAttachmentNewValue) {
+                if (hasAttachmentNewValue && hasAttachment != hasAttachmentNewValue) {
                     runInAction(() => {
                         Expression.setDataValueExpression(hasAttachmentsDataArgs , hasAttachmentNewValue)
                     })
@@ -97,10 +102,11 @@ export default class SignatureEditorViewProcessor
                 forceUpdate();
             }, 500, {'leading': false})
 
-            AttachmentsManager.observeAttachmentsChangeForContext(attachmentsRef, parentId, "SIGNATURE", attachmentCategoryName, getAttachmentsDebounce);
+
+            AttachmentsManager.observeAttachmentsChangeForContext(attachmentRef, parentId, "SIGNATURE", attachmentCategoryName, getAttachmentsDebounce);
 
             return () => {
-                AttachmentsManager.unsubscribeAttachmentsChangeForContext(attachmentsRef, parentId, "SIGNATURE", attachmentCategoryName)
+                AttachmentsManager.unsubscribeAttachmentsChangeForContext(attachmentRef, parentId, "SIGNATURE", attachmentCategoryName)
             }
         }, [])
 
@@ -142,9 +148,8 @@ export default class SignatureEditorViewProcessor
 
         return (
             <View>
-                <View style={{flexDirection: "row", marginBottom: 10, alignItems: 'center'}}>
-
-                    <MexAsyncText promiseFn={getTitle}>
+                <View style={{flexDirection: "row", alignItems: 'center'}}>
+                <MexAsyncText promiseFn={getTitle}>
                         {(text) => (
                             <Text style={[StylesManager.getStyles().textHeadingBold, {flex: 1}]}>{text}</Text>)}
                     </MexAsyncText>
