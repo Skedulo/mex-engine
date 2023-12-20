@@ -14,10 +14,9 @@ class ListViewProcessorManager {
     }
 
     loadCustomProcessors() {
-        ModuleRegistrationInstance.getRegisteredModules().forEach(module => {
-            const customListPageViewComponentProcessors = module.getRegisteredListPageItemComponentProcessors() ?? []
-            this.processors = [...this.processors, ...customListPageViewComponentProcessors]
-        })
+        const customProcessors = ModuleRegistrationInstance.getRegisteredModules()
+            .flatMap(module => module.getRegisteredListPageItemComponentProcessors() ?? [])
+        this.processors = [...this.processors, ...customProcessors]
     }
 
     findProcessor(typeName: string): ProcessorType|null {
