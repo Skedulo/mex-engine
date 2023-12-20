@@ -18,7 +18,6 @@ import {
 import Expressions from "../../expression/Expressions";
 import * as lodash from "lodash";
 import ThemeManager from "../../../colors/ThemeManager";
-import {PageLevelDataContext} from "../../../assets/AssetsManager";
 import converters from "../../Converters";
 import StylesManager from "../../../StylesManager";
 import MexAsyncText from "../../../../components/MexAsyncText";
@@ -36,6 +35,7 @@ import {SelectPageConfig} from "@skedulo/mex-types";
 import {useOrderBy} from "../../../hooks/list/useOrderBy";
 import {useHasSection} from "../../../hooks/list/useHasSection";
 import {ListPageSectionHeaderComponent} from "../../../../components/ListPage/ListPageSectionHeader";
+import { PageLevelDataContext } from '@skedulo/mex-engine-proxy';
 
 const { height: screenHeight } = Dimensions.get('window');
 
@@ -321,18 +321,6 @@ const SelectScreen: React.FC<Props> = ({route}) => {
             <View style={{ height: 12 }} />
         )
     }, [])
-
-    const renderSectionHeader = useCallback(({section: {title}}:any) => {
-        if (!selectPageConfig.hasSection)
-            return <></>
-
-        let newDataContext:any = {
-            ...dataContext,
-            sectionItem: {title: title}
-        }
-
-        return <ListPageSectionHeaderComponent title={selectPageConfig.hasSection!.sectionTitleText} dataContext={newDataContext} />
-    }, [dataContext])
 
     let renderBaseOnStatus = () => {
 
