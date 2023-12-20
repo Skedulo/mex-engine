@@ -1,6 +1,8 @@
 import TitleAndCaptionViewProcessor from "./TitleAndCaptionViewProcessor";
+import {ModuleRegistrationInstance} from "../../../../ModuleRegistration";
+import {ListPageProcessorInterface} from "@skedulo/mex-engine-proxy";
 
-type ProcessorType = TitleAndCaptionViewProcessor
+type ProcessorType = TitleAndCaptionViewProcessor | ListPageProcessorInterface
 
 class ListViewProcessorManager {
     processors: ProcessorType[]
@@ -9,6 +11,13 @@ class ListViewProcessorManager {
         this.processors = [
             new TitleAndCaptionViewProcessor(),
         ]
+    }
+
+    loadCustomProcessors() {
+        const customProcessors = ModuleRegistrationInstance.getRegisteredModules()
+            .flatMap(module => module.getRegisteredListPageItemComponentProcessors()
+                .flatMap(registryInfo => registryInfo.componentProcessor)) ?? []
+        this.processors = [...this.processors, ...customProcessors]
     }
 
     findProcessor(typeName: string): ProcessorType|null {

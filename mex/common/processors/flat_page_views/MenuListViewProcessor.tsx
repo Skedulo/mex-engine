@@ -1,4 +1,4 @@
-import AbstractFlatPageViewProcessor, {FlatPageViewArgs, FlatPageViewProps} from "./AbstractFlatPageViewProcessor";
+import { AbstractFlatPageViewProcessor, FlatPageViewArgs, FlatPageViewProps } from "@skedulo/mex-engine-proxy";
 import StylesManager from "../../../StylesManager";
 import {Text, TouchableOpacity, View} from "react-native";
 import MexAsyncText from "../../../../components/MexAsyncText";

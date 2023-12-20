@@ -5,10 +5,9 @@ import React, { useEffect, useMemo, useRef, useState} from "react";
 import StylesManager from "../../mex/StylesManager";
 import moment from "moment";
 import converters from "../../mex/common/Converters";
-import {DatetimeEditorViewProps, IconTypes} from "@skedulo/mex-engine-proxy";
+import {DatetimeEditorViewProps, IconTypes, TimeZoneType} from "@skedulo/mex-engine-proxy";
 import SkedIcon from "../SkedIcon";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import {TimeZoneType} from "@skedulo/mex-engine-proxy/dist/src/proxies/utils/models";
 import {TimezoneType} from "@skedulo/mex-types";
 import AssetsManager from "../../mex/assets/AssetsManager";
 

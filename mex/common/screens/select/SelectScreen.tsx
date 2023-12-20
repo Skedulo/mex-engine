@@ -18,7 +18,6 @@ import {
 import Expressions from "../../expression/Expressions";
 import * as lodash from "lodash";
 import ThemeManager from "../../../colors/ThemeManager";
-import {PageLevelDataContext} from "../../../assets/AssetsManager";
 import converters from "../../Converters";
 import StylesManager from "../../../StylesManager";
 import MexAsyncText from "../../../../components/MexAsyncText";
@@ -36,6 +35,7 @@ import {SelectPageConfig} from "@skedulo/mex-types";
 import {useOrderBy} from "../../../hooks/list/useOrderBy";
 import {useHasSection} from "../../../hooks/list/useHasSection";
 import {ListPageSectionHeaderComponent} from "../../../../components/ListPage/ListPageSectionHeader";
+import { PageLevelDataContext } from '@skedulo/mex-engine-proxy';
 
 const { height: screenHeight } = Dimensions.get('window');
 
@@ -162,7 +162,7 @@ const SelectScreen: React.FC<Props> = ({route}) => {
         handleCloseButtonClick();
     }
 
-    const handleCloseButtonClick =  useCallback(() => {
+    const handleCloseButtonClick = useCallback(() => {
         if (selectedItemsRef.current.length > 0) {
             NavigationProcessManager.goBack(selectPageConfig.isMultiSelect ? selectedItemsRef.current : selectedItemsRef.current[0])
         } else {

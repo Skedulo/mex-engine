@@ -4,7 +4,6 @@ import {useBaseUrl} from "./useBaseUrl";
 import {useEffect} from "react";
 import AssetsManager from "../assets/AssetsManager";
 import {useNetInfo} from "@react-native-community/netinfo";
-import {HooksProxy} from "@skedulo/mex-engine-proxy";
 import {AxiosRequestConfig} from "axios";
 
 type APIResult<T> = {

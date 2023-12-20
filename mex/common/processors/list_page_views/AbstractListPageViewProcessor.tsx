@@ -1,23 +1,14 @@
-import AbstractProcessor, {StandardComponentArgs, StandardComponentProps} from "../AbstractProcessor";
+import {AbstractProcessor, ListPageViewArgs, ListPageViewProps} from "@skedulo/mex-engine-proxy";
 import {View} from "react-native";
 import Divider from "../../../../components/Divider";
 import * as React from "react";
 import {SublistPageViewArgs} from "../flat_page_views/sublist/AbstractSublistViewProcessor";
 import InvalidBadge from "../../../../components/InvalidBadge";
-import {useCallback, useEffect, useReducer, useRef} from "react";
+import {useCallback} from "react";
 import StylesManager from "../../../StylesManager";
-import lodash from "lodash";
-import AttachmentsManager from "../../attachments/AttachmentsManager";
-import SkeduloImage from "../../../../components/SkeduloImage";
 import TagsView from "../../../../components/TagsView";
-import {BaseListPageViewComponentModel, ListPageComponentModel, UseAttachments} from "@skedulo/mex-types";
-import {AttachmentMetadata} from "@skedulo/mex-engine-proxy";
-
-export type ListPageViewProps<TComponentDefinitionModel extends BaseListPageViewComponentModel> = StandardComponentProps<ListPageViewArgs<TComponentDefinitionModel>, TComponentDefinitionModel>
-
-export type ListPageViewArgs<TComponentDefinitionModel extends BaseListPageViewComponentModel>  = StandardComponentArgs<TComponentDefinitionModel> & {
-    listPageJsonDef: ListPageComponentModel
-}
+import {BaseListPageViewComponentModel} from "@skedulo/mex-types";
+import {AttachmentsView} from "../../../../components/AttachmentsView";
 
 abstract class AbstractListPageViewProcessor<TComponentDefinitionModel extends BaseListPageViewComponentModel>
     extends AbstractProcessor<
@@ -104,72 +95,5 @@ abstract class AbstractListPageViewProcessor<TComponentDefinitionModel extends B
 
     abstract generateInnerSublistViewComponent(args: SublistPageViewArgs<TComponentDefinitionModel>): JSX.Element;
 }
-
-
-type AttachmentsViewProps = {
-    dataContext: any,
-    jsonDef: UseAttachments,
-    styles?: AttachmentsStyle
-}
-
-type AttachmentsStyle = {
-    borderRadius?: number,
-    aspectRatio?: number,
-    width?: number,
-    marginRight?: number,
-    marginTop?: number,
-}
-
-let AttachmentsView = (props: AttachmentsViewProps) => {
-    let dataContext = props.dataContext
-    let { jsonDef, styles } = props
-
-    const [, forceUpdate] = useReducer(x => x + 1, 0);
-
-    let attachmentsMetadata = useRef<AttachmentMetadata[]>([])
-    let attachmentsRef = useRef()
-
-    // subscribe for changes
-    useEffect(() => {
-
-        let getAttachmentsDebounce = lodash.throttle(function(attachments: AttachmentMetadata[]) {
-            attachmentsMetadata.current = attachments;
-
-            forceUpdate();
-        }, 500, {'leading': false})
-
-        AttachmentsManager.observeAttachmentsChangeForContext(attachmentsRef, dataContext.item.UID, "ATTACHMENT", jsonDef.categoryName ?? "", getAttachmentsDebounce);
-
-        return () => {
-            AttachmentsManager.unsubscribeAttachmentsChangeForContext(attachmentsRef, dataContext.item.UID, "ATTACHMENT", jsonDef.categoryName ?? "")
-        }
-    }, [])
-
-    if (attachmentsMetadata.current.length == 0) {
-        return <></>
-    }
-
-    let item = attachmentsMetadata.current
-        .sort((a: AttachmentMetadata, b:AttachmentMetadata) => a.uploadDate < b.uploadDate ? 1 : -1)[0]
-
-    let finalUrl = item.localFileURL ?? item.downloadURL;
-
-    return (
-    <View style={[{
-        borderRadius: 10,
-        aspectRatio: 16 / 9,
-    }, styles ?? {}]}>
-        <SkeduloImage
-            style={{
-                height: "100%",
-                width: "100%",
-            }}
-            imageStyles={{
-                borderRadius: styles?.borderRadius ?? undefined
-            }}
-            uri={finalUrl}/>
-    </View>)
-}
-
 
 export default AbstractListPageViewProcessor

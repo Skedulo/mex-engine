@@ -11,9 +11,8 @@ import {
     ExtHelperDate,
     ExtHelperSubmitOptions,
     ExtHelperUI,
-    TimezoneMetadata
+    TimezoneMetadata, TimeZoneType
 } from "@skedulo/mex-engine-proxy";
-import {TimeZoneType} from "@skedulo/mex-engine-proxy/dist/src/proxies/utils/models";
 import converters from "../Converters";
 
 export class ExtHelperImpl implements ExtHelper {

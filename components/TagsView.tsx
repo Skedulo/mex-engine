@@ -5,7 +5,7 @@ import StylesManager from "../mex/StylesManager";
 import MexAsyncText from "./MexAsyncText";
 import Expressions from "../mex/common/expression/Expressions";
 import ThemeManager from "../mex/colors/ThemeManager";
-import {PageLevelDataContext} from "@skedulo/mex-engine-proxy/dist/proxies/services";
+import {PageLevelDataContext} from "@skedulo/mex-engine-proxy";
 
 export interface Props {
     dataContext: PageLevelDataContext,

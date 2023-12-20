@@ -33,12 +33,10 @@ import {
     ComponentsProxy,
     CoreContainer,
     ContextProxy,
-    CustomComponentRegistry,
     ExpressionProxy,
-    ServicesProxy, HooksProxy, INativeHooks, UtilsProxy, StylesProxy
+    ServicesProxy, HooksProxy, INativeHooks, UtilsProxy, StylesProxy, InternalUtilsType
 } from "@skedulo/mex-engine-proxy";
 import ExpressionFunctions from "./mex/common/expression/Expressions";
-import {InternalUtilsType} from "@skedulo/mex-engine-proxy/dist/src/proxies/services/interfaces";
 import {IAPIHooks} from "@skedulo/mex-engine-proxy/dist/src/proxies/hooks/interfaces";
 import {useAPI, useSkedAPI} from "./mex/hooks/useAPI";
 import {useAccessToken} from "./mex/hooks/useAccessToken";
@@ -56,6 +54,9 @@ import {DatetimeEditorView} from "./components/Editors/DatetimeEditorView";
 import {RadioButton} from "./components/Editors/RadioButton";
 import {TextEditorView} from "./components/Editors/TextEditorView";
 import {AttachmentsEditorView} from "./components/Editors/AttachmentsEditorView";
+import {ModuleRegistrationInstance} from "./ModuleRegistration";
+import FlatPageViewProcessorsManager from "./mex/common/processors/flat_page_views/FlatPageViewProcessorsManager";
+import ListViewProcessorManager from "./mex/common/processors/list_page_views/ListViewProcessorsManager";
 LogBox.ignoreLogs(['Warning: ...', '[MobX]', 'Require cycle', 'Could not find image']); // Ignore log notification by message
 
 const Stack = createNativeStackNavigator();
@@ -96,8 +97,6 @@ const RootStack = ({packageId, formName, contextId, staticResourcesId} : RootSta
             }} />)
     }
 
-    let registeredModules = useRef<CustomComponentRegistry[]>([])
-
     if (!isLoaded)
     {
         AssetsManager.initialize({packageId, formName, contextId, staticResourcesId}, {utils: InternalUtils as InternalUtilsType})
@@ -108,11 +107,11 @@ const RootStack = ({packageId, formName, contextId, staticResourcesId} : RootSta
             LocalizationManager.initializeLocalization(),
             RegexManager.initialize(),
             AssetsManager.loadMexData(CoreContainer.get(ExpressionProxy.ExpressionFunctions)),
-            scanModulePages().then((registries) => {
-                registeredModules.current = registries ?? []
-            })
+            ModuleRegistrationInstance.registerCustomModules()
         ])
             .then((_) => {
+                FlatPageViewProcessorsManager.loadCustomProcessors()
+                ListViewProcessorManager.loadCustomProcessors()
                 setIsLoaded(true)
             })
             .catch((err) => {
@@ -149,7 +148,7 @@ const RootStack = ({packageId, formName, contextId, staticResourcesId} : RootSta
         />)
     }
 
-    registeredModules.current.forEach(module => {
+    ModuleRegistrationInstance.getRegisteredModules().forEach(module => {
         let screens = module.getRegisteredScreens()
         screens.forEach(screen => {
             let screenKey = module.resolveScreenKey(screen)
@@ -315,6 +314,3 @@ registerServices();
 // Module name
 AppRegistry.registerComponent('RNHighScores', () => RootStack);
 AppRegistry.registerComponent('MexApp', () => RootStack);
-
-async function scanModulePages(): Promise<CustomComponentRegistry[]> {
-}

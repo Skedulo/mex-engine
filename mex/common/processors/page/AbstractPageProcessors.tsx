@@ -1,4 +1,4 @@
-import AbstractProcessor, {StandardComponentArgs, StandardComponentProps} from "../AbstractProcessor";
+import {AbstractProcessor, StandardComponentArgs, StandardComponentProps} from "@skedulo/mex-engine-proxy";
 import * as React from "react";
 import {useCallback, useEffect, useLayoutEffect, useRef} from "react";
 import Expressions from "../../expression/Expressions";

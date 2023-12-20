@@ -1,9 +1,8 @@
-import {StandardComponentArgs, StandardComponentProps} from "../AbstractProcessor";
+import {AbstractFlatPageViewProcessor, StandardComponentArgs, StandardComponentProps} from "@skedulo/mex-engine-proxy";
 import {Text, View} from "react-native";
 import StylesManager from "../../../StylesManager";
 import Expressions from "../../expression/Expressions";
 import MexAsyncText from "../../../../components/MexAsyncText";
-import AbstractFlatPageViewProcessor from "./AbstractFlatPageViewProcessor";
 import React, {useContext, useRef, useState} from "react";
 import ErrorTextWithRef from "../../../../components/ErrorText";
 import ThemeManager from "../../../colors/ThemeManager";

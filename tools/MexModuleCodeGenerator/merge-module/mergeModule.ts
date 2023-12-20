@@ -48,12 +48,19 @@ async function run() {
 
 async function appendResolveModulesCode(modulesInfo: { name: string, destinationFolderPath: string }[], runningRootFolder: string) {
     let project = new Project()
-    project.addSourceFileAtPath(runningRootFolder + "/index.tsx")
+    project.addSourceFileAtPath(runningRootFolder + "/ModuleRegistration.ts")
     project.resolveSourceFileDependencies();
 
-    let indexSourceFile = project.getSourceFile("index.tsx")
+    let moduleRegistrationSourceFile = project.getSourceFile("ModuleRegistration.ts")
 
-    const scanModulePagesFunc = indexSourceFile.getFunction("scanModulePages")
+    const moduleRegistrationClass = moduleRegistrationSourceFile.getClass("ModuleRegistration");
+
+    if (!moduleRegistrationClass) {
+        console.log("Not found Module Registration class")
+        return
+    }
+
+    const scanModulePagesFunc = moduleRegistrationClass.getMethod("scanCustomModules")
     scanModulePagesFunc.setBodyText(writer => {
         writer.writeLine("let result:CustomComponentRegistry[] = []")
 

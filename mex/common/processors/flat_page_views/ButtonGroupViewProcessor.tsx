@@ -2,7 +2,7 @@ import * as React from "react";
 import {StyleProp, View, ViewStyle} from "react-native";
 import StylesManager from "../../../StylesManager";
 import Expressions from "../../expression/Expressions";
-import AbstractFlatPageViewProcessor, {FlatPageViewArgs, FlatPageViewProps} from "./AbstractFlatPageViewProcessor";
+import {AbstractFlatPageViewProcessor, FlatPageViewArgs, FlatPageViewProps} from "@skedulo/mex-engine-proxy";
 import SkedButton from "../../../../components/SkedButton";
 import {useCallback, useContext, useMemo} from "react";
 import {BehaviorManager} from "../ButtonBehaviorManager";

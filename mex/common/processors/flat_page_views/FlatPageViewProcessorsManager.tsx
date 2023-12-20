@@ -12,6 +12,8 @@ import ContactDetailsLayoutProcessor from "./contact_details/ContactDetailsViewP
 import BodyMapEditorViewProcessor from "./BodyMapEditorViewProcessor";
 import ButtonGroupViewProcessor from "./ButtonGroupViewProcessor";
 import MenuListViewProcessor from "./MenuListViewProcessor";
+import {ModuleRegistrationInstance} from "../../../../ModuleRegistration";
+import {FlatPageProcessorInterface} from "@skedulo/mex-engine-proxy";
 
 type ProcessorType = TextEditorViewProcessor
     |SelectEditorViewProcessor
@@ -27,6 +29,7 @@ type ProcessorType = TextEditorViewProcessor
     |BodyMapEditorViewProcessor
     |ButtonGroupViewProcessor
     |MenuListViewProcessor
+    |FlatPageProcessorInterface
 
 class FlatPageViewProcessorsManager {
     processors: ProcessorType[]
@@ -48,6 +51,13 @@ class FlatPageViewProcessorsManager {
             new ButtonGroupViewProcessor(),
             new MenuListViewProcessor()
         ]
+    }
+
+    loadCustomProcessors() {
+        const customProcessors = ModuleRegistrationInstance.getRegisteredModules()
+            .flatMap(module => module.getRegisteredFlatPageComponentProcessors()
+                    .flatMap(registryInfo => registryInfo.componentProcessor)) ?? []
+        this.processors = [...this.processors, ...customProcessors]
     }
 
     findProcessor(typeName: string): ProcessorType|null {

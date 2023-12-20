@@ -3,7 +3,7 @@ import {Text, View} from "react-native";
 import MexAsyncText from "../../../../../components/MexAsyncText";
 import Expressions from "../../../expression/Expressions";
 import StylesManager from "../../../../StylesManager";
-import AbstractFlatPageViewProcessor, {FlatPageViewArgs, FlatPageViewProps} from "../AbstractFlatPageViewProcessor";
+import {AbstractFlatPageViewProcessor, FlatPageViewArgs, FlatPageViewProps} from "@skedulo/mex-engine-proxy";
 import ProfileImage from "../../../../../components/ProfileImage";
 import ContactMethodViews from "../../../../../components/ContactMethodViews";
 import {ContactDetailsLayoutComponentModel} from "@skedulo/mex-types";
