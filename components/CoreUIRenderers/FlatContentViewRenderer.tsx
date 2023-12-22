@@ -1,6 +1,6 @@
 import React, {MutableRefObject, useEffect, useRef} from "react";
 import {ErrorTextRefFunction} from "../ErrorText";
-import {Text, View} from "react-native";
+import {StyleSheet, Text, View} from "react-native";
 import ThemeManager from "../../mex/colors/ThemeManager";
 import MexAsyncText from "../MexAsyncText";
 import Expressions from "../../mex/common/expression/Expressions";
@@ -12,17 +12,18 @@ import {
     BaseComponentModel,
     BaseFlatPageViewComponentModel,
     DataExpressionType,
-    LocalizedKey,
     ValidatorDefinitionModel
 } from "@skedulo/mex-types";
+import TagsView from "../TagsView";
+import Divider from "../Divider";
 
 export type Props = {
     items: BaseFlatPageViewComponentModel[]
-    description?: LocalizedKey
     navigationContext: NavigationContext
     dataContext: any
     formValidator?: ValidatorDefinitionModel|undefined,
-    readonly?: DataExpressionType|boolean
+    readonly?: DataExpressionType|boolean,
+    args?: any
 }
 
 export class FlatContentViewContextObj {
@@ -67,10 +68,12 @@ export const FlatContentViewRenderer = React.forwardRef<FlatPageContentViewRefFu
         formValidator,
         dataContext,
         items,
-        description,
         navigationContext,
-        readonly
+        readonly,
+        args
     } = props!;
+
+    const {headerTitle, headerDescription, tags} = args.jsonDef ?? {}
 
     let styleConst = StylesManager.getStyleConst()
     let styles = StylesManager.getStyles()
@@ -136,24 +139,64 @@ export const FlatContentViewRenderer = React.forwardRef<FlatPageContentViewRefFu
             </View>)
     }
 
+    const getHeaderTitle = async (): Promise<string> => {
+        if (!headerTitle) {
+            return ""
+        }
+
+        const result = Expressions.getValueFromLocalizedKey({expressionStr: headerTitle, dataContext: dataContext})
+
+        if (result instanceof Promise) {
+            return await result
+        }
+
+        return result;
+    }
+
+    const getHeaderDescription = async (): Promise<string> => {
+        if (!headerDescription) {
+            return ""
+        }
+
+        const result = Expressions.getValueFromLocalizedKey({expressionStr: headerDescription, dataContext: dataContext})
+
+        if (result instanceof Promise) {
+            return await result
+        }
+
+        return result;
+    }
+
     return (
         <FlatContentViewContext.Provider value={flatPageContentViewContextObjRef.current}>
             <View>
-                {description ? (<MexAsyncText promiseFn={Expressions.generateGetValueFromLocalizationExpressionFunc({
-                    expressionStr: description,
-                    dataContext: dataContext
-                })}>
-                    {(text) => (
-                        <Text style={[
-                            styles.textCaption,
-                            {
-                                paddingBottom: styleConst.smallVerticalPadding,
-                                paddingHorizontal: styleConst.defaultHorizontalPadding,
-                                backgroundColor: ThemeManager.getColorSet().white
-                            }
-                        ]}>{text}</Text>
+                <View style={componentStyles.headerContainer}>
+                    {!!headerTitle && (
+                        <MexAsyncText promiseFn={getHeaderTitle}>
+                            {(text) => (
+                                <Text style={[styles.textHeadingBold, componentStyles.textTitle]}>
+                                    {text}
+                                </Text>)}
+                        </MexAsyncText>
                     )}
-                </MexAsyncText>) : null}
+
+                    {!!headerDescription && (
+                        <MexAsyncText promiseFn={getHeaderDescription}>
+                            {(text) => (
+                                <Text style={[styles.textRegular, { marginBottom: tags ? 0 : 16, marginTop: headerTitle ? 16 : 0 }]}>
+                                    {text}
+                                </Text>)
+                            }
+                        </MexAsyncText>)
+                    }
+
+                    {tags && <TagsView dataContext={args.dataContext} uiDef={tags} />}
+
+                    {(!!headerTitle || !!headerDescription || args.jsonDef.tags)
+                        && <Divider style={{marginVertical: 16}} color={ThemeManager.getColorSet().navy100}/>
+                    }
+
+                </View>
 
                 {generateValidatorIfPossible()}
 
@@ -190,4 +233,24 @@ export const FlatContentViewRenderer = React.forwardRef<FlatPageContentViewRefFu
             </View>
         </FlatContentViewContext.Provider>
     )
+})
+
+const componentStyles = StyleSheet.create({
+    headerContainer: {
+        backgroundColor: ThemeManager.getColorSet().white,
+        marginHorizontal: 16
+    },
+    verticalListButtonContainer: {
+        marginBottom: 16,
+        marginHorizontal: 16,
+    },
+    titleRowContainer: {
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    textTitle: {
+        marginRight: 8,
+        flex: 1,
+    }
 })

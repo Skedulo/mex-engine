@@ -37,7 +37,7 @@ class FlatPageProcessor extends AbstractPageProcessor<FlatPageComponentModel> {
 
     generateContent(args: StandardPageComponentArgs<FlatPageComponentModel>, abstractPageProcessorContextObj: AbstractPageProcessorContextObj): [JSX.Element, any] {
 
-        let {jsonDef, dataContext} = args
+        let { jsonDef, dataContext} = args
 
         let {
             pageProcessorContextObj,
@@ -158,8 +158,9 @@ class FlatPageProcessor extends AbstractPageProcessor<FlatPageComponentModel> {
                                 formValidator={jsonDef.upsert?.validator}
                                 dataContext={dataContext}
                                 items={jsonDef.items}
-                                description={jsonDef.description}
-                                readonly={jsonDef.upsert?.readonly ?? false}/>
+                                readonly={jsonDef.upsert?.readonly ?? false}
+                                args={args}
+                            />
                         </View>
                     </ScrollView>
 
