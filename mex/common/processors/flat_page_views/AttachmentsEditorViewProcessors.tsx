@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Text, TouchableOpacity, View} from "react-native";
+import {NativeModules, Text, TouchableOpacity, View} from "react-native";
 import StylesManager from "../../../StylesManager";
 import Expressions from "../../expression/Expressions";
 import AbstractEditorViewProcessor, {EditorViewArgs, EditorViewProps} from "./AbstractEditorViewProcessors";
@@ -19,7 +19,10 @@ import ErrorTextWithRef from "../../../../components/ErrorText";
 import {AttachmentsEditorViewComponentModel} from "@skedulo/mex-types";
 import {PageProcessorContext, PageProcessorContextObj} from "../../../hooks/useCrudOnPage";
 import {AttachmentMetadata, ExpressionArgs} from "@skedulo/mex-engine-proxy";
+import AttachmentModuleProxy from "../../attachments/AttachmentModuleProxy";
 let {translate} = converters.localization
+
+const { AttachmentModule } = NativeModules;
 
 type AttachmentsEditorViewProps = EditorViewProps<AttachmentsEditorViewArgs, AttachmentsEditorViewComponentModel>
 
@@ -95,6 +98,8 @@ export default class AttachmentsEditorViewProcessor
         useEffect(() => {
 
             let getAttachmentsDebounce = lodash.throttle(function(attachments: AttachmentMetadata[]) {
+                console.log("attachments", attachments.length)
+
                 attachmentsMetadata.current = attachments;
 
                 runInAction(() => {
@@ -127,18 +132,18 @@ export default class AttachmentsEditorViewProcessor
 
         let addAttachmentRequests:any[] = []
 
-        let addAttachment = (response: ImagePickerResponse) => {
-            if (!response || !response.assets) {
+        let addAttachment = (response: string[]) => {
+            if (!response) {
                 return
             }
 
-            response.assets.forEach((asset:any) => {
+            response.forEach((uri:string) => {
 
                 let uid = utils.data.generateUniqSerial('local')
 
                 addAttachmentRequests.push({
                     uid: uid,
-                    uri: asset.uri
+                    uri: uri
                 })
             })
 
@@ -147,22 +152,19 @@ export default class AttachmentsEditorViewProcessor
 
         let showPickFileBottomSheet = function() {
             BottomSheet.showBottomSheetWithOptions({
-                options: [translate('builtin_camera'), translate('builtin_photo_library'), translate('builtin_cancel')],
-                cancelButtonIndex: 2,
+                options: [translate('builtin_camera'), translate('builtin_photo_library'), translate('builtin_pick_files'), translate('builtin_cancel')],
+                cancelButtonIndex: 3,
             }, async (chosenIndex) => {
+                if (chosenIndex === 2) {
+                    let files = await AttachmentModuleProxy.pickFiles()
+
+                    addAttachment(files.map(a => a.url))
+                }
+
                 if (chosenIndex === 1) {
-                    launchImageLibrary({
-                        mediaType: "mixed",
-                        maxHeight: 1920,
-                        maxWidth: 1080,
-                        quality: 0.5,
-                        selectionLimit: 0,
-                        videoQuality: "medium"
-                    }).then(response => {
-                        runInAction(() => {
-                            addAttachment(response)
-                        })
-                    })
+                    let files = await AttachmentModuleProxy.pickMedias()
+
+                    addAttachment(files.map(a => a.url))
                 }
 
                 if (chosenIndex === 0) {
@@ -178,7 +180,7 @@ export default class AttachmentsEditorViewProcessor
                             quality: 0.5,
                             saveToPhotos: attachmentSettings.saveOriginalPhotos
                         }).then(response => {
-                            addAttachment(response)
+                            addAttachment(response.assets.map(a => a.uri))
                         })
                     }
                 }
