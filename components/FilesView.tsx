@@ -1,4 +1,4 @@
-import {useCallback, useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
+import {useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState} from "react";
 import AttachmentsManager from "../mex/common/attachments/AttachmentsManager";
 import utils from "../mex/common/Utils";
 import {Alert, AlertButton, Platform, SafeAreaView, Text, TouchableOpacity, View} from "react-native";
@@ -242,7 +242,7 @@ const AttachmentRow = function({item, isSignature}: {item: AttachmentMetadata, i
             height: 50,
             width: 50
         }}>
-            <AttachmentThumbnailView
+            <AttachmentThumbnailViewMemo
                 uid={item.uid}
                 contentType={item.contentType}
                 fileUrl={finalUrl}/>
@@ -279,7 +279,7 @@ const AttachmentThumbnailView = ({uid, fileUrl, contentType}: {uid: string, file
     useEffect(() => {
         AttachmentModuleProxy.generateThumbnailForFile(uid, fileUrl)
             .then(thumbnailUrl => setThumbnailUrl(thumbnailUrl))
-    })
+    }, [])
 
     /* Not an image cell, first fetch the thumbnail first */
     if (!thumbnailUrl) {
@@ -310,5 +310,7 @@ let getImageMetadataAsync = (item: any) => {
             return `${readableUploadDate} • ${readableSize}`;
         })
 }
+
+const AttachmentThumbnailViewMemo = React.memo(AttachmentThumbnailView)
 
 export default FilesView
