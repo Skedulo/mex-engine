@@ -1,6 +1,7 @@
 {
   "builtin_camera" : "Camera",
   "builtin_photo_library" : "Photo Library",
+  "builtin_pick_files" : "Files",
   "builtin_scan": "Scan",
 
   "builtin_cancel" : "Cancel",

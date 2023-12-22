@@ -56,6 +56,7 @@ import {DatetimeEditorView} from "./components/Editors/DatetimeEditorView";
 import {RadioButton} from "./components/Editors/RadioButton";
 import {TextEditorView} from "./components/Editors/TextEditorView";
 import {AttachmentsEditorView} from "./components/Editors/AttachmentsEditorView";
+import WithLoadingOverlay from "./mex/common/contexts/WithLoadingOverlay";
 LogBox.ignoreLogs(['Warning: ...', '[MobX]', 'Require cycle', 'Could not find image']); // Ignore log notification by message
 
 const Stack = createNativeStackNavigator();
@@ -171,89 +172,91 @@ const RootStack = ({packageId, formName, contextId, staticResourcesId} : RootSta
             FallbackComponent={RootErrorFallbackComponent}>
             <GestureHandlerRootView style={{ flex: 1 }}>
                 <WithManageTheme>
-                    <WithManageInstanceData>
-                        <NavigationContainer ref={navigationRef.current}>
-                            <Stack.Navigator
-                                initialRouteName={uiDefinitions.firstPage}
-                                screenOptions={{
-                                    contentStyle: {
-                                        backgroundColor: colors.skeduloBackgroundGrey
-                                    },
-                                    headerTintColor: colors.white,
+                <WithManageInstanceData>
+                <WithLoadingOverlay>
+                    <NavigationContainer ref={navigationRef.current}>
+                        <Stack.Navigator
+                            initialRouteName={uiDefinitions.firstPage}
+                            screenOptions={{
+                                contentStyle: {
+                                    backgroundColor: colors.skeduloBackgroundGrey
+                                },
+                                headerTintColor: colors.white,
+                                headerStyle: {
+                                    backgroundColor: colors.skeduloBlue,
+                                },
+                            }}>
+
+                            {pagesDef}
+
+                            <Stack.Screen
+                                name={SelectScreenName as never}
+                                component={SelectScreen}
+                                options={{
+                                    presentation: 'transparentModal',
+                                    headerShown: false,
+                                    gestureEnabled: false,
                                     headerStyle: {
-                                        backgroundColor: colors.skeduloBlue,
+                                        backgroundColor: 'transparent'
                                     },
-                                }}>
+                                    contentStyle: {
+                                        backgroundColor: 'transparent'
+                                    },
+                                    animation: "none"
+                                }}
+                            />
 
-                                {pagesDef}
+                            <Stack.Screen
+                                name="scanQRBarcodeScreen"
+                                component={ScanQRBarCodeScreen}
+                                options={{
+                                    headerShown: false,
+                                    presentation: 'fullScreenModal',
+                                }}
+                            />
 
-                                <Stack.Screen
-                                    name={SelectScreenName as never}
-                                    component={SelectScreen}
-                                    options={{
-                                        presentation: 'transparentModal',
-                                        headerShown: false,
-                                        gestureEnabled: false,
-                                        headerStyle: {
-                                            backgroundColor: 'transparent'
-                                        },
-                                        contentStyle: {
-                                            backgroundColor: 'transparent'
-                                        },
-                                        animation: "none"
-                                    }}
-                                />
+                            <Stack.Screen
+                                name="captureSignatureScreen"
+                                component={CaptureSignatureScreen}
+                                options={{
+                                    headerShown: true,
+                                    presentation: 'fullScreenModal',
+                                }}
+                            />
 
-                                <Stack.Screen
-                                    name="scanQRBarcodeScreen"
-                                    component={ScanQRBarCodeScreen}
-                                    options={{
-                                        headerShown: false,
-                                        presentation: 'fullScreenModal',
-                                    }}
-                                />
+                            <Stack.Screen
+                                name="bodyMapScreen"
+                                component={BodyMapScreen}
+                                options={{
+                                    headerShown: false,
+                                    presentation: 'fullScreenModal',
+                                    contentStyle: {
+                                        backgroundColor: ThemeManager.getColorSet().skedBlue900
+                                    },
+                                }}
+                            />
 
-                                <Stack.Screen
-                                    name="captureSignatureScreen"
-                                    component={CaptureSignatureScreen}
-                                    options={{
-                                        headerShown: true,
-                                        presentation: 'fullScreenModal',
-                                    }}
-                                />
+                            <Stack.Screen
+                                name="routingModalScreen"
+                                component={RoutingModalScreen}
+                                options={{
+                                    presentation: 'transparentModal',
+                                    headerShown: false,
+                                    gestureEnabled: false,
+                                    headerStyle: {
+                                        backgroundColor: 'transparent'
+                                    },
+                                    contentStyle: {
+                                        backgroundColor: 'transparent'
+                                    },
+                                    animation: "none"
+                                }}
+                            />
 
-                                <Stack.Screen
-                                    name="bodyMapScreen"
-                                    component={BodyMapScreen}
-                                    options={{
-                                        headerShown: false,
-                                        presentation: 'fullScreenModal',
-                                        contentStyle: {
-                                            backgroundColor: ThemeManager.getColorSet().skedBlue900
-                                        },
-                                    }}
-                                />
-
-                                <Stack.Screen
-                                    name="routingModalScreen"
-                                    component={RoutingModalScreen}
-                                    options={{
-                                        presentation: 'transparentModal',
-                                        headerShown: false,
-                                        gestureEnabled: false,
-                                        headerStyle: {
-                                            backgroundColor: 'transparent'
-                                        },
-                                        contentStyle: {
-                                            backgroundColor: 'transparent'
-                                        },
-                                        animation: "none"
-                                    }}
-                                />
-
-                            </Stack.Navigator>
-                        </NavigationContainer>
-                    </WithManageInstanceData>
+                        </Stack.Navigator>
+                    </NavigationContainer>
+                </WithLoadingOverlay>
+                </WithManageInstanceData>
                 </WithManageTheme>
             </GestureHandlerRootView>
         </ErrorBoundary>);
