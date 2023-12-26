@@ -13,7 +13,7 @@ import {
     BaseFlatPageViewComponentModel,
     DataExpressionType,
     ValidatorDefinitionModel,
-    FlatPageHeaderModel
+    FlatPageHeaderModel, LocalizedKey
 } from "@skedulo/mex-types";
 import TagsView from "../TagsView";
 import Divider from "../Divider";
@@ -22,6 +22,7 @@ export type Props = {
     items: BaseFlatPageViewComponentModel[]
     navigationContext: NavigationContext
     dataContext: any
+    pageDescription?: LocalizedKey
     formValidator?: ValidatorDefinitionModel|undefined,
     readonly?: DataExpressionType|boolean,
     header?: FlatPageHeaderModel
@@ -71,10 +72,12 @@ export const FlatContentViewRenderer = React.forwardRef<FlatPageContentViewRefFu
         items,
         navigationContext,
         readonly,
-        header
+        header,
+        pageDescription
     } = props!;
 
-    const { title, description, tags} = header ?? {}
+    const { title , tags} = header ?? {}
+    const description = header?.description || pageDescription // some old forms use this 'description' property at page level
 
     let styleConst = StylesManager.getStyleConst()
     let styles = StylesManager.getStyles()

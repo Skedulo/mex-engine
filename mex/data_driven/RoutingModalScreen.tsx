@@ -75,7 +75,8 @@ const RoutingModalScreen: React.FC<Props> = ({route}) => {
                     navigationContext={route.params.navigationContext}
                     dataContext={dataContext}
                     items={jsonDef.ui!.items}
-                    description={jsonDef.ui!.description}/>
+                    pageDescription={jsonDef.ui!.description}
+                />
 
 
                 <View style={{

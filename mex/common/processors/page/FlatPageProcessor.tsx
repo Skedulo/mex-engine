@@ -157,6 +157,7 @@ class FlatPageProcessor extends AbstractPageProcessor<FlatPageComponentModel> {
                                 navigationContext={args.navigationContext}
                                 formValidator={jsonDef.upsert?.validator}
                                 dataContext={dataContext}
+                                pageDescription={jsonDef.description}
                                 items={jsonDef.items}
                                 readonly={jsonDef.upsert?.readonly ?? false}
                                 header={jsonDef.header}
