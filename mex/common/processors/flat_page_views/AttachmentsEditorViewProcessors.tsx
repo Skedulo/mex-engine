@@ -98,7 +98,6 @@ export default class AttachmentsEditorViewProcessor
         useEffect(() => {
 
             let getAttachmentsDebounce = lodash.throttle(function(attachments: AttachmentMetadata[]) {
-                console.log("attachments", attachments.length)
 
                 attachmentsMetadata.current = attachments;
 

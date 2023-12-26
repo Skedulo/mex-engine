@@ -267,6 +267,9 @@ const AttachmentThumbnailView = ({uid, fileUrl, contentType}: {uid: string, file
 
     const [thumbnailUrl, setThumbnailUrl] = useState<string|null>()
 
+    let colors = ThemeManager.getColorSet()
+    let styles = StylesManager.getStyles()
+
     if (contentType.startsWith("image")) {
         return (<SkeduloImage
             style={{
@@ -281,9 +284,31 @@ const AttachmentThumbnailView = ({uid, fileUrl, contentType}: {uid: string, file
             .then(thumbnailUrl => setThumbnailUrl(thumbnailUrl))
     }, [])
 
-    /* Not an image cell, first fetch the thumbnail first */
     if (!thumbnailUrl) {
-        return (<View></View>)
+        let parts = fileUrl.split(".")
+        let extension = parts.length > 0 ? parts[parts.length - 1] : 0
+
+        return (
+            <View style={{
+                height: "100%",
+                width: "100%",
+                backgroundColor: colors.skedBlue50,
+                alignItems: "center",
+                alignContent: "center",
+                alignSelf: "center",
+                justifyContent: "center"
+            }}>
+                <Text style={{
+                    ...styles.textMedium,
+                    alignSelf: "center",
+                    alignContent: "center",
+                    textAlignVertical: "center",
+                    textAlign: "center",
+                    textTransform: "uppercase",
+                    color: colors.skedBlue900,
+                    fontSize: 12
+                }}>{extension}</Text>
+            </View>)
     }
 
     return (<FastImage
