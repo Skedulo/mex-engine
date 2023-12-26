@@ -1,4 +1,4 @@
-import {useEffect, useLayoutEffect, useRef, useState} from "react";
+import {useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState} from "react";
 import AttachmentsManager from "../mex/common/attachments/AttachmentsManager";
 import utils from "../mex/common/Utils";
 import {Alert, AlertButton, Platform, SafeAreaView, Text, TouchableOpacity, View} from "react-native";
@@ -14,6 +14,9 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import stylesManager from "../mex/StylesManager";
 import { translate } from "../mex/assets/LocalizationManager";
 import {AttachmentMetadata, IconTypes} from "@skedulo/mex-engine-proxy";
+import AttachmentModuleProxy from "../mex/common/attachments/AttachmentModuleProxy";
+import FastImage from 'react-native-fast-image';
+import {LoadingOverlayDataContext} from "../mex/common/contexts/WithLoadingOverlay";
 
 const FilesView = ({attachmentsMetadata, isSignature, readonly}: {
     attachmentsMetadata: AttachmentMetadata[],
@@ -22,6 +25,8 @@ const FilesView = ({attachmentsMetadata, isSignature, readonly}: {
 }) => {
 
     let [detailsViewVisible, setDetailsViewDetailsViewVisible] = useState(false)
+
+    let overlay = useContext(LoadingOverlayDataContext)
 
     let selectedImages = useRef<any[]>([]);
     let selectedImageMetadata = useRef<any>(null);
@@ -55,23 +60,31 @@ const FilesView = ({attachmentsMetadata, isSignature, readonly}: {
 
     }
 
-    let selectImage = function(item: AttachmentMetadata) {
-        AssetsManager.getAccessToken().then((token:string) => {
-            selectedImages.current = [
-                {
-                    uri: item.localFileURL ?? item.downloadURL,
-                    headers: {
-                        Authorization: 'Bearer ' + token
-                    },
-                    cache: "force-cache"
-                }
-            ]
+    let selectImage = useCallback((item: AttachmentMetadata) => {
 
-            selectedImageMetadata.current = item
+        if (item.contentType.startsWith("image")) {
+            AssetsManager.getAccessToken().then((token:string) => {
+                selectedImages.current = [
+                    {
+                        uri: item.localFileURL ?? item.downloadURL,
+                        headers: {
+                            Authorization: 'Bearer ' + token
+                        },
+                        cache: "force-cache"
+                    }
+                ]
 
-            setDetailsViewDetailsViewVisible(true)
-        })
-    }
+                selectedImageMetadata.current = item
+
+                setDetailsViewDetailsViewVisible(true)
+            })
+        } else {
+            overlay.setIsShow(true)
+
+            AttachmentModuleProxy.openFile(item.uid).
+                then(() => overlay.setIsShow(false));
+        }
+    }, [selectedImageMetadata, selectedImages])
 
     let colors = ThemeManager.getColorSet()
 
@@ -199,7 +212,7 @@ const AttachmentRow = function({item, isSignature}: {item: AttachmentMetadata, i
         }
     }, []);
 
-    let [metadata, setMetadata] = useState(null);
+    let [metadata, setMetadata] = useState<string|null>(null);
 
     useEffect(() => {
         getImageMetadataAsync(item).then((metadata:any) => {
@@ -229,12 +242,10 @@ const AttachmentRow = function({item, isSignature}: {item: AttachmentMetadata, i
             height: 50,
             width: 50
         }}>
-            <SkeduloImage
-                style={{
-                    height: "100%",
-                    width: "100%",
-                }}
-                uri={finalUrl}/>
+            <AttachmentThumbnailViewMemo
+                uid={item.uid}
+                contentType={item.contentType}
+                fileUrl={finalUrl}/>
         </View>
 
         <View style={{marginLeft: 10, justifyContent: 'center', flexShrink: 1}}>
@@ -252,6 +263,63 @@ const AttachmentRow = function({item, isSignature}: {item: AttachmentMetadata, i
     </View>)
 }
 
+const AttachmentThumbnailView = ({uid, fileUrl, contentType}: {uid: string, fileUrl: string, contentType: string}) => {
+
+    const [thumbnailUrl, setThumbnailUrl] = useState<string|null>()
+
+    let colors = ThemeManager.getColorSet()
+    let styles = StylesManager.getStyles()
+
+    if (contentType.startsWith("image")) {
+        return (<SkeduloImage
+            style={{
+                height: "100%",
+                width: "100%",
+            }}
+            uri={fileUrl}/>)
+    }
+
+    useEffect(() => {
+        AttachmentModuleProxy.generateThumbnailForFile(uid, fileUrl)
+            .then(thumbnailUrl => setThumbnailUrl(thumbnailUrl))
+    }, [])
+
+    if (!thumbnailUrl) {
+        let parts = fileUrl.split(".")
+        let extension = parts.length > 0 ? parts[parts.length - 1] : 0
+
+        return (
+            <View style={{
+                height: "100%",
+                width: "100%",
+                backgroundColor: colors.skedBlue50,
+                alignItems: "center",
+                alignContent: "center",
+                alignSelf: "center",
+                justifyContent: "center"
+            }}>
+                <Text style={{
+                    ...styles.textMedium,
+                    alignSelf: "center",
+                    alignContent: "center",
+                    textAlignVertical: "center",
+                    textAlign: "center",
+                    textTransform: "uppercase",
+                    color: colors.skedBlue900,
+                    fontSize: 12
+                }}>{extension}</Text>
+            </View>)
+    }
+
+    return (<FastImage
+        style={{
+            height: "100%",
+            width: "100%",
+        }}
+        source={{uri: thumbnailUrl}}/>)
+}
+
+
 let getImageMetadataAsync = (item: any) => {
     if (!item.uploadDate || !item.size) {
         return Promise.resolve("")
@@ -267,5 +335,7 @@ let getImageMetadataAsync = (item: any) => {
             return `${readableUploadDate} • ${readableSize}`;
         })
 }
+
+const AttachmentThumbnailViewMemo = React.memo(AttachmentThumbnailView)
 
 export default FilesView
