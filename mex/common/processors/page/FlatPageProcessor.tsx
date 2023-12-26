@@ -159,7 +159,7 @@ class FlatPageProcessor extends AbstractPageProcessor<FlatPageComponentModel> {
                                 dataContext={dataContext}
                                 items={jsonDef.items}
                                 readonly={jsonDef.upsert?.readonly ?? false}
-                                args={args}
+                                header={jsonDef.header}
                             />
                         </View>
                     </ScrollView>

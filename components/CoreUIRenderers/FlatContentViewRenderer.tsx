@@ -12,7 +12,8 @@ import {
     BaseComponentModel,
     BaseFlatPageViewComponentModel,
     DataExpressionType,
-    ValidatorDefinitionModel
+    ValidatorDefinitionModel,
+    FlatPageHeaderModel
 } from "@skedulo/mex-types";
 import TagsView from "../TagsView";
 import Divider from "../Divider";
@@ -23,7 +24,7 @@ export type Props = {
     dataContext: any
     formValidator?: ValidatorDefinitionModel|undefined,
     readonly?: DataExpressionType|boolean,
-    args?: any
+    header?: FlatPageHeaderModel
 }
 
 export class FlatContentViewContextObj {
@@ -70,10 +71,10 @@ export const FlatContentViewRenderer = React.forwardRef<FlatPageContentViewRefFu
         items,
         navigationContext,
         readonly,
-        args
+        header
     } = props!;
 
-    const {headerTitle, headerDescription, tags} = args.jsonDef ?? {}
+    const { title, description, tags} = header ?? {}
 
     let styleConst = StylesManager.getStyleConst()
     let styles = StylesManager.getStyles()
@@ -140,11 +141,11 @@ export const FlatContentViewRenderer = React.forwardRef<FlatPageContentViewRefFu
     }
 
     const getHeaderTitle = async (): Promise<string> => {
-        if (!headerTitle) {
+        if (!title) {
             return ""
         }
 
-        const result = Expressions.getValueFromLocalizedKey({expressionStr: headerTitle, dataContext: dataContext})
+        const result = Expressions.getValueFromLocalizedKey({expressionStr: title, dataContext: dataContext})
 
         if (result instanceof Promise) {
             return await result
@@ -154,11 +155,11 @@ export const FlatContentViewRenderer = React.forwardRef<FlatPageContentViewRefFu
     }
 
     const getHeaderDescription = async (): Promise<string> => {
-        if (!headerDescription) {
+        if (!description) {
             return ""
         }
 
-        const result = Expressions.getValueFromLocalizedKey({expressionStr: headerDescription, dataContext: dataContext})
+        const result = Expressions.getValueFromLocalizedKey({expressionStr: description, dataContext: dataContext})
 
         if (result instanceof Promise) {
             return await result
@@ -171,7 +172,7 @@ export const FlatContentViewRenderer = React.forwardRef<FlatPageContentViewRefFu
         <FlatContentViewContext.Provider value={flatPageContentViewContextObjRef.current}>
             <View>
                 <View style={componentStyles.headerContainer}>
-                    {!!headerTitle && (
+                    {!!title && (
                         <MexAsyncText promiseFn={getHeaderTitle}>
                             {(text) => (
                                 <Text style={[styles.textHeadingBold, componentStyles.textTitle]}>
@@ -180,22 +181,21 @@ export const FlatContentViewRenderer = React.forwardRef<FlatPageContentViewRefFu
                         </MexAsyncText>
                     )}
 
-                    {!!headerDescription && (
+                    {!!description && (
                         <MexAsyncText promiseFn={getHeaderDescription}>
                             {(text) => (
-                                <Text style={[styles.textRegular, { marginBottom: tags ? 0 : 16, marginTop: headerTitle ? 16 : 0 }]}>
+                                <Text style={[styles.textRegular, { marginTop: title ? styleConst.smallVerticalPadding : 0 }]}>
                                     {text}
                                 </Text>)
                             }
                         </MexAsyncText>)
                     }
 
-                    {tags && <TagsView dataContext={args.dataContext} uiDef={tags} />}
+                    { tags && <TagsView dataContext={dataContext} uiDef={tags} /> }
 
-                    {(!!headerTitle || !!headerDescription || args.jsonDef.tags)
-                        && <Divider style={{marginVertical: 16}} color={ThemeManager.getColorSet().navy100}/>
+                    {(!!title || !!description || tags)
+                        && <Divider style={{ marginVertical: 16 }} color={ThemeManager.getColorSet().navy100}/>
                     }
-
                 </View>
 
                 {generateValidatorIfPossible()}
@@ -239,15 +239,6 @@ const componentStyles = StyleSheet.create({
     headerContainer: {
         backgroundColor: ThemeManager.getColorSet().white,
         marginHorizontal: 16
-    },
-    verticalListButtonContainer: {
-        marginBottom: 16,
-        marginHorizontal: 16,
-    },
-    titleRowContainer: {
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-        alignItems: 'center',
     },
     textTitle: {
         marginRight: 8,
