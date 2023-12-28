@@ -382,6 +382,22 @@ function getMandatoryExpressionValue(def: boolean|DataExpressionType|undefined, 
     return Expressions.getValueExpression({expressionStr: def as DataExpressionType, dataContext: dataContext}) ?? false
 }
 
+function getBooleanExpressionGenericValue(def: boolean|DataExpressionType|undefined, dataContext: any): boolean {
+    let result: boolean
+
+    if (def === undefined)
+        return false;
+
+    if (typeof def === 'boolean') {
+        result = def as boolean
+    }
+    else {
+        result = Expressions.getValueExpression({expressionStr: def as DataExpressionType, dataContext: dataContext})
+    }
+
+    return result
+}
+
 const InternalUtils =  {
     data: {
         removeData,
@@ -397,7 +413,8 @@ const InternalUtils =  {
         getFilterSourceByKeywords,
         orderListByExpression,
         getMandatoryExpressionValue,
-        generateUniqSerial: utils.data.generateUniqSerial
+        generateUniqSerial: utils.data.generateUniqSerial,
+        getBooleanExpressionGenericValue
     },
     navigation: {
         exit: function () {

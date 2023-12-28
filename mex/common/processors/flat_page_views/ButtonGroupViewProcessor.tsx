@@ -4,10 +4,11 @@ import StylesManager from "../../../StylesManager";
 import Expressions from "../../expression/Expressions";
 import {AbstractFlatPageViewProcessor, FlatPageViewArgs, FlatPageViewProps} from "@skedulo/mex-engine-proxy";
 import SkedButton from "../../../../components/SkedButton";
-import {useCallback, useContext, useMemo} from "react";
+import {useContext, useMemo} from "react";
 import {BehaviorManager} from "../ButtonBehaviorManager";
 import {ButtonGroupItemComponentModel, ButtonGroupViewComponentModel} from "@skedulo/mex-types";
 import {PageProcessorContext, PageProcessorContextObj} from "../../../hooks/useCrudOnPage";
+import InternalUtils from "../../InternalUtils";
 
 type ButtonGroupViewProps = FlatPageViewProps<ButtonGroupViewArgs, ButtonGroupViewComponentModel>
 
@@ -16,15 +17,15 @@ type ButtonGroupViewArgs = FlatPageViewArgs<ButtonGroupViewComponentModel> & {
 
 export default class ButtonGroupViewProcessor extends AbstractFlatPageViewProcessor<ButtonGroupViewProps, ButtonGroupViewArgs, ButtonGroupViewComponentModel> {
 
+    override useObservable(): boolean {
+        return true
+    }
+
     getTypeName(): string {
         return "buttonGroup";
     }
 
     generateInnerComponent(args: ButtonGroupViewArgs): JSX.Element {
-        if (!this.checkVisibility(args)) {
-            return (<></>)
-        }
-
         let items = args.jsonDef.items
         let dataContext = args.dataContext
 
@@ -34,7 +35,7 @@ export default class ButtonGroupViewProcessor extends AbstractFlatPageViewProces
         let behaviorManager = useMemo(() => new BehaviorManager(), [])
 
         let renderButton = (item: ButtonGroupItemComponentModel, style?: StyleProp<ViewStyle>, index?: any) => {
-            let onPressCallback = useCallback(() => {
+            let onPressCallback = () => {
                 let behavior = behaviorManager.findProcessor(item.behavior.type)
 
                 behavior?.execute({
@@ -42,16 +43,22 @@ export default class ButtonGroupViewProcessor extends AbstractFlatPageViewProces
                     dataContext: dataContext,
                     pageContext: pageContext
                 })
+            }
 
-            },[item, behaviorManager])
+            const disabled = InternalUtils.data.getBooleanExpressionGenericValue(item.disabled, dataContext)
 
             return (
                 <View style={[{flex: 1}, style]} key={index}>
                     <SkedButton
+                        disabled={disabled}
                         onPress={onPressCallback}
                         theme={item.theme}
                         textPromiseFn={Expressions.generateGetValueFromLocalizationExpressionFunc({dataContext: args.dataContext, expressionStr: item.text})} />
                 </View>)
+        }
+
+        if (!this.checkVisibility(args)) {
+            return (<></>)
         }
 
         if (items.length === 1) {

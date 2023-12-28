@@ -8,6 +8,7 @@ import ErrorTextWithRef from "../../../../components/ErrorText";
 import ThemeManager from "../../../colors/ThemeManager";
 import {FlatContentViewContext} from "../../../../components/CoreUIRenderers/FlatContentViewRenderer";
 import {CommonEditorViewComponentModel, DataExpressionType} from "@skedulo/mex-types";
+import InternalUtils from "../../InternalUtils";
 
 export type EditorViewProps<
     TComponentArgs extends EditorViewArgs<TComponentDefinitionModel>,
@@ -88,7 +89,7 @@ abstract class AbstractEditorViewProcessor<
     }
 
     isComponentReadonly(readonlyDef: boolean|DataExpressionType|undefined, dataContext: any): boolean {
-        let componentReadonly = this.getBooleanExpressionGenericValue(readonlyDef, dataContext)
+        let componentReadonly = InternalUtils.data.getBooleanExpressionGenericValue(readonlyDef, dataContext)
 
         let flatContentViewContext = useContext(FlatContentViewContext)
 
@@ -101,23 +102,7 @@ abstract class AbstractEditorViewProcessor<
     }
 
     isComponentMandatory(mandatoryDef: boolean|DataExpressionType|undefined, dataContext: any): boolean {
-        return this.getBooleanExpressionGenericValue(mandatoryDef, dataContext)
-    }
-
-    getBooleanExpressionGenericValue(def: boolean|DataExpressionType|undefined, dataContext: any): boolean {
-        let readonlyResult:any
-
-        if (def === undefined)
-            return false;
-
-        if (typeof def === 'boolean') {
-            readonlyResult = def as boolean
-        }
-        else {
-            readonlyResult = Expressions.getValueExpression({expressionStr: def as DataExpressionType, dataContext: dataContext})
-        }
-
-        return readonlyResult
+        return InternalUtils.data.getBooleanExpressionGenericValue(mandatoryDef, dataContext)
     }
 }
 
