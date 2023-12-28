@@ -143,40 +143,16 @@ export const FlatContentViewRenderer = React.forwardRef<FlatPageContentViewRefFu
             </View>)
     }
 
-    const getHeaderTitle = async (): Promise<string> => {
-        if (!title) {
-            return ""
-        }
-
-        const result = Expressions.getValueFromLocalizedKey({expressionStr: title, dataContext: dataContext})
-
-        if (result instanceof Promise) {
-            return await result
-        }
-
-        return result;
-    }
-
-    const getHeaderDescription = async (): Promise<string> => {
-        if (!description) {
-            return ""
-        }
-
-        const result = Expressions.getValueFromLocalizedKey({expressionStr: description, dataContext: dataContext})
-
-        if (result instanceof Promise) {
-            return await result
-        }
-
-        return result;
-    }
-
     return (
         <FlatContentViewContext.Provider value={flatPageContentViewContextObjRef.current}>
             <View>
                 <View style={componentStyles.headerContainer}>
                     {!!title && (
-                        <MexAsyncText promiseFn={getHeaderTitle}>
+                        <MexAsyncText
+                            promiseFn={Expressions.generateGetValueFromLocalizationExpressionFunc(
+                                {expressionStr: title, dataContext: dataContext}
+                            )}
+                        >
                             {(text) => (
                                 <Text style={[styles.textHeadingBold, componentStyles.textTitle]}>
                                     {text}
@@ -185,7 +161,9 @@ export const FlatContentViewRenderer = React.forwardRef<FlatPageContentViewRefFu
                     )}
 
                     {!!description && (
-                        <MexAsyncText promiseFn={getHeaderDescription}>
+                        <MexAsyncText promiseFn={Expressions.generateGetValueFromLocalizationExpressionFunc(
+                            {expressionStr: description, dataContext: dataContext}
+                        )}>
                             {(text) => (
                                 <Text style={[styles.textRegular, { marginTop: title ? styleConst.smallVerticalPadding : 0 }]}>
                                     {text}
