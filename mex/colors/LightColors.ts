@@ -28,7 +28,15 @@ let LightColors: SkedColorSet = {
 
     red800: "#EB3B5A",
 
-    overlayColor: "#000000"
+    overlayColor: "#000000",
+
+    // tags
+    successTag: "#03AA55",
+    defaultTag: "#6D7991",
+    primaryTag: "#0461CB",
+    focusTag: "#6432B4",
+    dangerTag: "#EB3B5A",
+    warningTag: "#F78F39",
 }
 
 export default LightColors

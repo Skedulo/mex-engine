@@ -155,7 +155,8 @@ export const ListPageHeaderComponent : FC<ListPageHeaderComponentProps> = (props
             {(!!headerTitle || !!headerDescription || buttonArray.length > 0)
                 && <Divider color={colors.navy100}/>
             }
-        </View>)
+        </View>
+    )
 }
 
 const componentStyles = StyleSheet.create({
