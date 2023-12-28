@@ -1,4 +1,4 @@
-import React, {useContext, useMemo} from 'react'
+import React, {FC, useContext, useMemo} from 'react'
 import {AddNewButtonData, ListPageComponentModel, ButtonGroupItemComponentModel} from "@skedulo/mex-types";
 import NavigationProcessManager, {NavigationContext} from "../../mex/common/NavigationProcessManager";
 import StylesManager from "../../mex/StylesManager";
@@ -12,6 +12,7 @@ import Divider from "../Divider";
 import InternalUtils from "../../mex/common/InternalUtils";
 import {PageProcessorContext, PageProcessorContextObj} from "../../mex/hooks/useCrudOnPage";
 import {SkedButtonSize} from "@skedulo/mex-engine-proxy";
+import {toJS} from "mobx";
 
 type ListPageHeaderComponentProps = {
     jsonDef: ListPageComponentModel,
@@ -24,7 +25,7 @@ type ListPageHeaderButton = {
     data: AddNewButtonData | ButtonGroupItemComponentModel
 }
 
-export const ListPageHeaderComponent : React.FC<ListPageHeaderComponentProps> = (props) => {
+export const ListPageHeaderComponent : FC<ListPageHeaderComponentProps> = (props) => {
     const { jsonDef, dataContext, navigationContext } = props
     const { headerTitle, headerDescription, addNew, buttonGroup } = jsonDef
     const styles = StylesManager.getStyles()
@@ -55,47 +56,6 @@ export const ListPageHeaderComponent : React.FC<ListPageHeaderComponentProps> = 
         return buttons
     },[dataContext])
 
-    const getHeaderTitle = async (): Promise<string> => {
-        if (!headerTitle) {
-            return ""
-        }
-
-        const result = Expressions.getValueFromLocalizedKey({expressionStr: headerTitle, dataContext: dataContext})
-
-        if (result instanceof Promise) {
-            return await result
-        }
-
-        return result;
-    }
-
-    const getHeaderDescription = async (): Promise<string> => {
-        if (!headerDescription) {
-            return ""
-        }
-
-        const result = Expressions.getValueFromLocalizedKey({expressionStr: headerDescription, dataContext: dataContext})
-
-        if (result instanceof Promise) {
-            return await result
-        }
-
-        return result;
-    }
-
-    const getAddButtonText = async (): Promise<string> => {
-        let getAddButtonText = Expressions.getValueFromLocalizedKey({
-            expressionStr: addNew.text,
-            dataContext: dataContext
-        })
-
-        if (getAddButtonText instanceof Promise) {
-            return await getAddButtonText
-        }
-
-        return getAddButtonText;
-    }
-
     const onAddButtonClicked = async () => {
         if (!jsonDef.addNew) {
             return
@@ -119,7 +79,10 @@ export const ListPageHeaderComponent : React.FC<ListPageHeaderComponentProps> = 
             return (
                 <SkedButton
                     onPress={onAddButtonClicked}
-                    textPromiseFn={getAddButtonText}
+                    textPromiseFn={Expressions.generateGetValueFromLocalizationExpressionFunc({
+                        expressionStr: addNew.text,
+                        dataContext: dataContext
+                    })}
                     size={isRightButton ? SkedButtonSize.SMALL : SkedButtonSize.LARGE}
                 />
             )
@@ -127,6 +90,7 @@ export const ListPageHeaderComponent : React.FC<ListPageHeaderComponentProps> = 
 
         // other button
         const buttonGroupItemData = buttonData.data as ButtonGroupItemComponentModel
+        const disabled = InternalUtils.data.getBooleanExpressionGenericValue(buttonGroupItemData.disabled, toJS(dataContext))
         const onPressCallback = () => {
             const behavior = behaviorManager.findProcessor(buttonGroupItemData.behavior.type)
             behavior?.execute({
@@ -138,6 +102,7 @@ export const ListPageHeaderComponent : React.FC<ListPageHeaderComponentProps> = 
 
         return (
             <SkedButton
+                disabled={disabled}
                 onPress={onPressCallback}
                 theme={buttonGroupItemData.theme!}
                 textPromiseFn={Expressions.generateGetValueFromLocalizationExpressionFunc({dataContext, expressionStr: buttonData.data.text})}
@@ -150,7 +115,10 @@ export const ListPageHeaderComponent : React.FC<ListPageHeaderComponentProps> = 
         <View style={componentStyles.container}>
             <View style={[componentStyles.titleRowContainer, { marginBottom: headerTitle ? 16 : 0 }]}>
                 {!!headerTitle && (
-                    <MexAsyncText promiseFn={getHeaderTitle}>
+                    <MexAsyncText promiseFn={Expressions.generateGetValueFromLocalizationExpressionFunc({
+                        expressionStr: headerTitle,
+                        dataContext: dataContext
+                    })}>
                         {(text) => (
                             <Text style={[styles.textHeadingBold, componentStyles.textTitle]}>
                                 {text}
@@ -163,7 +131,10 @@ export const ListPageHeaderComponent : React.FC<ListPageHeaderComponentProps> = 
             </View>
 
             {!!headerDescription && (
-                <MexAsyncText promiseFn={getHeaderDescription}>
+                <MexAsyncText promiseFn={Expressions.generateGetValueFromLocalizationExpressionFunc({
+                    expressionStr: headerDescription,
+                    dataContext: dataContext
+                })}>
                     {(text) => (
                         <Text style={[styles.textRegular, { marginBottom: 16, marginHorizontal: 16 }]}>
                             {text}
