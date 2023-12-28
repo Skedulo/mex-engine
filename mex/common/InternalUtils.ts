@@ -383,7 +383,7 @@ function getMandatoryExpressionValue(def: boolean|DataExpressionType|undefined, 
 }
 
 function getBooleanExpressionGenericValue(def: boolean|DataExpressionType|undefined, dataContext: any): boolean {
-    let result:any
+    let result: boolean
 
     if (def === undefined)
         return false;
