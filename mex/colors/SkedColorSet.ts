@@ -27,4 +27,11 @@ export type SkedColorSet = {
     red800: string,
 
     overlayColor: string,
+    // tags
+    successTag: string,
+    defaultTag: string,
+    primaryTag: string,
+    focusTag: string,
+    dangerTag: string,
+    warningTag: string,
 }

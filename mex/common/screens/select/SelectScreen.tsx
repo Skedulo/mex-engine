@@ -4,7 +4,6 @@ import {
     ActivityIndicator,
     BackHandler,
     Dimensions,
-    FlatList,
     Image,
     LayoutChangeEvent,
     Platform, SectionList,
