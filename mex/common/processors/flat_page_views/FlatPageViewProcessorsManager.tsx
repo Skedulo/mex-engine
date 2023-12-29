@@ -14,6 +14,7 @@ import ButtonGroupViewProcessor from "./ButtonGroupViewProcessor";
 import MenuListViewProcessor from "./MenuListViewProcessor";
 import {ModuleRegistrationInstance} from "../../../../ModuleRegistration";
 import {FlatPageProcessorInterface} from "@skedulo/mex-engine-proxy";
+import TextViewProcessor from "./TextViewProcessor";
 
 type ProcessorType = TextEditorViewProcessor
     |SelectEditorViewProcessor
@@ -29,6 +30,7 @@ type ProcessorType = TextEditorViewProcessor
     |BodyMapEditorViewProcessor
     |ButtonGroupViewProcessor
     |MenuListViewProcessor
+    |TextViewProcessor
     |FlatPageProcessorInterface
 
 class FlatPageViewProcessorsManager {
@@ -49,7 +51,8 @@ class FlatPageViewProcessorsManager {
             new ContactDetailsLayoutProcessor(),
             new BodyMapEditorViewProcessor(),
             new ButtonGroupViewProcessor(),
-            new MenuListViewProcessor()
+            new MenuListViewProcessor(),
+            new TextViewProcessor()
         ]
     }
 
