@@ -22,7 +22,7 @@ export default class ToggleEditorViewProcessor extends AbstractEditorViewProcess
 		return "toggleEditor";
 	}
 
-	override getMarginTopHintText(args: ToggleEditorViewArgs): number {
+	override getMarginTopCaption(args: ToggleEditorViewArgs): number {
 		if (args.jsonDef.mode == "switch") {
 			return StylesManager.getStyleConst().smallVerticalPadding
 		}

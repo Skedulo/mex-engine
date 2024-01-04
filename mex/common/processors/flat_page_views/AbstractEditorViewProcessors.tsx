@@ -49,9 +49,6 @@ abstract class AbstractEditorViewProcessor<
 
         let isMandatoryField = this.isComponentMandatory(args.jsonDef.mandatory, args.dataContext)
 
-        // @ts-ignore
-        const hint = args.jsonDef.hint || args.jsonDef.caption // deprecated props 'caption' of selector component
-
         return (
             <View style={{flexDirection: "column"}}>
                 {this.useTitle() && args.jsonDef.title !== undefined ?
@@ -74,13 +71,13 @@ abstract class AbstractEditorViewProcessor<
 
                 {editorComponent}
 
-                {!!hint &&
+                {!!args.jsonDef.caption &&
                     <MexAsyncText promiseFn={Expressions.generateGetValueFromLocalizationExpressionFunc({
-                        expressionStr: hint,
+                        expressionStr: args.jsonDef.caption,
                         dataContext: args.dataContext
                     })}>
                         {(text) => (
-                            <Text style={[StylesManager.getStyles().textCaptionSelector, { marginTop: this.getMarginTopHintText(args) }]}>
+                            <Text style={[StylesManager.getStyles().textCaptionSelector, { marginTop: this.getMarginTopCaption(args) }]}>
                                 {text}
                             </Text>
                         )}
@@ -102,7 +99,7 @@ abstract class AbstractEditorViewProcessor<
         return args.jsonDef.validator !== undefined
     }
 
-    getMarginTopHintText(_args: TComponentArgs): number {
+    getMarginTopCaption(_args: TComponentArgs): number {
         return StylesManager.getStyleConst().smallVerticalPadding
     }
 
