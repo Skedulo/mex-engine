@@ -284,12 +284,6 @@ const AttachmentThumbnailView = ({uid, fileUrl, contentType}: {uid: string, file
             .then(thumbnailUrl => setThumbnailUrl(thumbnailUrl))
     }, [])
 
-    fileUrl = "abcasd/fweofowfoefow.png1234"
-
-    let parts = fileUrl.split(".")
-    let extension = parts.length > 0 ? parts[parts.length - 1] : ""
-
-
     if (!thumbnailUrl) {
         let parts = fileUrl.split(".")
         let extension = parts.length > 0 ? parts[parts.length - 1] : ""
