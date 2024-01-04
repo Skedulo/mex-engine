@@ -44,7 +44,7 @@ export default class TextViewProcessor extends AbstractFlatPageViewProcessor<Tex
                     </MexAsyncText>
                 }
 
-                <View style={{ height: 8 }} />
+                <View style={{ height: StylesManager.getStyleConst().smallVerticalPadding }} />
 
                 <MexAsyncText promiseFn={Expressions.generateGetValueFromLocalizationExpressionFunc({
                     expressionStr: text,

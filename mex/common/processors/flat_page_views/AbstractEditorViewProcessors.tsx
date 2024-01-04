@@ -49,6 +49,9 @@ abstract class AbstractEditorViewProcessor<
 
         let isMandatoryField = this.isComponentMandatory(args.jsonDef.mandatory, args.dataContext)
 
+        // @ts-ignore
+        const hint = args.jsonDef.hint || args.jsonDef.caption // deprecated props 'caption' of selector component
+
         return (
             <View style={{flexDirection: "column"}}>
                 {this.useTitle() && args.jsonDef.title !== undefined ?
@@ -70,8 +73,23 @@ abstract class AbstractEditorViewProcessor<
                     : null}
 
                 {editorComponent}
+
+                {!!hint &&
+                    <MexAsyncText promiseFn={Expressions.generateGetValueFromLocalizationExpressionFunc({
+                        expressionStr: hint,
+                        dataContext: args.dataContext
+                    })}>
+                        {(text) => (
+                            <Text style={[StylesManager.getStyles().textCaptionSelector, { marginTop: this.getMarginTopHintText(args) }]}>
+                                {text}
+                            </Text>
+                        )}
+                    </MexAsyncText>
+                }
+
                 {renderValidator()}
-            </View>)
+            </View>
+        )
     }
 
     abstract generateEditorComponent(args: TComponentArgs): JSX.Element;
@@ -82,6 +100,10 @@ abstract class AbstractEditorViewProcessor<
 
     useValidator(args: TComponentArgs): boolean {
         return args.jsonDef.validator !== undefined
+    }
+
+    getMarginTopHintText(_args: TComponentArgs): number {
+        return StylesManager.getStyleConst().smallVerticalPadding
     }
 
     useTitle() {

@@ -22,6 +22,13 @@ export default class ToggleEditorViewProcessor extends AbstractEditorViewProcess
 		return "toggleEditor";
 	}
 
+	override getMarginTopHintText(args: ToggleEditorViewArgs): number {
+		if (args.jsonDef.mode == "switch") {
+			return StylesManager.getStyleConst().smallVerticalPadding
+		}
+		return StylesManager.getStyleConst().defaultVerticalPadding
+	}
+
 	generateEditorComponent(args: ToggleEditorViewArgs): JSX.Element {
         const readonly = this.isComponentReadonly(args.jsonDef.readonly, args.dataContext)
         let renderItem = function (item: ToggleEditorItemModel, index: number) {
