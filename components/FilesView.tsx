@@ -61,8 +61,7 @@ const FilesView = ({attachmentsMetadata, isSignature, readonly}: {
     }
 
     let selectImage = useCallback((item: AttachmentMetadata) => {
-
-        if (item.contentType.startsWith("image")) {
+        if (isImage(item.contentType)) {
             AssetsManager.getAccessToken().then((token:string) => {
                 selectedImages.current = [
                     {
@@ -270,7 +269,7 @@ const AttachmentThumbnailView = ({uid, fileUrl, contentType}: {uid: string, file
     let colors = ThemeManager.getColorSet()
     let styles = StylesManager.getStyles()
 
-    if (contentType.startsWith("image")) {
+    if (isImage(contentType)) {
         return (<SkeduloImage
             style={{
                 height: "100%",
@@ -344,5 +343,9 @@ let getImageMetadataAsync = (item: any) => {
 }
 
 const AttachmentThumbnailViewMemo = React.memo(AttachmentThumbnailView)
+
+const isImage = (contentType: string) => {
+    return contentType.startsWith("image")
+}
 
 export default FilesView

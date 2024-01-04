@@ -131,18 +131,20 @@ export default class AttachmentsEditorViewProcessor
 
         let addAttachmentRequests:any[] = []
 
-        let addAttachment = (response: string[]) => {
+        let addAttachment = (response: {uri: string, fileName: string|undefined}[]) => {
+
             if (!response) {
                 return
             }
 
-            response.forEach((uri:string) => {
+            response.forEach(({fileName, uri}) => {
 
                 let uid = utils.data.generateUniqSerial('local')
 
                 addAttachmentRequests.push({
                     uid: uid,
-                    uri: uri
+                    uri: uri,
+                    fileName: fileName,
                 })
             })
 
@@ -157,13 +159,19 @@ export default class AttachmentsEditorViewProcessor
                 if (chosenIndex === 2) {
                     let files = await AttachmentModuleProxy.pickFiles()
 
-                    addAttachment(files.map(a => a.url))
+                    console.log("response", files)
+
+                    let attachments = files.map(a => { return {uri: a.url, fileName: a.fileName} })
+
+                    addAttachment(attachments)
                 }
 
                 if (chosenIndex === 1) {
                     let files = await AttachmentModuleProxy.pickMedias()
 
-                    addAttachment(files.map(a => a.url))
+                    let attachments = files.map(a => { return {uri: a.url, fileName: a.fileName} })
+
+                    addAttachment(attachments)
                 }
 
                 if (chosenIndex === 0) {
@@ -179,7 +187,10 @@ export default class AttachmentsEditorViewProcessor
                             quality: 0.5,
                             saveToPhotos: attachmentSettings.saveOriginalPhotos
                         }).then(response => {
-                            addAttachment(response.assets.map(a => a.uri))
+
+                            let attachments = response.assets.map(a => { return {uri: a.uri, fileName: a.fileName} })
+
+                            addAttachment(attachments)
                         })
                     }
                 }
