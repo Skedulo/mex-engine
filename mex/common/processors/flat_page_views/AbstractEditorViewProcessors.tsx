@@ -70,8 +70,23 @@ abstract class AbstractEditorViewProcessor<
                     : null}
 
                 {editorComponent}
+
+                {!!args.jsonDef.caption &&
+                    <MexAsyncText promiseFn={Expressions.generateGetValueFromLocalizationExpressionFunc({
+                        expressionStr: args.jsonDef.caption,
+                        dataContext: args.dataContext
+                    })}>
+                        {(text) => (
+                            <Text style={[StylesManager.getStyles().textCaptionSelector, { marginTop: this.getMarginTopCaption(args) }]}>
+                                {text}
+                            </Text>
+                        )}
+                    </MexAsyncText>
+                }
+
                 {renderValidator()}
-            </View>)
+            </View>
+        )
     }
 
     abstract generateEditorComponent(args: TComponentArgs): JSX.Element;
@@ -82,6 +97,10 @@ abstract class AbstractEditorViewProcessor<
 
     useValidator(args: TComponentArgs): boolean {
         return args.jsonDef.validator !== undefined
+    }
+
+    getMarginTopCaption(_args: TComponentArgs): number {
+        return StylesManager.getStyleConst().smallVerticalPadding
     }
 
     useTitle() {

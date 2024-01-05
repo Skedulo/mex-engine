@@ -1,12 +1,11 @@
 import * as React from "react";
-import {Pressable, StyleSheet, Text, TextInput, View} from "react-native";
+import {Pressable, StyleSheet, TextInput, View} from "react-native";
 import StylesManager from "../../../StylesManager";
 import Expressions from "../../expression/Expressions";
 import AbstractEditorViewProcessor, {EditorViewArgs, EditorViewProps} from "./AbstractEditorViewProcessors";
 import {runInAction} from "mobx";
 import * as RootNavigation from "../../RootNavigation";
 import NavigationProcessManager from "../../NavigationProcessManager";
-import MexAsyncText from "../../../../components/MexAsyncText";
 import ThemeManager from "../../../colors/ThemeManager";
 import SkedIcon from "../../../../components/SkedIcon";
 import {translateOneLevelOfExpression} from "../../InternalUtils";
@@ -32,7 +31,6 @@ export default class SelectEditorViewProcessor
     generateEditorComponent(args: SelectEditorViewArgs): JSX.Element {
         let {jsonDef, dataContext, hasError = false} = args;
         const [isFocused, setIsFocused] = useState(false)
-        let styles = StylesManager.getStyles()
 
         let displayString = ""
         let selectPageJsonDef= jsonDef.selectPage;
@@ -106,20 +104,6 @@ export default class SelectEditorViewProcessor
                 });
         }
 
-        const getCaptionStr = async (): Promise<string> => {
-            if (!jsonDef.caption) {
-                return ""
-            }
-
-            let caption = Expressions.getValueFromLocalizedKey({expressionStr: jsonDef.caption, dataContext: dataContext})
-
-            if (caption instanceof Promise) {
-                return await caption
-            }
-
-            return caption;
-        }
-
         const getBorderColor = () => {
             if (hasError) {
                 return ThemeManager.getColorSet().red800
@@ -135,7 +119,6 @@ export default class SelectEditorViewProcessor
         return (
             <Pressable onPress={handleOnFocus} disabled={isComponentReadonly} >
                 <View pointerEvents={isComponentReadonly ? "auto" : "none"}>
-
                     {!isComponentReadonly
                         ? <View style={[StylesManager.getStyles().selector, componentStyles.inputContainer, { borderColor: getBorderColor()}]}>
                             <TextInput
@@ -150,16 +133,6 @@ export default class SelectEditorViewProcessor
                         </View>
                         : <ReadonlyText iconRight={IconTypes.DownArrow} text={displayString} />
                     }
-
-                    <MexAsyncText promiseFn={getCaptionStr}>
-                        {(text) => {
-                            return (text.length > 0 ?
-                                <Text style={[
-                                    styles.textCaptionSelector,
-                                    { marginTop: 8 }
-                                ]}>{text}</Text> : null)
-                        }}
-                    </MexAsyncText>
                 </View>
             </Pressable>
         )
