@@ -344,7 +344,7 @@ let getImageMetadataAsync = (item: any) => {
 
 const AttachmentThumbnailViewMemo = React.memo(AttachmentThumbnailView)
 
-const isImage = (contentType: string) => {
+export const isImage = (contentType: string) => {
     return contentType.startsWith("image") || contentType == "application/octet-stream"
 }
 

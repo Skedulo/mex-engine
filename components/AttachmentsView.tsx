@@ -6,6 +6,7 @@ import {View} from "react-native";
 import SkeduloImage from "./SkeduloImage";
 import * as React from "react";
 import { AttachmentMetadata } from "@skedulo/mex-engine-proxy";
+import {isImage} from "./FilesView";
 
 type AttachmentsViewProps = {
     dataContext: any,
@@ -46,11 +47,13 @@ export const AttachmentsView = (props: AttachmentsViewProps) => {
         }
     }, [])
 
-    if (attachmentsMetadata.current.length == 0) {
+    let imagesAttachments =  (attachmentsMetadata.current ?? []).filter(a => isImage(a.contentType))
+
+    if (imagesAttachments.length == 0) {
         return <></>
     }
 
-    let item = attachmentsMetadata.current
+    let item = imagesAttachments
         .sort((a: AttachmentMetadata, b:AttachmentMetadata) => a.uploadDate < b.uploadDate ? 1 : -1)[0]
 
     let finalUrl = item.localFileURL ?? item.downloadURL;
