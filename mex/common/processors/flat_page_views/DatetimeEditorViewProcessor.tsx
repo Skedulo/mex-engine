@@ -53,6 +53,7 @@ export default class DateTimeEditorViewProcessor extends AbstractEditorViewProce
                 hasError={args.hasError}
                 readonly={readonly}
                 timezone={jsonDef.datetimeOptions?.timezone}
+                minuteInterval={jsonDef.timeOptions?.minuteInterval}
                 placeholder={Expressions.getValueFromLocalizedKey({expressionStr: args.jsonDef.placeholder, dataContext: args.dataContext}) as string}
                 onValueChanged={handleDateChanged} />
         )

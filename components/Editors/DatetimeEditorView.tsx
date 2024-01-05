@@ -13,7 +13,16 @@ import AssetsManager from "../../mex/assets/AssetsManager";
 
 export const DatetimeEditorView = (props: DatetimeEditorViewProps) => {
 
-    let {value, readonly, timezone, mode, placeholder, hasError, onValueChanged} = props
+    let {
+        value,
+        readonly,
+        timezone,
+        mode,
+        placeholder,
+        hasError,
+        onValueChanged,
+        minuteInterval
+    } = props
 
     let dateStr = value
 
@@ -143,6 +152,11 @@ export const DatetimeEditorView = (props: DatetimeEditorViewProps) => {
         return (<ReadonlyText iconLeft={IconTypes.DatePicker} iconRight={IconTypes.DownArrow} text={localizedDateStr}/>)
     }
 
+    if ([5, 10, 15, 20, 30].includes(minuteInterval) == false) {
+        // We do support only these value now
+        minuteInterval = undefined
+    }
+
     return (
         <>
             <Pressable onPress={handleOnFocus}>
@@ -170,6 +184,7 @@ export const DatetimeEditorView = (props: DatetimeEditorViewProps) => {
 
             <DateTimePickerModal
                 timeZoneOffsetInMinutes={timezoneOffsetByMinutes}
+                minuteInterval={minuteInterval}
                 isVisible={isFocus}
                 mode={mode}
                 date={dateTimeValue}
