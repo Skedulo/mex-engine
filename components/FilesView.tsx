@@ -61,8 +61,7 @@ const FilesView = ({attachmentsMetadata, isSignature, readonly}: {
     }
 
     let selectImage = useCallback((item: AttachmentMetadata) => {
-
-        if (item.contentType.startsWith("image")) {
+        if (isImage(item.contentType)) {
             AssetsManager.getAccessToken().then((token:string) => {
                 selectedImages.current = [
                     {
@@ -162,7 +161,7 @@ let AttachmentDetailFooter = function({item, isSignature}: any) {
 
     let colors = ThemeManager.getColorSet()
 
-    let [metadata, setMetadata] = useState(null);
+    let [metadata, setMetadata] = useState<string|null>(null);
 
     useLayoutEffect(() => {
         getImageMetadataAsync(item).then((metadata:any) => {
@@ -198,7 +197,7 @@ let AttachmentDetailFooter = function({item, isSignature}: any) {
             <Text
                 ellipsizeMode='tail'
                 numberOfLines={1}
-                style={[StylesManager.getStyles().textRegular, {color: ThemeManager.getColorSet().white, fontSize: 14}]}>{metadata}</Text>
+                style={[StylesManager.getStyles().textRegular, {color: ThemeManager.getColorSet().white, fontSize: 14}]}>{metadata ?? ""}</Text>
         </View>
     </SafeAreaView>)
 }
@@ -270,7 +269,7 @@ const AttachmentThumbnailView = ({uid, fileUrl, contentType}: {uid: string, file
     let colors = ThemeManager.getColorSet()
     let styles = StylesManager.getStyles()
 
-    if (contentType.startsWith("image")) {
+    if (isImage(contentType)) {
         return (<SkeduloImage
             style={{
                 height: "100%",
@@ -286,7 +285,14 @@ const AttachmentThumbnailView = ({uid, fileUrl, contentType}: {uid: string, file
 
     if (!thumbnailUrl) {
         let parts = fileUrl.split(".")
-        let extension = parts.length > 0 ? parts[parts.length - 1] : 0
+        let extension = parts.length > 0 ? parts[parts.length - 1] : ""
+
+        const maxExtensionLength = 5;
+
+        if (extension.length > maxExtensionLength) {
+            // If somehow extension is too long, truncate it
+            extension = extension.substring(extension.length - maxExtensionLength, extension.length)
+        }
 
         return (
             <View style={{
@@ -337,5 +343,9 @@ let getImageMetadataAsync = (item: any) => {
 }
 
 const AttachmentThumbnailViewMemo = React.memo(AttachmentThumbnailView)
+
+const isImage = (contentType: string) => {
+    return contentType.startsWith("image") || contentType == "application/octet-stream"
+}
 
 export default FilesView
